@@ -33,7 +33,7 @@ jobs:
         run: docker pull ${GOLANGCI_LINT_CONTAINER}
       - name: Run golangci-lint
         run: |
-          cd integraiton
+          cd integration
           docker run --rm -v $(pwd):/app -w /app ${GOLANGCI_LINT_CONTAINER} golangci-lint run
   excludeFmtErrorf:
     name: exclude fmt.Errorf
