@@ -1,0 +1,1 @@
+TODO: This folder should be removed when we've completed all NSM applications.

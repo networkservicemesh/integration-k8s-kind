@@ -1,0 +1,171 @@
+---
+run:
+  # concurrency: 6
+  timeout: 2m
+  issues-exit-code: 1
+  tests: true
+linters-settings:
+  goheader:
+    template-path: "../.license/template.txt"
+    values:
+      const:
+        year: 2020
+      regexp:
+        year-range: ((\d\d\d\d-{{year}})|({{year}}))
+        company: .*
+        copyright-holder: Copyright \(c\) {{year-range}} {{company}}\n\n
+        copyright-holders: ({{copyright-holder}})+
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+  govet:
+    check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/sirupsen/logrus.FieldLogger).Infof
+          - (github.com/sirupsen/logrus.FieldLogger).Warnf
+          - (github.com/sirupsen/logrus.FieldLogger).Errorf
+          - (github.com/sirupsen/logrus.FieldLogger).Fatalf
+  golint:
+    min-confidence: 0.8
+  goimports:
+    local-prefixes: github.com/networkservicemesh/integration-k8s-kind
+  gocyclo:
+    min-complexity: 15
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 150
+  funlen:
+    Lines: 100
+    Statements: 50
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      - errors
+    packages-with-error-message:
+      # specify an error message to output when a blacklisted package is used
+      - errors: "Please use \"github.com/pkg/errors\" instead of \"errors\" in go imports"
+  misspell:
+    locale: US
+  unparam:
+    check-exported: false
+  nakedret:
+    max-func-lines: 30
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+  gocritic:
+    enabled-checks:
+      - appendAssign
+      - assignOp
+      - appendCombine
+      - argOrder
+      - badCall
+      - badCond
+      - boolExprSimplify
+      - builtinShadow
+      - captLocal
+      - caseOrder
+      - codegenComment
+      - commentFormatting
+      - commentedOutCode
+      - commentedOutImport
+      - defaultCaseOrder
+      - deprecatedComment
+      - docStub
+      - dupArg
+      - dupBranchBody
+      - dupCase
+      - dupImport
+      - dupSubExpr
+      - elseif
+      - emptyFallthrough
+      - emptyStringTest
+      - equalFold
+      - evalOrder
+      - exitAfterDefer
+      - flagDeref
+      - flagName
+      - hexLiteral
+      - hugeParam
+      - ifElseChain
+      - importShadow
+      - indexAlloc
+      - initClause
+      - methodExprCall
+      - nestingReduce
+      - newDeref
+      - nilValReturn
+      - octalLiteral
+      - offBy1
+      - paramTypeCombine
+      - rangeExprCopy
+      - rangeValCopy
+      - regexpMust
+      - regexpPattern
+      - singleCaseSwitch
+      - sloppyLen
+      - sloppyReassign
+      - stringXbytes
+      - switchTrue
+      - typeAssertChain
+      - typeSwitchVar
+      - typeUnparen
+      - unlabelStmt
+      - unnamedResult
+      - unnecessaryBlock
+      - underef
+      - unlambda
+      - unslice
+      - valSwap
+      - weakCond
+      - wrapperFunc
+      - yodaStyleExpr
+linters:
+  disable-all: true
+  enable:
+    # - rowserrcheck
+    - goheader
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - golint
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - interfacer
+    # - lll
+    - misspell
+    - nakedret
+    - scopelint
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    # - unused
+    - varcheck
+    - whitespace
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
