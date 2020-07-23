@@ -1,6 +1,9 @@
 ---
 name: ci
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   yamllint:
     name: yamllint
@@ -32,9 +35,7 @@ jobs:
       - name: Pull golangci-lint docker container
         run: docker pull ${GOLANGCI_LINT_CONTAINER}
       - name: Run golangci-lint
-        run: |
-          cd integration
-          docker run --rm -v $(pwd):/app -w /app ${GOLANGCI_LINT_CONTAINER} golangci-lint run
+        run: docker run --rm -v $(pwd):/app -w /app ${GOLANGCI_LINT_CONTAINER} golangci-lint run
   excludeFmtErrorf:
     name: exclude fmt.Errorf
     runs-on: ubuntu-latest
@@ -93,16 +94,6 @@ jobs:
         run: |
           git diff -- '*.pb.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
           git diff -- '*.gen.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
-  excludereplace:
-    name: Exclude Replace in go.mod
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v2
-      - name: Exclude replace in go.mod
-        run: |
-          grep ^replace go.mod || exit 0
-          exit 1
   captureRunEnv:
     name: Capture CI Run Env
     runs-on: ubuntu-latest

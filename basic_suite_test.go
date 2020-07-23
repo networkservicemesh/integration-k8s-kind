@@ -14,14 +14,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package integration_test
+package integration_k8s_kind_test
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
+	"github.com/networkservicemesh/integration-k8s-kind/tests/nsmtesting"
 
-	"github.com/networkservicemesh/integration-k8s-kind/tests/integration/nsmtesting"
+	"github.com/stretchr/testify/suite"
 )
 
 type BasicTestsSuite struct {
@@ -34,8 +34,8 @@ func (s *BasicTestsSuite) SetupSuite() {
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
-	s.Exec("kubectl apply -f ../deployments/alpine.yaml")
-	defer s.Exec("kubectl delete -f ../deployments/alpine.yaml")
+	s.Exec("kubectl apply -f ./deployments/alpine.yaml")
+	defer s.Exec("kubectl delete -f ./deployments/alpine.yaml")
 	s.Exec("kubectl wait --for=condition=ready pod -l app=alpine")
 }
 

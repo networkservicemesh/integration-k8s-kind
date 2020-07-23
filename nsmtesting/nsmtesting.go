@@ -47,11 +47,8 @@ func (t *NSMTesting) K8s() *kubernetes.Clientset {
 
 // Exec executes command
 func (t *NSMTesting) Exec(cmd string) {
-	errMsg := strings.Builder{}
-	out, err := exechelper.Output(cmd, exechelper.WithStderr(&errMsg))
-	str := strings.TrimSpace(string(out))
-	if str != "" {
-		logrus.Println(str)
-	}
-	require.NoError(t.t, err, errMsg.String())
+	writer := logrus.StandardLogger().Writer()
+	var errWriter strings.Builder
+	err := exechelper.Run(cmd, exechelper.WithStderr(&errWriter), exechelper.WithStdout(writer))
+	require.NoError(t.t, err, errWriter.String())
 }
