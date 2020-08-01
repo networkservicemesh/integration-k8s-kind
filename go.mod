@@ -1,4 +1,4 @@
-module github.com/networkservicemesh/integration-k8s-kind/tests
+module github.com/networkservicemesh/integration-k8s-kind
 
 go 1.14
 
@@ -6,13 +6,7 @@ require (
 	github.com/edwarnicke/exechelper v1.0.1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/text v0.3.3 // indirect
-	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
-	google.golang.org/appengine v1.6.6 // indirect
-	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
-	k8s.io/client-go v11.0.0+incompatible
+	k8s.io/client-go v0.17.0
 )
 
 replace (

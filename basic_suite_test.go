@@ -19,24 +19,29 @@ package integration_k8s_kind_test
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-k8s-kind/tests/nsmtesting"
+	"github.com/edwarnicke/exechelper"
+	"github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/suite"
 )
 
 type BasicTestsSuite struct {
 	suite.Suite
-	*nsmtesting.NSMTesting
+	options []*exechelper.Option
 }
 
 func (s *BasicTestsSuite) SetupSuite() {
-	s.NSMTesting = nsmtesting.New(s.T())
+	writer := logrus.StandardLogger().Writer()
+	s.options = []*exechelper.Option{
+		exechelper.WithStderr(writer),
+		exechelper.WithStdout(writer),
+	}
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
-	s.Exec("kubectl apply -f ./deployments/alpine.yaml")
-	defer s.Exec("kubectl delete -f ./deployments/alpine.yaml")
-	s.Exec("kubectl wait --for=condition=ready pod -l app=alpine")
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/alpine.yaml", s.options...))
+	defer s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/alpine.yaml", s.options...))
+	s.Require().NoError(exechelper.Run(("kubectl wait --for=condition=ready pod -l app=alpine"), s.options...))
 }
 
 func TestBasic(t *testing.T) {
