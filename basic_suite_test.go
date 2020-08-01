@@ -17,12 +17,16 @@
 package integration_k8s_kind_test
 
 import (
+	"k8s.io/client-go/tools/clientcmd"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/edwarnicke/exechelper"
 	"github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/suite"
+	"k8s.io/client-go/kubernetes"
 )
 
 type BasicTestsSuite struct {
@@ -38,10 +42,18 @@ func (s *BasicTestsSuite) SetupSuite() {
 	}
 }
 
+func (s *BasicTestsSuite) TestK8sClient() {
+	path := filepath.Join(os.Getenv("HOME"), ".kube", "config")
+	config, err := clientcmd.BuildConfigFromFlags("", path)
+	s.NoError(err)
+	_, err = kubernetes.NewForConfig(config)
+	s.NoError(err)
+}
+
 func (s *BasicTestsSuite) TestDeployAlpine() {
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/alpine.yaml", s.options...))
-	defer s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/alpine.yaml", s.options...))
 	s.Require().NoError(exechelper.Run(("kubectl wait --for=condition=ready pod -l app=alpine"), s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/alpine.yaml", s.options...))
 }
 
 func TestBasic(t *testing.T) {
