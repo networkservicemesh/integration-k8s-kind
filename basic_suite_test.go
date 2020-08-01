@@ -17,10 +17,11 @@
 package integration_k8s_kind_test
 
 import (
-	"k8s.io/client-go/tools/clientcmd"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/edwarnicke/exechelper"
 	"github.com/sirupsen/logrus"
