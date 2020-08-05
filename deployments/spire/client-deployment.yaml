@@ -1,27 +1,26 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alpine
+  name: client
   labels:
-    app: alpine
+    app: client
 spec:
   selector:
     matchLabels:
-      app: alpine
+      app: client
   template:
     metadata:
       labels:
-        app: alpine
+        app: client
     spec:
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: alpine:latest
-          command:
-            - /bin/sh
-            - "-c"
-            - "sleep 60m"
-          imagePullPolicy: IfNotPresent
-          name: alpine
+        - name: client
+          image: gcr.io/spiffe-io/spire-agent:0.10.0
+          command: ["sleep"]
+          args: ["1000000000"]
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

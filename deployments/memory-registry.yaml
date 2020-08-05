@@ -2,26 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alpine
+  name: memory-registry
   labels:
-    app: alpine
+    app: memory-registry
 spec:
   selector:
     matchLabels:
-      app: alpine
+      app: memory-registry
   template:
     metadata:
       labels:
-        app: alpine
+        app: memory-registry
     spec:
       containers:
-        - image: alpine:latest
-          command:
-            - /bin/sh
-            - "-c"
-            - "sleep 60m"
+        - image: nsm/memory-registry:0.1
           imagePullPolicy: IfNotPresent
-          name: alpine
+          name: memory-registry
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix://run/spire/sockets/agent.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
