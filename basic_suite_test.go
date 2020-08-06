@@ -35,19 +35,51 @@ type BasicTestsSuite struct {
 	options []*exechelper.Option
 }
 
-func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/memory-registry.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/memory-registry.yaml", s.options...))
-}
-
 func (s *BasicTestsSuite) SetupSuite() {
 	writer := logrus.StandardLogger().Writer()
+
 	s.options = []*exechelper.Option{
 		exechelper.WithStderr(writer),
 		exechelper.WithStdout(writer),
 	}
-	s.Require().NoError(exechelper.Run("kubectl apply -f deployments/spire/spire-namespace.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl apply -f deployments/spire", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/spire/spire-namespace.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/spire", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl wait -n spire --timeout=60s --for=condition=ready pod -l app=spire-agent", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait -n spire --timeout=60s --for=condition=ready pod -l app=spire-server", s.options...))
+
+	s.Require().NoError(exechelper.Run(`kubectl exec -n spire spire-server-0 --
+												/opt/spire/bin/spire-server entry create
+												-spiffeID spiffe://example.org/ns/spire/sa/spire-agent
+												-selector k8s_sat:cluster:nsm-cluster
+												-selector k8s_sat:agent_ns:spire
+												-selector k8s_sat:agent_sa:spire-agent
+												-node`, s.options...))
+
+	s.Require().NoError(exechelper.Run(`kubectl exec -n spire spire-server-0 --
+												/opt/spire/bin/spire-server entry create
+												-spiffeID spiffe://example.org/ns/default/sa/default
+												-parentID spiffe://example.org/ns/spire/sa/spire-agent
+												-selector k8s:ns:default \
+												-selector k8s:sa:default`, s.options...))
+}
+
+func (s *BasicTestsSuite) TearDownSuite() {
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/spire/spire-namespace.yaml"))
+}
+
+func (s *BasicTestsSuite) TearDownTest() {
+	s.Require().NoError(exechelper.Run("kubectl delete serviceaccounts --all"))
+	s.Require().NoError(exechelper.Run("kubectl delete services --all"))
+	s.Require().NoError(exechelper.Run("kubectl delete deployment --all"))
+	s.Require().NoError(exechelper.Run("kubectl delete pods --all"))
+}
+
+func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/memory-registry.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=memory-registry", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/memory-registry.yaml", s.options...))
 }
 
 func (s *BasicTestsSuite) TestK8sClient() {
@@ -59,12 +91,11 @@ func (s *BasicTestsSuite) TestK8sClient() {
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
-	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/alpine.yaml", s.options...))
-
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/alpine.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=alpine", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/alpine.yaml", s.options...))
 }
 
-func TestBasic(t *testing.T) {
+func TestRunBasicSuite(t *testing.T) {
 	suite.Run(t, &BasicTestsSuite{})
 }

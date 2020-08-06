@@ -22,12 +22,3 @@ spec:
             - "sleep 60m"
           imagePullPolicy: IfNotPresent
           name: alpine
-          volumeMounts:
-            - name: spire-agent-socket
-              mountPath: /run/spire/sockets
-              readOnly: true
-      volumes:
-        - name: spire-agent-socket
-          hostPath:
-            path: /run/spire/sockets
-            type: Directory

@@ -35,7 +35,7 @@ data:
         plugin_data {
           clusters = {
             # NOTE: Change this to your cluster name
-            "demo-cluster" = {
+            "nsm-cluster" = {
               use_token_review_api_validation = true
               service_account_whitelist = ["spire:spire-agent"]
             }
