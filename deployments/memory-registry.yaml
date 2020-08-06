@@ -15,7 +15,7 @@ spec:
         app: memory-registry
     spec:
       containers:
-        - image: docker.pkg.github.com/networkservicemesh/cmd-registry-memory/cmd-registry-memory:latest
+        - image: networkservicemeshci/memory-registry:master
           imagePullPolicy: IfNotPresent
           name: memory-registry
           env:
