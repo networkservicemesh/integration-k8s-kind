@@ -79,6 +79,7 @@ func (s *BasicTestsSuite) TearDownTest() {
 func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/memory-registry.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=memory-registry", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl describe pod -l app=memory-registry", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/memory-registry.yaml", s.options...))
 }
 

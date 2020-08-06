@@ -1,3 +1,4 @@
+---
 # ClusterRole to allow spire-server node attestor to query Token Review API
 # and to be able to push certificate bundles to a configmap
 kind: ClusterRole
