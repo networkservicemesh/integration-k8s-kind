@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-registry
+  labels:
+    app: memory-registry
+spec:
+  selector:
+    matchLabels:
+      app: memory-registry
+  template:
+    metadata:
+      labels:
+        app: memory-registry
+    spec:
+      containers:
+        - image: networkservicemeshci/memory-registry:master
+          imagePullPolicy: IfNotPresent
+          name: memory-registry
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix://run/spire/sockets/agent.sock
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
