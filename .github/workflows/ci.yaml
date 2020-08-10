@@ -144,4 +144,4 @@ jobs:
           echo "environment-kubeconfig:" ${KUBECONFIG}
       - name: Run tests
         run: |
-          gotestsum  -- -race -verbose -short $(go list ./...)
+          gotestsum  -- -race -v -short $(go list ./...)
