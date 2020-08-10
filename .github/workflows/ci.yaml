@@ -128,6 +128,8 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: engineerd/setup-kind@v0.4.0
+        with:
+          config: cluster-config.yaml
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v1
         with:
@@ -136,12 +138,12 @@ jobs:
       - uses: autero1/action-gotestsum@v0.1.0
         with:
           gotestsum_version: 0.4.1
-      - name: Integration tests
+      - name: Check kind cluster
         run: |
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
-      - name: Run tests
+      - name: Integration tests
         run: |
           gotestsum --format standard-verbose -- -race -short $(go list ./...)
