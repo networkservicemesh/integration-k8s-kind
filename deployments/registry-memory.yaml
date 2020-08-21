@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-memory
+  labels:
+    app: registry-memory
+spec:
+  selector:
+    matchLabels:
+      app: registry-memory
+  template:
+    metadata:
+      labels:
+        app: registry-memory
+    spec:
+      containers:
+        - image: networkservicemeshci/cmd-registry-memory:master
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: REGISTRY-MEMORY_LISTEN_ON
+              value: unix:///var/lib/networkservicemesh/registry.sock
+          imagePullPolicy: IfNotPresent
+          name: registry-memory
+          ports:
+            - containerPort: 5002
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate

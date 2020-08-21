@@ -54,11 +54,37 @@ func (s *BasicTestsSuite) TearDownTest() {
 	s.Require().NoError(exechelper.Run("kubectl delete pods --all --grace-period=0 --force"))
 }
 
+func (s *BasicTestsSuite) TestNSE_CanRegisterInRegistry() {
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=registry-memory", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/nse.yaml --grace-period=0 --force", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/registry-memory.yaml --grace-period=0 --force", s.options...))
+}
+
+func (s *BasicTestsSuite) TestNSMgr_CanCanFindNSEInRegistry() {
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=registry-memory", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nsmgr.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsmgr", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/nsmgr.yaml --grace-period=0 --force", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/nse.yaml --grace-period=0 --force", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/registry-memory.yaml --grace-period=0 --force", s.options...))
+}
+
 func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/memory-registry.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=memory-registry", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl describe pod -l app=memory-registry", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/memory-registry.yaml --grace-period=0 --force", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=registry-memory", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl describe pod -l app=registry-memory", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/registry-memory.yaml --grace-period=0 --force", s.options...))
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {

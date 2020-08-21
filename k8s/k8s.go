@@ -33,7 +33,10 @@ var clientErr error
 // Client returns k8s client
 func Client() (*kubernetes.Clientset, error) {
 	once.Do(func() {
-		path := filepath.Join(os.Getenv("HOME"), ".kube", "config")
+		path := os.Getenv("KUBECONFIG")
+		if path == "" {
+			path = filepath.Join(os.Getenv("HOME"), ".kube", "config")
+		}
 		config, err := clientcmd.BuildConfigFromFlags("", path)
 		if err != nil {
 			clientErr = err

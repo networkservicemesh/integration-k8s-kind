@@ -22,3 +22,12 @@ spec:
             - "sleep 60m"
           imagePullPolicy: IfNotPresent
           name: alpine
+          volumeMounts:
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
+      volumes:
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
