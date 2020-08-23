@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"net"
 	"net/url"
 	"os"
 	"time"
@@ -27,6 +29,37 @@ type Config struct {
 	ConnectTo                  url.URL `desc:"url to the local registry that handles this domain" split_words:"true"`
 	NetworkServiceName         string  `default:"icmp-responder" desc:"url to the local registry that handles this domain" split_words:"true"`
 	NetworkServiceEndpointName string  `default:"icmp-responder-nse" desc:"url to the local registry that handles this domain" split_words:"true"`
+}
+
+// WaitForPortAvailable waits while the port will is available. Throws exception if the context is done.
+func WaitForPortAvailable(ctx context.Context, protoType, registryAddress string, idleSleep time.Duration) error {
+	if idleSleep < 0 {
+		return errors.New("idleSleep must be positive")
+	}
+	logrus.Infof("Waiting for liveness probe: %s:%s", protoType, registryAddress)
+	last := time.Now()
+
+	for {
+		select {
+		case <-ctx.Done():
+			return errors.New("timeout waiting for: " + protoType + ":" + registryAddress)
+		default:
+			var d net.Dialer
+			conn, err := d.DialContext(ctx, protoType, registryAddress)
+			if conn != nil {
+				_ = conn.Close()
+			}
+			if err == nil {
+				return nil
+			}
+			if time.Since(last) > time.Minute {
+				logrus.Infof("Waiting for liveness probe: %s:%s", protoType, registryAddress)
+				last = time.Now()
+			}
+			// Sleep to not overflow network
+			<-time.After(idleSleep)
+		}
+	}
 }
 
 func main() {
@@ -78,6 +111,7 @@ func main() {
 
 	cc, err = grpc.DialContext(ctx,
 		getTarget(),
+		grpc.WithBlock(),
 		grpc.WithTransportCredentials(credentials.NewTLS(tlsconfig.MTLSClientConfig(source, source, tlsconfig.AuthorizeAny()))),
 	)
 
@@ -88,16 +122,19 @@ func main() {
 	_, err = api_registry.NewNetworkServiceRegistryClient(cc).Register(context.Background(), &api_registry.NetworkService{
 		Name:    config.NetworkServiceName,
 		Payload: "IP",
-	}, grpc.WaitForReady(true))
+	})
 	if err != nil {
 		logrus.Fatalf(err.Error())
 	}
 
-	_, err = api_registry.NewNetworkServiceEndpointRegistryClient(cc).Register(context.Background(), &api_registry.NetworkServiceEndpoint{
+	nse, err := api_registry.NewNetworkServiceEndpointRegistryClient(cc).Register(context.Background(), &api_registry.NetworkServiceEndpoint{
 		Name:                config.NetworkServiceEndpointName,
 		NetworkServiceNames: []string{config.NetworkServiceName},
-		ExpirationTime:      &timestamp.Timestamp{Seconds: int64(time.Now().Add(time.Hour).Second()) * 24},
+		ExpirationTime:      &timestamp.Timestamp{Seconds: time.Now().Add(time.Hour * 24).Unix()},
 	})
+
+	logrus.Infof("NSE: %+v", nse)
+
 	if err != nil {
 		logrus.Fatalf(err.Error())
 	}

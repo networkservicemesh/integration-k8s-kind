@@ -1,18 +1,18 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
-  name: nsm-registry
+  name: registry-memory
   labels:
-    app: nsm-registry
+    app: registry-memory
 spec:
   selector:
     matchLabels:
-      app: nsm-registry
+      app: registry-memory
   template:
     metadata:
       labels:
-        app: nsm-registry
+        app: registry-memory
     spec:
       containers:
         - image: networkservicemeshci/cmd-registry-memory:master
@@ -20,15 +20,16 @@ spec:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: REGISTRY-MEMORY_LISTEN_ON
-              value: tcp://:5002
+              value: unix:///var/lib/networkservicemesh/registry.sock
           imagePullPolicy: IfNotPresent
-          name: nsm-registry
+          name: registry-memory
           ports:
             - containerPort: 5002
-              hostPort: 5002
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
       volumes:
         - name: spire-agent-socket
           hostPath:

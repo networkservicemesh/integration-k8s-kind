@@ -22,7 +22,7 @@ import (
 
 // Config is configuration for cmd-testing-registry-client
 type Config struct {
-	ConnectTO                      url.URL `desc:"url to the local registry that handles this domain" split_words:"true"`
+	ConnectTo                      url.URL `desc:"url to the local registry that handles this domain" split_words:"true"`
 	FindNetworkServiceName         string  `default:"icmp-responder" desc:"url to the local registry that handles this domain" split_words:"true"`
 	FindNetworkServiceEndpointName string  `default:"icmp-responder-nse" desc:"url to the local registry that handles this domain" split_words:"true"`
 }
@@ -64,32 +64,27 @@ func main() {
 	}
 	logrus.Infof("SVID: %q", svid.ID)
 	cc, err := grpc.DialContext(ctx,
-		config.ConnectTO.String(),
+		config.ConnectTo.String(),
 		grpc.WithTransportCredentials(credentials.NewTLS(tlsconfig.MTLSClientConfig(source, source, tlsconfig.AuthorizeAny()))),
 		grpc.WithBlock(),
 	)
-
-	nsStream, err := api_registry.NewNetworkServiceRegistryClient(cc).Find(context.Background(), &api_registry.NetworkServiceQuery{
-		NetworkService: &api_registry.NetworkService{Name: config.FindNetworkServiceName},
-	})
 	if err != nil {
 		logrus.Fatal(err.Error())
 	}
-	services := api_registry.ReadNetworkServiceList(nsStream)
-	if len(services) == 0 {
-		logrus.Fatal("Network Service is not found")
-	}
 
-	nseStream, err := api_registry.NewNetworkServiceRegistryClient(cc).Find(context.Background(), &api_registry.NetworkServiceQuery{
-		NetworkService: &api_registry.NetworkService{Name: config.FindNetworkServiceName},
+	logrus.Info("Starting search")
+
+	nseStream, err := api_registry.NewNetworkServiceEndpointRegistryClient(cc).Find(context.Background(), &api_registry.NetworkServiceEndpointQuery{
+		NetworkServiceEndpoint: &api_registry.NetworkServiceEndpoint{Name: config.FindNetworkServiceEndpointName},
 	})
+
 	if err != nil {
 		logrus.Fatal(err.Error())
 	}
-	nses := api_registry.ReadNetworkServiceList(nseStream)
+	nses := api_registry.ReadNetworkServiceEndpointList(nseStream)
 	if len(nses) == 0 {
 		logrus.Fatal("Network Service  Endpoint is not found")
 	}
-
+	logrus.Infof("Found an NSE: %+v", nses[0])
 	<-ctx.Done()
 }
