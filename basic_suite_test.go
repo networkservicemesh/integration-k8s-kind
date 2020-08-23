@@ -58,6 +58,7 @@ func (s *BasicTestsSuite) TearDownTest() {
 func (s *BasicTestsSuite) TestNSE_CanRegisterInRegistry() {
 	defer require.NoRestarts(s.T())
 
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry", s.options...))
 
