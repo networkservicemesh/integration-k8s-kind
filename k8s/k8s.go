@@ -56,18 +56,19 @@ func Client() (*kubernetes.Clientset, error) {
 	return client, clientErr
 }
 
+// ApplyDeployment is analogy of 'kubeclt apply -f path' but with mutating deployment before apply
 func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) error {
 	client, err := Client()
 	if err != nil {
 		return err
 	}
-	b, err := ioutil.ReadFile(path)
+	b, err := ioutil.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return err
 	}
 	var d v1.Deployment
-	if err = yaml.Unmarshal(b, &d); err != nil {
-		return err
+	if parseErr := yaml.Unmarshal(b, &d); parseErr != nil {
+		return parseErr
 	}
 	for _, m := range mutators {
 		m(&d)
@@ -82,19 +83,21 @@ func ShowLogs(options ...*exechelper.Option) {
 
 	if err != nil {
 		logrus.Errorf("Cannot get k8s client: %v", err.Error())
+		return
 	}
 
 	pods, err := client.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 
 	if err != nil {
-		logrus.Errorf("An error during get list pods: %v", err.Error())
+		logrus.Errorf("Cannot get pods%v", err.Error())
+		return
 	}
 
 	for i := 0; i < len(pods.Items); i++ {
 		pod := &pods.Items[i]
 		for j := 0; j < len(pod.Spec.Containers); j++ {
-			container := &pod.Spec.Containers[i]
-			exechelper.Run(fmt.Sprintf("kubeclt logs %v -c %v ", pod.Name, container.Name), options...)
+			container := &pod.Spec.Containers[j]
+			_ = exechelper.Run(fmt.Sprintf("kubeclt logs %v -c %v ", pod.Name, container.Name), options...)
 		}
 	}
 }
