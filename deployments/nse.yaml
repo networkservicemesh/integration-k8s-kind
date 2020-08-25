@@ -20,7 +20,7 @@ spec:
           name: nse
           env:
             - name: NSE_CONNECT_TO
-              value: nsm-registry-service:5002
+              value: nsm-registry-svc:5002
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
           volumeMounts:

@@ -1,30 +1,31 @@
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: registry-memory
+  name: nsm-registry-proxy-dns
   labels:
-    app: registry-memory
+    app: nsm-registry-proxy-dns
 spec:
   selector:
     matchLabels:
-      app: registry-memory
+      app: nsm-registry-proxy-dns
   template:
     metadata:
       labels:
-        app: registry-memory
+        app: nsm-registry-proxy-dns
     spec:
       containers:
-        - image: networkservicemeshci/cmd-registry-memory:master
+        - image: networkservicemeshci/cmd-registry-proxy-dns:master
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: REGISTRY-MEMORY_LISTEN_ON
-              value: unix:///var/lib/networkservicemesh/registry.sock
+            - name: REGISTRY-PROXY-DNS_LISTEN_ON
+              value: tcp://:5003
           imagePullPolicy: IfNotPresent
-          name: registry-memory
+          name: nsm-registry-proxy-dns
           ports:
-            - containerPort: 5002
+            - containerPort: 5003
+              hostPort: 5003
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
