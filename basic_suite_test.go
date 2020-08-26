@@ -82,8 +82,8 @@ func (s *BasicTestsSuite) TestNSMgr_CanCanFindNSEInRegistry() {
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
 
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nsmgr.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsmgr", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/fake-nsmgr.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=fake-nsmgr", s.options...))
 }
 
 func (s *BasicTestsSuite) TestProxyRegistryDNS_CanCanFindNSE_Local() {
@@ -107,14 +107,14 @@ func (s *BasicTestsSuite) TestProxyRegistryDNS_CanCanFindNSE_Local() {
 
 	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry-proxy-dns", s.options...))
 
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsmgr.yaml", func(nsmgr *v1.Deployment) {
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/fake-nsmgr.yaml", func(nsmgr *v1.Deployment) {
 		nsmgr.Spec.Template.Spec.Containers[0].Env = append(nsmgr.Spec.Template.Spec.Containers[0].Env, v1core.EnvVar{
-			Name:  "NSMGR_FIND_NETWORK_SERVICE_ENDPOINT_NAME",
+			Name:  "FAKE-NSMGR_FIND_NETWORK_SERVICE_ENDPOINT_NAME",
 			Value: "icmp-responder@default.svc.cluster.local",
 		})
 	}))
 
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsmgr", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=fake-nsmgr", s.options...))
 }
 
 func (s *BasicTestsSuite) TestDeployMemoryRegistry() {

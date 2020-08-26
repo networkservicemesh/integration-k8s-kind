@@ -1,4 +1,4 @@
-module github.com/networkservicemesh/integration-k8s-kind/cmd/nsmgr
+module github.com/networkservicemesh/integration-k8s-kind/cmd/fake-nsmgr
 
 go 1.14
 

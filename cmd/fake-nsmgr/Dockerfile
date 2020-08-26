@@ -7,9 +7,9 @@ COPY go.mod go.sum ./
 COPY pkg ./pkg
 RUN go build ./pkg/imports
 COPY . .
-RUN go build -o /bin/nsmgr .
+RUN go build -o /bin/fake-nsmgr .
 
 
 FROM alpine as runtime
-COPY --from=build /bin/nsmgr /bin/nsmgr
-CMD /bin/nsmgr
+COPY --from=build /bin/fake-nsmgr /bin/fake-nsmgr
+CMD /bin/fake-nsmgr

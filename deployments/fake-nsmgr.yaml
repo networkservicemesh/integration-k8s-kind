@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsmgr
+  name: fake-nsmgr
   labels:
-    app: nsmgr
+    app: fake-nsmgr
 spec:
   selector:
     matchLabels:
-      app: nsmgr
+      app: fake-nsmgr
   template:
     metadata:
       labels:
-        app: nsmgr
+        app: fake-nsmgr
     spec:
       containers:
-        - image: networkservicemeshci/nsmgr:master
+        - image: networkservicemeshci/fake-nsmgr:master
           imagePullPolicy: IfNotPresent
-          name: nsmgr
+          name: fake-nsmgr
           env:
-            - name: NSMGR_CONNECT_TO
+            - name: FAKE-NSMGR_CONNECT_TO
               value: nsm-registry-svc:5002
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock

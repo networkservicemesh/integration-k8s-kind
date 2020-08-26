@@ -89,7 +89,7 @@ func ShowLogs(options ...*exechelper.Option) {
 	pods, err := client.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 
 	if err != nil {
-		logrus.Errorf("Cannot get pods%v", err.Error())
+		logrus.Errorf("Cannot get pods: %v", err.Error())
 		return
 	}
 
@@ -97,7 +97,7 @@ func ShowLogs(options ...*exechelper.Option) {
 		pod := &pods.Items[i]
 		for j := 0; j < len(pod.Spec.Containers); j++ {
 			container := &pod.Spec.Containers[j]
-			_ = exechelper.Run(fmt.Sprintf("kubeclt logs %v -c %v ", pod.Name, container.Name), options...)
+			_ = exechelper.Run(fmt.Sprintf("kubectl logs %v -c %v ", pod.Name, container.Name), options...)
 		}
 	}
 }

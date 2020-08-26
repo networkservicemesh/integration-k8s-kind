@@ -18,8 +18,6 @@ package main
 
 import (
 	"context"
-	"errors"
-	"net"
 	"net/url"
 	"os"
 	"time"
@@ -45,37 +43,6 @@ type Config struct {
 	ConnectTo                  url.URL `desc:"url to the local registry that handles this domain" split_words:"true"`
 	NetworkServiceName         string  `default:"icmp-responder" desc:"url to the local registry that handles this domain" split_words:"true"`
 	NetworkServiceEndpointName string  `default:"icmp-responder-nse" desc:"url to the local registry that handles this domain" split_words:"true"`
-}
-
-// WaitForPortAvailable waits while the port will is available. Throws exception if the context is done.
-func WaitForPortAvailable(ctx context.Context, protoType, registryAddress string, idleSleep time.Duration) error {
-	if idleSleep < 0 {
-		return errors.New("idleSleep must be positive")
-	}
-	logrus.Infof("Waiting for liveness probe: %s:%s", protoType, registryAddress)
-	last := time.Now()
-
-	for {
-		select {
-		case <-ctx.Done():
-			return errors.New("timeout waiting for: " + protoType + ":" + registryAddress)
-		default:
-			var d net.Dialer
-			conn, err := d.DialContext(ctx, protoType, registryAddress)
-			if conn != nil {
-				_ = conn.Close()
-			}
-			if err == nil {
-				return nil
-			}
-			if time.Since(last) > time.Minute {
-				logrus.Infof("Waiting for liveness probe: %s:%s", protoType, registryAddress)
-				last = time.Now()
-			}
-			// Sleep to not overflow network
-			<-time.After(idleSleep)
-		}
-	}
 }
 
 func main() {

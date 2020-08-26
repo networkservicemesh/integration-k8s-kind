@@ -60,10 +60,10 @@ func main() {
 	}
 	// Get config from environment
 	config := &Config{}
-	if err := envconfig.Usage("nsmgr", config); err != nil {
+	if err := envconfig.Usage("fake-nsmgr", config); err != nil {
 		logrus.Fatal(err)
 	}
-	if err := envconfig.Process("nsmgr", config); err != nil {
+	if err := envconfig.Process("fake-nsmgr", config); err != nil {
 		logrus.Fatalf("error processing config from env: %+v", err)
 	}
 
