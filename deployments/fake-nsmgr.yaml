@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-nsmgr
+  labels:
+    app: fake-nsmgr
+spec:
+  selector:
+    matchLabels:
+      app: fake-nsmgr
+  template:
+    metadata:
+      labels:
+        app: fake-nsmgr
+    spec:
+      containers:
+        - image: networkservicemeshci/fake-nsmgr:master
+          imagePullPolicy: IfNotPresent
+          name: fake-nsmgr
+          env:
+            - name: FAKE-NSMGR_CONNECT_TO
+              value: nsm-registry-svc:5002
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: Directory
