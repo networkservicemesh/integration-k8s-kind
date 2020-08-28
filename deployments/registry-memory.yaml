@@ -31,6 +31,7 @@ spec:
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
+              readOnly: true
       volumes:
         - name: spire-agent-socket
           hostPath:

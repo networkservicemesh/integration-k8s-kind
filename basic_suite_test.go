@@ -19,11 +19,11 @@ package integration_k8s_kind_test
 import (
 	"testing"
 
+	"github.com/networkservicemesh/integration-k8s-kind/k8s"
+
 	v1 "k8s.io/api/apps/v1"
 	v1core "k8s.io/api/core/v1"
 
-	"github.com/networkservicemesh/integration-k8s-kind/k8s"
-	"github.com/networkservicemesh/integration-k8s-kind/k8s/require"
 	"github.com/networkservicemesh/integration-k8s-kind/spire"
 
 	"github.com/edwarnicke/exechelper"
@@ -46,6 +46,8 @@ func (s *BasicTestsSuite) SetupSuite() {
 	}
 
 	s.Require().NoError(spire.Setup(s.options...))
+
+	s.Require().NoError(k8s.KindRequire("fake-nsmgr", "nse"))
 }
 
 func (s *BasicTestsSuite) TearDownSuite() {
@@ -53,7 +55,7 @@ func (s *BasicTestsSuite) TearDownSuite() {
 }
 
 func (s *BasicTestsSuite) TearDownTest() {
-	k8s.ShowLogs(s.options...)
+	k8s.ShowLogs(k8s.DefaultNamespace, s.options...)
 
 	s.Require().NoError(exechelper.Run("kubectl delete serviceaccounts --all"))
 	s.Require().NoError(exechelper.Run("kubectl delete services --all"))
@@ -62,7 +64,7 @@ func (s *BasicTestsSuite) TearDownTest() {
 }
 
 func (s *BasicTestsSuite) TestNSE_CanRegisterInRegistry() {
-	defer require.NoRestarts(s.T())
+	defer k8s.NoRestarts(s.T())
 
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
@@ -73,7 +75,7 @@ func (s *BasicTestsSuite) TestNSE_CanRegisterInRegistry() {
 }
 
 func (s *BasicTestsSuite) TestNSMgr_CanCanFindNSEInRegistry() {
-	defer require.NoRestarts(s.T())
+	defer k8s.NoRestarts(s.T())
 
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
@@ -87,7 +89,7 @@ func (s *BasicTestsSuite) TestNSMgr_CanCanFindNSEInRegistry() {
 }
 
 func (s *BasicTestsSuite) TestProxyRegistryDNS_CanCanFindNSE_Local() {
-	defer require.NoRestarts(s.T())
+	defer k8s.NoRestarts(s.T())
 
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/proxy-registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
@@ -118,7 +120,7 @@ func (s *BasicTestsSuite) TestProxyRegistryDNS_CanCanFindNSE_Local() {
 }
 
 func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
-	defer require.NoRestarts(s.T())
+	defer k8s.NoRestarts(s.T())
 
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
@@ -127,11 +129,23 @@ func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
-	defer require.NoRestarts(s.T())
+	defer k8s.NoRestarts(s.T())
 
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/alpine.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=alpine", s.options...))
+}
+
+func (s *BasicTestsSuite) TestNsmgr() {
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nsmgr/nsmgr-namespace.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nsmgr/nsmgr.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsmgr --namespace nsmgr", s.options...))
+
+	podInfo, err := k8s.DescribePod("nsmgr", "", map[string]string{"app": "nsmgr"})
+	s.Require().NoError(err)
+	s.Require().Equal(v1core.PodRunning, podInfo.Status.Phase)
+
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/nsmgr/nsmgr.yaml --grace-period=0 --force", s.options...))
 }
 
 func TestRunBasicSuite(t *testing.T) {

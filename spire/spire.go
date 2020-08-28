@@ -19,29 +19,30 @@ package spire
 
 import (
 	"github.com/edwarnicke/exechelper"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/pkg/errors"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/sirupsen/logrus"
 
 	"github.com/networkservicemesh/integration-k8s-kind/k8s"
 )
 
-func exist() bool {
-	client, err := k8s.Client()
-	if err != nil {
-		return false
-	}
-	_, err = client.CoreV1().Namespaces().Get("spire", v1.GetOptions{})
-	return err == nil
+// Config - configuration for spire
+type Config struct {
+	Cleanup   bool   `default:"true" desc:"Perform full Spire cleanup" split_words:"true"`
+	Namespace string `default:"spire" desc:"Namespace of spire namespace" split_words:"true"`
 }
 
 // Delete deletes spire namespace with all depended resources
 func Delete(options ...*exechelper.Option) error {
-	return exechelper.Run("kubectl delete -f ./deployments/spire/spire-namespace.yaml", options...)
+	if config().Cleanup {
+		return exechelper.Run("kubectl delete -f ./deployments/spire/spire-namespace.yaml", options...)
+	}
+	return nil
 }
 
 // Setup setups spire in spire namespace
 func Setup(options ...*exechelper.Option) error {
-	if exist() {
+	if k8s.NamespaceExists(config().Namespace) {
 		return nil
 	}
 	if err := exechelper.Run("kubectl apply -f ./deployments/spire/spire-namespace.yaml", options...); err != nil {
@@ -69,9 +70,26 @@ func Setup(options ...*exechelper.Option) error {
                                       /opt/spire/bin/spire-server entry create
                                       -spiffeID spiffe://example.org/ns/default/sa/default
                                       -parentID spiffe://example.org/ns/spire/sa/spire-agent
-                                      -selector k8s:ns:default \
+                                      -selector k8s:ns:default  
+                                      -selector k8s:sa:default`, options...); err != nil {
+		return errors.Wrap(err, "cannot create spire-entry for default namespace")
+	}
+	if err := exechelper.Run(`kubectl exec -n spire spire-server-0 --
+                                      /opt/spire/bin/spire-server entry create
+                                      -spiffeID spiffe://example.org/ns/default/sa/default
+                                      -parentID spiffe://example.org/ns/spire/sa/spire-agent
+                                      -selector k8s:ns:nsmgr 
                                       -selector k8s:sa:default`, options...); err != nil {
 		return errors.Wrap(err, "cannot create spire-entry for default namespace")
 	}
 	return nil
+}
+
+// config - read configuration from environment.
+func config() *Config {
+	conf := &Config{}
+	if err := envconfig.Process("spire", conf); err != nil {
+		logrus.Fatalf("error processing conf from env: %+v", err)
+	}
+	return conf
 }

@@ -141,8 +141,12 @@ jobs:
         run: |
           docker build cmd/nse -t networkservicemeshci/nse:master
           docker build cmd/fake-nsmgr -t networkservicemeshci/fake-nsmgr:master
+          docker build cmd/proxy-client -t networkservicemeshci/proxy-client:master
+          docker build cmd/proxy-endpoint -t networkservicemeshci/proxy-endpoint:master
           kind load docker-image networkservicemeshci/nse:master
           kind load docker-image networkservicemeshci/fake-nsmgr:master
+          kind load docker-image networkservicemeshci/proxy-client:master
+          kind load docker-image networkservicemeshci/proxy-endpoint:master
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
