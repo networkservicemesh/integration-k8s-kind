@@ -30,6 +30,8 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
+const defaultNamespace = "default"
+
 type BasicTestsSuite struct {
 	suite.Suite
 	options []*exechelper.Option

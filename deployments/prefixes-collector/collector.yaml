@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: excluded-prefixes-collector
+  namespace: excluded-prefixes-collector
+  labels:
+    app: excluded-prefixes-collector
+spec:
+  selector:
+    matchLabels:
+      app: excluded-prefixes-collector
+  template:
+    metadata:
+      labels:
+        app: excluded-prefixes-collector
+    spec:
+      serviceAccountName: prefixes-collector
+      containers:
+        - image: networkservicemeshci/cmd-exclude-prefixes-k8s:master
+          imagePullPolicy: IfNotPresent
+          name: excluded-prefixes-collector
+          env:
+            - name: EXCLUDE_PREFIXES_K8S_CONFIG_MAP_NAMESPACE
+              value: default
+            - name: EXCLUDE_PREFIXES_K8S_CONFIG_MAP_NAME
+              value: excluded-prefixes-config
+          volumeMounts:
+            - name: config-dir
+              mountPath: /var/lib/networkservicemesh/config/
+      volumes:
+        - name: config-dir
+          hostPath:
+            path: /var/lib/networkservicemesh/config/
+            type: DirectoryOrCreate

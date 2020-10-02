@@ -28,9 +28,11 @@ import (
 	"sync"
 	"time"
 
+	v1 "k8s.io/client-go/kubernetes/typed/core/v1"
+
 	"github.com/edwarnicke/exechelper"
 	"github.com/sirupsen/logrus"
-	v1 "k8s.io/api/apps/v1"
+	apiv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -85,7 +87,7 @@ func Nodes() ([]*corev1.Node, error) {
 }
 
 // ApplyDeployment is analogy of 'kubeclt apply -f path' but with mutating deployment before apply
-func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) error {
+func ApplyDeployment(path string, mutators ...func(deployment *apiv1.Deployment)) error {
 	client, err := Client()
 	if err != nil {
 		return err
@@ -94,13 +96,14 @@ func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) e
 	if err != nil {
 		return err
 	}
-	var d v1.Deployment
+	var d apiv1.Deployment
 	if parseErr := yaml.Unmarshal(b, &d); parseErr != nil {
 		return parseErr
 	}
 	for _, m := range mutators {
 		m(&d)
 	}
+
 	if d.Namespace == "" {
 		d.Namespace = namespace
 	}
@@ -109,8 +112,8 @@ func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) e
 }
 
 // SetNode sets NodeSelector for the pod based on passed nodeName
-func SetNode(nodeName string) func(*v1.Deployment) {
-	return func(deployment *v1.Deployment) {
+func SetNode(nodeName string) func(*apiv1.Deployment) {
+	return func(deployment *apiv1.Deployment) {
 		deployment.Spec.Template.Spec.NodeSelector = map[string]string{
 			"kubernetes.io/hostname": nodeName,
 		}
@@ -133,8 +136,8 @@ func NewNamespace() (name string, cleanup func(), err error) {
 }
 
 // SetNamespace sets namespace for deployment
-func SetNamespace(namespace string) func(*v1.Deployment) {
-	return func(deployment *v1.Deployment) {
+func SetNamespace(namespace string) func(*apiv1.Deployment) {
+	return func(deployment *apiv1.Deployment) {
 		deployment.Namespace = namespace
 	}
 }
@@ -164,7 +167,7 @@ func WaitLogsMatch(labelSelector, pattern, namespace string, timeout time.Durati
 }
 
 // ShowLogs prints logs into console all containers of pods
-func ShowLogs(options ...*exechelper.Option) {
+func ShowLogs(namespace string, options ...*exechelper.Option) {
 	client, err := Client()
 
 	if err != nil {
@@ -186,4 +189,69 @@ func ShowLogs(options ...*exechelper.Option) {
 			_ = exechelper.Run(fmt.Sprintf("kubectl logs %v -c %v ", pod.Name, container.Name), options...)
 		}
 	}
+}
+
+// DescribePod - find a pod by name or by matching all labels passed.
+func DescribePod(namespace, name string, labels map[string]string) (*corev1.Pod, error) {
+	client, err := Client()
+	if err != nil {
+		return nil, err
+	}
+	var pods *corev1.PodList
+	pods, err = client.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i < len(pods.Items); i++ {
+		pod := pods.Items[i]
+		// If name matches
+		if pod.Name == name {
+			return &pod, nil
+		}
+		if labels != nil && pod.Labels != nil {
+			// Check if all lables are in pod labels,
+			matches := len(labels)
+			for k, v := range labels {
+				if pod.Labels[k] == v {
+					matches--
+				}
+			}
+			if matches == 0 {
+				return &pod, nil
+			}
+		}
+	}
+
+	return nil, nil
+}
+
+// ApplyDaemonSet is analogy of 'kubeclt apply -f path' but with mutating daemon set before apply
+func ApplyDaemonSet(path string, mutators ...func(deployment *apiv1.DaemonSet)) error {
+	client, err := Client()
+	if err != nil {
+		return err
+	}
+	b, err := ioutil.ReadFile(filepath.Clean(path))
+	if err != nil {
+		return err
+	}
+	var d apiv1.DaemonSet
+	if parseErr := yaml.Unmarshal(b, &d); parseErr != nil {
+		return parseErr
+	}
+	for _, m := range mutators {
+		m(&d)
+	}
+	_, err = client.AppsV1().DaemonSets(d.Namespace).Create(&d)
+	return err
+}
+
+// ConfigMapInterface returns v1.ConfigMapInterface for passed namespace
+func ConfigMapInterface(namespace string) (v1.ConfigMapInterface, error) {
+	client, err := Client()
+	if err != nil {
+		return nil, err
+	}
+
+	return client.CoreV1().ConfigMaps(namespace), nil
 }
