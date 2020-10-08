@@ -97,11 +97,6 @@ jobs:
         run: |
           git diff -- '*.pb.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
           git diff -- '*.gen.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
-  captureRunEnv:
-    name: Capture CI Run Env
-    runs-on: ubuntu-latest
-    steps:
-      - run: printenv
   automerge:
     name: automerge
     runs-on: ubuntu-latest
@@ -126,6 +121,10 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.5.0
+        with:
+          access_token: ${{ github.token }}
       - uses: actions/checkout@master
       - uses: engineerd/setup-kind@v0.4.0
         with:
