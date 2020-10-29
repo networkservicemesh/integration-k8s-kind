@@ -18,6 +18,8 @@
 package spire
 
 import (
+	"context"
+
 	"github.com/edwarnicke/exechelper"
 	"github.com/pkg/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,7 +32,7 @@ func exist() bool {
 	if err != nil {
 		return false
 	}
-	_, err = client.CoreV1().Namespaces().Get("spire", v1.GetOptions{})
+	_, err = client.CoreV1().Namespaces().Get(context.Background(), "spire", v1.GetOptions{})
 	return err == nil
 }
 
