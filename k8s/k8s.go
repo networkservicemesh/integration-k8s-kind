@@ -18,6 +18,7 @@
 package k8s
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -73,7 +74,7 @@ func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) e
 	for _, m := range mutators {
 		m(&d)
 	}
-	_, err = client.AppsV1().Deployments(namespace).Create(&d)
+	_, err = client.AppsV1().Deployments(namespace).Create(context.Background(), &d, metav1.CreateOptions{})
 	return err
 }
 
@@ -86,7 +87,7 @@ func ShowLogs(options ...*exechelper.Option) {
 		return
 	}
 
-	pods, err := client.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	pods, err := client.CoreV1().Pods(namespace).List(context.Background(), metav1.ListOptions{})
 
 	if err != nil {
 		logrus.Errorf("Cannot get pods: %v", err.Error())

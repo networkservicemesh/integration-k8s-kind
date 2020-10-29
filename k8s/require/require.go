@@ -18,6 +18,7 @@
 package require
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -31,7 +32,7 @@ import (
 func NoRestarts(t *testing.T) {
 	c, err := k8s.Client()
 	require.NoError(t, err)
-	list, err := c.CoreV1().Pods("default").List(metav1.ListOptions{})
+	list, err := c.CoreV1().Pods("default").List(context.Background(), metav1.ListOptions{})
 	require.NoError(t, err)
 	for i := 0; i < len(list.Items); i++ {
 		pod := &list.Items[i]
