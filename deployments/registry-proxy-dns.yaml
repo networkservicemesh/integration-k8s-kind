@@ -15,7 +15,7 @@ spec:
         app: nsm-registry-proxy-dns
     spec:
       containers:
-        - image: networkservicemeshci/cmd-registry-proxy-dns:master
+        - image: networkservicemeshci/cmd-registry-proxy-dns:8ba15e0d
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
