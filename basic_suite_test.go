@@ -18,9 +18,7 @@ package integration_k8s_kind_test
 
 import (
 	"testing"
-
-	v1 "k8s.io/api/apps/v1"
-	v1core "k8s.io/api/core/v1"
+	"time"
 
 	"github.com/networkservicemesh/integration-k8s-kind/k8s"
 	"github.com/networkservicemesh/integration-k8s-kind/k8s/require"
@@ -46,10 +44,24 @@ func (s *BasicTestsSuite) SetupSuite() {
 	}
 
 	s.Require().NoError(spire.Setup(s.options...))
+
+	// Setup NSM
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/namespace.yaml", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsm-registry --namespace nsm-system", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nsmgr.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsmgr --namespace nsm-system", s.options...))
+
+	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/fake-cross-nse.yaml", s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=fake-cross-nse --namespace nsm-system", s.options...))
 }
 
 func (s *BasicTestsSuite) TearDownSuite() {
 	s.Require().NoError(spire.Delete(s.options...))
+	s.Require().NoError(exechelper.Run("kubectl delete -f ./deployments/namespace.yaml", s.options...))
 }
 
 func (s *BasicTestsSuite) TearDownTest() {
@@ -61,77 +73,40 @@ func (s *BasicTestsSuite) TearDownTest() {
 	s.Require().NoError(exechelper.Run("kubectl delete pods --all --grace-period=0 --force"))
 }
 
-func (s *BasicTestsSuite) TestNSE_CanRegisterInRegistry() {
-	defer require.NoRestarts(s.T())
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry", s.options...))
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
-}
-
-func (s *BasicTestsSuite) TestNSMgr_CanCanFindNSEInRegistry() {
-	defer require.NoRestarts(s.T())
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry", s.options...))
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/fake-nsmgr.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=fake-nsmgr", s.options...))
-}
-
-func (s *BasicTestsSuite) TestProxyRegistryDNS_CanCanFindNSE_Local() {
-	defer require.NoRestarts(s.T())
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/proxy-registry-service.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
-
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/registry-proxy-dns.yaml", func(proxyRegistry *v1.Deployment) {
-		proxyRegistry.Spec.Template.Spec.Containers[0].Env = append(proxyRegistry.Spec.Template.Spec.Containers[0].Env, v1core.EnvVar{
-			Name:  "REGISTRY-PROXY-DNS_DOMAIN",
-			Value: "default.svc.cluster.local",
-		})
-	}))
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry", s.options...))
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/nse.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nse", s.options...))
-
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry-proxy-dns", s.options...))
-
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/fake-nsmgr.yaml", func(nsmgr *v1.Deployment) {
-		nsmgr.Spec.Template.Spec.Containers[0].Env = append(nsmgr.Spec.Template.Spec.Containers[0].Env, v1core.EnvVar{
-			Name:  "FAKE-NSMGR_FIND_NETWORK_SERVICE_ENDPOINT_NAME",
-			Value: "icmp-responder@default.svc.cluster.local",
-		})
-	}))
-
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=fake-nsmgr", s.options...))
-}
-
-func (s *BasicTestsSuite) TestDeployMemoryRegistry() {
-	defer require.NoRestarts(s.T())
-
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-memory.yaml", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl wait --timeout=120s  --for=condition=ready pod -l app=nsm-registry", s.options...))
-	s.Require().NoError(exechelper.Run("kubectl describe pod -l app=nsm-registry", s.options...))
-}
-
 func (s *BasicTestsSuite) TestDeployAlpine() {
 	defer require.NoRestarts(s.T())
 
-	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/registry-service.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl apply -f ./deployments/alpine.yaml", s.options...))
 	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=alpine", s.options...))
+}
+
+func (s *BasicTestsSuite) TestNSM_Local() {
+	defer require.NoRestarts(s.T())
+
+	nodes, err := k8s.Nodes()
+	s.Require().NoError(err)
+	s.Require().Greater(len(nodes), 1)
+
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse", s.options...))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc", s.options...))
+
+	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", time.Minute/2))
+}
+
+func (s *BasicTestsSuite) TestNSM_Remote() {
+	defer require.NoRestarts(s.T())
+
+	nodes, err := k8s.Nodes()
+	s.Require().NoError(err)
+	s.Require().Greater(len(nodes), 1)
+
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse", s.options...))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[1].Labels["kubernetes.io/hostname"])))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc", s.options...))
+	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", time.Minute/2))
 }
 
 func TestRunBasicSuite(t *testing.T) {

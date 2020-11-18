@@ -86,7 +86,7 @@ jobs:
           version: '3.8.0'
       - uses: actions/setup-go@v1
         with:
-          go-version: 1.13
+          go-version: 1.15
       - name: Install proto-gen-go
         run: go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.3
       - name: Install proto-gen-go
@@ -126,27 +126,27 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@master
-      - uses: engineerd/setup-kind@v0.4.0
+      - uses: engineerd/setup-kind@v0.5.0
         with:
           config: cluster-config.yaml
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v1
         with:
-          go-version: 1.14
+          go-version: 1.15
           github-token: ${{ github.token }}
-      - uses: autero1/action-gotestsum@v0.1.0
-        with:
-          gotestsum_version: 0.4.1
       - name: Check kind cluster
         run: |
-          docker build cmd/nse -t networkservicemeshci/nse:master
-          docker build cmd/fake-nsmgr -t networkservicemeshci/fake-nsmgr:master
-          kind load docker-image networkservicemeshci/nse:master
-          kind load docker-image networkservicemeshci/fake-nsmgr:master
+          docker build cmd/fake-cross-nse -t networkservicemeshci/fake-cross-nse
+          kind load docker-image networkservicemeshci/fake-cross-nse:latest
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
+      - name: Set go env
+        run: |
+          echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
       - name: Integration tests
         run: |
+          go get gotest.tools/gotestsum
           gotestsum --format standard-verbose -- -race -short $(go list ./...)

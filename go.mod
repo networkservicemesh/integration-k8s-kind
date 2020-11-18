@@ -1,6 +1,6 @@
 module github.com/networkservicemesh/integration-k8s-kind
 
-go 1.14
+go 1.15
 
 require (
 	github.com/edwarnicke/exechelper v1.0.1

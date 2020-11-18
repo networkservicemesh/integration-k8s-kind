@@ -15,12 +15,12 @@ spec:
         app: nse
     spec:
       containers:
-        - image: networkservicemeshci/nse:master
+        - image: networkservicemeshci/cmd-nse-icmp-responder:latest
           imagePullPolicy: IfNotPresent
           name: nse
           env:
             - name: NSE_CONNECT_TO
-              value: nsm-registry-svc:5002
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
           volumeMounts:

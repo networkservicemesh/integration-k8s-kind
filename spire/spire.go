@@ -73,5 +73,14 @@ func Setup(options ...*exechelper.Option) error {
                                       -selector k8s:sa:default`, options...); err != nil {
 		return errors.Wrap(err, "cannot create spire-entry for default namespace")
 	}
+	if err := exechelper.Run(`kubectl exec -n spire spire-server-0 --
+                                      /opt/spire/bin/spire-server entry create
+                                      -spiffeID spiffe://example.org/ns/default/sa/default
+                                      -parentID spiffe://example.org/ns/spire/sa/spire-agent
+                                      -selector k8s:ns:nsm-system \
+                                      -selector k8s:sa:default`, options...); err != nil {
+		return errors.Wrap(err, "cannot create spire-entry for default namespace")
+	}
+
 	return nil
 }

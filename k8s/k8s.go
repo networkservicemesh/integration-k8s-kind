@@ -18,15 +18,20 @@
 package k8s
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/edwarnicke/exechelper"
 	"github.com/sirupsen/logrus"
 	v1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -56,6 +61,29 @@ func Client() (*kubernetes.Clientset, error) {
 	return client, clientErr
 }
 
+// Nodes returns a slice of Nodes where can be deployed deployment
+func Nodes() ([]*corev1.Node, error) {
+	c, err := Client()
+	if err != nil {
+		return nil, err
+	}
+	response, err := c.CoreV1().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*corev1.Node
+	for i := 0; i < len(response.Items); i++ {
+		node := &response.Items[i]
+		name := node.Labels["kubernetes.io/hostname"]
+		if !strings.HasSuffix(name, "control-plane") {
+			result = append(result, node)
+		}
+	}
+
+	return result, nil
+}
+
 // ApplyDeployment is analogy of 'kubeclt apply -f path' but with mutating deployment before apply
 func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) error {
 	client, err := Client()
@@ -75,6 +103,39 @@ func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) e
 	}
 	_, err = client.AppsV1().Deployments(namespace).Create(&d)
 	return err
+}
+
+// SetNode sets NodeSelector for the pod based on passed nodeName
+func SetNode(nodeName string) func(*v1.Deployment) {
+	return func(deployment *v1.Deployment) {
+		deployment.Spec.Template.Spec.NodeSelector = map[string]string{
+			"kubernetes.io/hostname": nodeName,
+		}
+	}
+}
+
+// WaitLogsMatch waits pattern in logs of deployment. Note: Use this function only for final assertion.
+// Do not use this for wait special state of application.
+// Note: This API should be replaced to using `ping` command.
+func WaitLogsMatch(labelSelector, pattern string, timeout time.Duration) error {
+	start := time.Now()
+	for {
+		sb := new(strings.Builder)
+		err := exechelper.Run(fmt.Sprintf("kubectl logs -l %v", labelSelector), exechelper.WithStderr(sb), exechelper.WithStdout(sb))
+		if err != nil {
+			return err
+		}
+		logs := sb.String()
+		if ok, err := regexp.MatchString(pattern, logs); err != nil {
+			return err
+		} else if ok {
+			return nil
+		}
+		if time.Since(start) >= timeout {
+			return errors.New("timeout for wait pattern: " + pattern)
+		}
+		time.Sleep(time.Millisecond * 100)
+	}
 }
 
 // ShowLogs prints logs into console all containers of pods
