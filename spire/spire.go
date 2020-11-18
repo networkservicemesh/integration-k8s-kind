@@ -18,6 +18,8 @@
 package spire
 
 import (
+	"fmt"
+
 	"github.com/edwarnicke/exechelper"
 	"github.com/pkg/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -65,13 +67,18 @@ func Setup(options ...*exechelper.Option) error {
                                       -node`, options...); err != nil {
 		return errors.Wrap(err, "cannot create spire-entry for spire-agent")
 	}
-	if err := exechelper.Run(`kubectl exec -n spire spire-server-0 --
+	if err := RegisterNamespace("nsm-system", options...); err != nil {
+		return errors.Wrap(err, "cannot create spire-entry for spire-agent")
+	}
+	return nil
+}
+
+// RegisterNamespace registers namespace entry
+func RegisterNamespace(namespace string, options ...*exechelper.Option) error {
+	return exechelper.Run(fmt.Sprintf(`kubectl exec -n spire spire-server-0 --
                                       /opt/spire/bin/spire-server entry create
                                       -spiffeID spiffe://example.org/ns/default/sa/default
                                       -parentID spiffe://example.org/ns/spire/sa/spire-agent
-                                      -selector k8s:ns:default \
-                                      -selector k8s:sa:default`, options...); err != nil {
-		return errors.Wrap(err, "cannot create spire-entry for default namespace")
-	}
-	return nil
+                                      -selector k8s:ns:%v
+                                      -selector k8s:sa:default`, namespace), options...)
 }

@@ -35,8 +35,6 @@ linters-settings:
     min-complexity: 15
   maligned:
     suggest-new: true
-  dupl:
-    threshold: 150
   funlen:
     Lines: 100
     Statements: 50
@@ -137,7 +135,6 @@ linters:
     - deadcode
     - depguard
     - dogsled
-    - dupl
     - errcheck
     - funlen
     - gochecknoinits
