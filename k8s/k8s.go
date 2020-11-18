@@ -101,7 +101,10 @@ func ApplyDeployment(path string, mutators ...func(deployment *v1.Deployment)) e
 	for _, m := range mutators {
 		m(&d)
 	}
-	_, err = client.AppsV1().Deployments(namespace).Create(&d)
+	if d.Namespace == "" {
+		d.Namespace = namespace
+	}
+	_, err = client.AppsV1().Deployments(d.Namespace).Create(&d)
 	return err
 }
 
@@ -114,14 +117,36 @@ func SetNode(nodeName string) func(*v1.Deployment) {
 	}
 }
 
+// NewNamespace generates new namespace
+func NewNamespace() (name string, cleanup func(), err error) {
+	c, err := Client()
+	if err != nil {
+		return "", nil, err
+	}
+	ns, err := c.CoreV1().Namespaces().Create(&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{GenerateName: "ns-"}})
+	if err != nil {
+		return "", nil, err
+	}
+	return ns.Name, func() {
+		_ = c.CoreV1().Namespaces().Delete(ns.Name, &metav1.DeleteOptions{})
+	}, nil
+}
+
+// SetNamespace sets namespace for deployment
+func SetNamespace(namespace string) func(*v1.Deployment) {
+	return func(deployment *v1.Deployment) {
+		deployment.Namespace = namespace
+	}
+}
+
 // WaitLogsMatch waits pattern in logs of deployment. Note: Use this function only for final assertion.
 // Do not use this for wait special state of application.
 // Note: This API should be replaced to using `ping` command.
-func WaitLogsMatch(labelSelector, pattern string, timeout time.Duration) error {
+func WaitLogsMatch(labelSelector, pattern, namespace string, timeout time.Duration) error {
 	start := time.Now()
 	for {
 		sb := new(strings.Builder)
-		err := exechelper.Run(fmt.Sprintf("kubectl logs -l %v", labelSelector), exechelper.WithStderr(sb), exechelper.WithStdout(sb))
+		err := exechelper.Run(fmt.Sprintf("kubectl logs -l %v -n %v", labelSelector, namespace), exechelper.WithStderr(sb), exechelper.WithStdout(sb))
 		if err != nil {
 			return err
 		}

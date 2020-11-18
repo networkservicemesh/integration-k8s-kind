@@ -66,11 +66,6 @@ func (s *BasicTestsSuite) TearDownSuite() {
 
 func (s *BasicTestsSuite) TearDownTest() {
 	k8s.ShowLogs(s.options...)
-
-	s.Require().NoError(exechelper.Run("kubectl delete serviceaccounts --all"))
-	s.Require().NoError(exechelper.Run("kubectl delete services --all"))
-	s.Require().NoError(exechelper.Run("kubectl delete deployment --all"))
-	s.Require().NoError(exechelper.Run("kubectl delete pods --all --grace-period=0 --force"))
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
@@ -83,30 +78,45 @@ func (s *BasicTestsSuite) TestDeployAlpine() {
 func (s *BasicTestsSuite) TestNSM_Local() {
 	defer require.NoRestarts(s.T())
 
+	ns, cleanup, err := k8s.NewNamespace()
+	s.Require().NoError(err)
+	defer cleanup()
+	s.Require().NoError(spire.RegisterNamespace(ns, s.options...))
+
 	nodes, err := k8s.Nodes()
 	s.Require().NoError(err)
-	s.Require().Greater(len(nodes), 1)
+	s.Require().Greater(len(nodes), 0)
 
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse", s.options...))
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc", s.options...))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n"+ns, s.options...))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n"+ns, s.options...))
 
-	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", time.Minute/2))
+	time.Sleep(time.Second * 15) // https://github.com/networkservicemesh/sdk/issues/593
+
+	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", ns, time.Minute/2))
 }
 
 func (s *BasicTestsSuite) TestNSM_Remote() {
 	defer require.NoRestarts(s.T())
 
+	ns, cleanup, err := k8s.NewNamespace()
+	s.Require().NoError(err)
+	defer cleanup()
+	s.Require().NoError(spire.RegisterNamespace(ns, s.options...))
+
 	nodes, err := k8s.Nodes()
 	s.Require().NoError(err)
 	s.Require().Greater(len(nodes), 1)
 
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"])))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse", s.options...))
-	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[1].Labels["kubernetes.io/hostname"])))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc", s.options...))
-	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", time.Minute/2))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n"+ns, s.options...))
+	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[1].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n"+ns, s.options...))
+
+	time.Sleep(time.Second * 15) // https://github.com/networkservicemesh/sdk/issues/593
+
+	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", ns, time.Minute/2))
 }
 
 func TestRunBasicSuite(t *testing.T) {
