@@ -28,8 +28,6 @@ import (
 	"sync"
 	"time"
 
-	v1 "k8s.io/client-go/kubernetes/typed/core/v1"
-
 	"github.com/edwarnicke/exechelper"
 	"github.com/sirupsen/logrus"
 	apiv1 "k8s.io/api/apps/v1"
@@ -166,6 +164,32 @@ func WaitLogsMatch(labelSelector, pattern, namespace string, timeout time.Durati
 	}
 }
 
+// ApplyDaemonSet is analogy of 'kubeclt apply -f path' but with mutating daemonSet before apply
+func ApplyDaemonSet(path string, mutators ...func(deployment *apiv1.DaemonSet)) error {
+	client, err := Client()
+	if err != nil {
+		return err
+	}
+	b, err := ioutil.ReadFile(filepath.Clean(path))
+	if err != nil {
+		return err
+	}
+	var d apiv1.DaemonSet
+	if parseErr := yaml.Unmarshal(b, &d); parseErr != nil {
+		return parseErr
+	}
+	for _, m := range mutators {
+		m(&d)
+	}
+
+	if d.Namespace == "" {
+		d.Namespace = namespace
+	}
+
+	_, err = client.AppsV1().DaemonSets(d.Namespace).Create(&d)
+	return err
+}
+
 // ShowLogs prints logs into console all containers of pods
 func ShowLogs(namespace string, options ...*exechelper.Option) {
 	client, err := Client()
@@ -186,13 +210,13 @@ func ShowLogs(namespace string, options ...*exechelper.Option) {
 		pod := &pods.Items[i]
 		for j := 0; j < len(pod.Spec.Containers); j++ {
 			container := &pod.Spec.Containers[j]
-			_ = exechelper.Run(fmt.Sprintf("kubectl logs %v -c %v ", pod.Name, container.Name), options...)
+			_ = exechelper.Run(fmt.Sprintf("kubectl logs -n %v %v -c %v ", namespace, pod.Name, container.Name), options...)
 		}
 	}
 }
 
-// DescribePod - find a pod by name or by matching all labels passed.
-func DescribePod(namespace, name string, labels map[string]string) (*corev1.Pod, error) {
+// GetPod - find a pod by name or by matching all labels passed.
+func GetPod(namespace, name string, labels map[string]string) (*corev1.Pod, error) {
 	client, err := Client()
 	if err != nil {
 		return nil, err
@@ -223,35 +247,4 @@ func DescribePod(namespace, name string, labels map[string]string) (*corev1.Pod,
 	}
 
 	return nil, nil
-}
-
-// ApplyDaemonSet is analogy of 'kubeclt apply -f path' but with mutating daemon set before apply
-func ApplyDaemonSet(path string, mutators ...func(deployment *apiv1.DaemonSet)) error {
-	client, err := Client()
-	if err != nil {
-		return err
-	}
-	b, err := ioutil.ReadFile(filepath.Clean(path))
-	if err != nil {
-		return err
-	}
-	var d apiv1.DaemonSet
-	if parseErr := yaml.Unmarshal(b, &d); parseErr != nil {
-		return parseErr
-	}
-	for _, m := range mutators {
-		m(&d)
-	}
-	_, err = client.AppsV1().DaemonSets(d.Namespace).Create(&d)
-	return err
-}
-
-// ConfigMapInterface returns v1.ConfigMapInterface for passed namespace
-func ConfigMapInterface(namespace string) (v1.ConfigMapInterface, error) {
-	client, err := Client()
-	if err != nil {
-		return nil, err
-	}
-
-	return client.CoreV1().ConfigMaps(namespace), nil
 }

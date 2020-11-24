@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: excluded-prefixes-config
+  namespace: default
+data:
+  excluded_prefixes.yaml: "Prefixes:\n- 128.0.0.0/1\n- 0.0.0.0/1"

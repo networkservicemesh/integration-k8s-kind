@@ -7,6 +7,10 @@ rules:
   - apiGroups: [""]
     resources: ["services", "nodes", "configmaps", "namespaces"]
     verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["nsm-config"]
+    verbs: ["update"]
 
 ---
 kind: ClusterRoleBinding

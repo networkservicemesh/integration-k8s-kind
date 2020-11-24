@@ -25,7 +25,6 @@ spec:
           volumeMounts:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
-              readOnly: true
       volumes:
         - name: nsm-socket
           hostPath:

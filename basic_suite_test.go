@@ -67,7 +67,7 @@ func (s *BasicTestsSuite) TearDownSuite() {
 }
 
 func (s *BasicTestsSuite) TearDownTest() {
-	k8s.ShowLogs(s.options...)
+	k8s.ShowLogs(defaultNamespace, s.options...)
 }
 
 func (s *BasicTestsSuite) TestDeployAlpine() {
