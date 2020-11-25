@@ -44,8 +44,8 @@ const (
 
 type ExcludedPrefixesSuite struct {
 	suite.Suite
-	options       []*exechelper.Option
-	alpinePodName string
+	options      []*exechelper.Option
+	nsmgrPodName string
 }
 
 type prefixes struct {
@@ -74,7 +74,7 @@ func (et *ExcludedPrefixesSuite) SetupSuite() {
 	et.Require().NoError(exechelper.Run("kubectl apply -f ../deployments/prefixes-collector/collector-account.yaml", et.options...))
 	et.Require().NoError(exechelper.Run("kubectl apply -f ../deployments/prefixes-collector/collector-cluster-role.yaml", et.options...))
 
-	et.setupAlpine()
+	et.setupNsmgr()
 }
 
 func (et *ExcludedPrefixesSuite) TearDownTest() {
@@ -177,14 +177,18 @@ func TestExcludedPrefixesSuite(t *testing.T) {
 	suite.Run(t, &ExcludedPrefixesSuite{})
 }
 
-func (et *ExcludedPrefixesSuite) setupAlpine() {
-	et.Require().NoError(k8s.ApplyDeployment("../deployments/alpine.yaml", func(alpine *v1.Deployment) {
-		alpine.Namespace = collectorNamespace
+func (et *ExcludedPrefixesSuite) setupNsmgr() {
+	et.Require().NoError(k8s.ApplyDaemonSet("../deployments/nsmgr.yaml", func(nsmgr *v1.DaemonSet) {
+		nsmgr.Namespace = collectorNamespace
+		spec := nsmgr.Spec.Template.Spec
+		// Remove spire sockets directory mount
+		spec.Volumes = spec.Volumes[1:]
+		spec.Containers[0].VolumeMounts = spec.Containers[0].VolumeMounts[1:]
 	}))
 
 	var podInfo *corev1.Pod
 	labels := map[string]string{
-		"app": "alpine",
+		"app": "nsmgr",
 	}
 
 	et.Eventually(func() bool {
@@ -196,7 +200,7 @@ func (et *ExcludedPrefixesSuite) setupAlpine() {
 		return podInfo != nil
 	}, time.Second*60, time.Second*5)
 
-	et.alpinePodName = podInfo.Name
+	et.nsmgrPodName = podInfo.Name
 }
 
 func (et *ExcludedPrefixesSuite) checkPrefixes(expectedPrefixes []string) func() bool {
@@ -205,7 +209,7 @@ func (et *ExcludedPrefixesSuite) checkPrefixes(expectedPrefixes []string) func()
 
 	return func() bool {
 		var sb strings.Builder
-		cmd := fmt.Sprintf("kubectl exec -n excluded-prefixes-collector -ti %v -- cat %v", et.alpinePodName, prefixesFilePath)
+		cmd := fmt.Sprintf("kubectl exec -n excluded-prefixes-collector -ti %v -- cat %v", et.nsmgrPodName, prefixesFilePath)
 		err := exechelper.Run(cmd, exechelper.WithStdout(&sb))
 		logrus.Infof("Current: %v Expected: %v", sb.String(), string(expectedPrefixesYaml))
 		return err == nil && sb.String() == string(expectedPrefixesYaml)
