@@ -88,12 +88,9 @@ func (s *BasicTestsSuite) TestNSM_Local() {
 	s.Require().Greater(len(nodes), 0)
 
 	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n"+ns, s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n "+ns, s.options...))
 	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n"+ns, s.options...))
-
-	time.Sleep(time.Second * 15) // https://github.com/networkservicemesh/sdk/issues/593
-
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n "+ns, s.options...))
 	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", ns, time.Minute/2))
 }
 
@@ -110,12 +107,9 @@ func (s *BasicTestsSuite) TestNSM_Remote() {
 	s.Require().Greater(len(nodes), 1)
 
 	s.Require().NoError(k8s.ApplyDeployment("./deployments/nse.yaml", k8s.SetNode(nodes[0].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n"+ns, s.options...))
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nse -n "+ns, s.options...))
 	s.Require().NoError(k8s.ApplyDeployment("./deployments/nsc.yaml", k8s.SetNode(nodes[1].Labels["kubernetes.io/hostname"]), k8s.SetNamespace(ns)))
-	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n"+ns, s.options...))
-
-	time.Sleep(time.Second * 15) // https://github.com/networkservicemesh/sdk/issues/593
-
+	s.Require().NoError(exechelper.Run("kubectl wait --for=condition=ready pod -l app=nsc -n "+ns, s.options...))
 	s.Require().NoError(k8s.WaitLogsMatch("app=nsc", "All client init operations are done.", ns, time.Minute/2))
 }
 
