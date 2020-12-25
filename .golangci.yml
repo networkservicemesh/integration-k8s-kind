@@ -30,11 +30,13 @@ linters-settings:
   golint:
     min-confidence: 0.8
   goimports:
-    local-prefixes: github.com/networkservicemesh/integration-k8s-kind
+    local-prefixes: github.com/networkservicemesh
   gocyclo:
     min-complexity: 15
   maligned:
     suggest-new: true
+  dupl:
+    threshold: 150
   funlen:
     Lines: 100
     Statements: 50
@@ -135,6 +137,7 @@ linters:
     - deadcode
     - depguard
     - dogsled
+    # - dupl
     - errcheck
     - funlen
     - gochecknoinits
@@ -163,6 +166,9 @@ linters:
     - varcheck
     - whitespace
 issues:
-  exclude-use-default: false
-  max-issues-per-linter: 0
-  max-same-issues: 0
+  exclude-rules:
+    # We really *do* want to pass a pointer to an interface in these cases.  See comments in file for New{Server,Client}
+    # function for why
+    - path: .*\.gen\.go
+      linters:
+        - goheader

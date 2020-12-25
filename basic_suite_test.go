@@ -19,8 +19,9 @@ package integration_k8s_kind_test
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-k8s-kind/suites/basic"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/networkservicemesh/integration-k8s-kind/suites/basic"
 )
 
 func TestRunBasicSuite(t *testing.T) {
