@@ -13,16 +13,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+package suites
 
-package integration_k8s_kind_test
-
-import (
-	"testing"
-
-	"github.com/networkservicemesh/integration-k8s-kind/suites/basic"
-	"github.com/stretchr/testify/suite"
-)
-
-func TestRunBasicSuite(t *testing.T) {
-	suite.Run(t, &basic.Suite{})
-}
+//go:generate gotestmd ../../deployments-k8s/examples .
+//go:generate goimports -w -local github.com/networkservicemesh -d "./"

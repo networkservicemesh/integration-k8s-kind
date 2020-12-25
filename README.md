@@ -2,6 +2,6 @@
 
 How to run integration tests locally?
 ```bash
-kind create cluster --name nsm --config cluster-config.yaml --wait 120s
+kind create cluster --config cluster-config.yaml --wait 120s
 go test ./...
 ```
