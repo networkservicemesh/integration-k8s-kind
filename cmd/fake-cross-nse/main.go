@@ -26,6 +26,7 @@ import (
 	"github.com/networkservicemesh/sdk/pkg/networkservice/common/mechanisms/sendfd"
 	"github.com/networkservicemesh/sdk/pkg/networkservice/core/adapters"
 	"github.com/networkservicemesh/sdk/pkg/registry/common/interpose"
+	"github.com/networkservicemesh/sdk/pkg/registry/common/refresh"
 	sendfd2 "github.com/networkservicemesh/sdk/pkg/registry/common/sendfd"
 	"github.com/networkservicemesh/sdk/pkg/registry/core/chain"
 	"github.com/networkservicemesh/sdk/pkg/tools/addressof"
@@ -44,7 +45,7 @@ type Config struct {
 func main() {
 	ctx := signalctx.WithSignals(context.Background())
 	ctx, cancel := context.WithCancel(ctx)
-
+	logrus.SetLevel(logrus.TraceLevel)
 	// Get config from environment
 	config := &Config{}
 	if err := envconfig.Usage("fake-cross-nse", config); err != nil {
@@ -122,6 +123,7 @@ func main() {
 	}
 
 	forwarderRegistrationClient := chain.NewNetworkServiceEndpointRegistryClient(
+		refresh.NewNetworkServiceEndpointRegistryClient(),
 		sendfd2.NewNetworkServiceEndpointRegistryClient(),
 		interpose.NewNetworkServiceEndpointRegistryClient(),
 		api_registry.NewNetworkServiceEndpointRegistryClient(cc),
@@ -134,7 +136,6 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err.Error())
 	}
-
 	<-ctx.Done()
 }
 

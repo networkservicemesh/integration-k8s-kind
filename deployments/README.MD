@@ -1,1 +1,0 @@
-TODO: This folder should be removed when we've created repository for NSM deployments.
