@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Doc.ai and/or its affiliates.
+// Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -14,16 +14,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package integration_k8s_kind_test
+package test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/networkservicemesh/integration-k8s-kind/suites/basic"
+	"github.com/networkservicemesh/integration-tests/suites/basic"
+	"github.com/networkservicemesh/integration-tests/suites/memory"
 )
 
 func TestRunBasicSuite(t *testing.T) {
-	suite.Run(t, &basic.Suite{})
+	suite.Run(t, new(basic.Suite))
+}
+
+func TestRunMemorySuite(t *testing.T) {
+	suite.Run(t, new(memory.Suite))
 }
