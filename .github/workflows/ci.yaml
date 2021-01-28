@@ -112,8 +112,6 @@ jobs:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
       - name: Check kind cluster
         run: |
-          docker build cmd/fake-cross-nse -t networkservicemeshci/fake-cross-nse
-          kind load docker-image networkservicemeshci/fake-cross-nse:latest
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
