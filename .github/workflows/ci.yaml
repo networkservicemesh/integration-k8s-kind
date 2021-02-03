@@ -102,10 +102,6 @@ jobs:
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
       - uses: actions/checkout@v2
         with:
-          path: ${{ github.workspace }}/src/github.com/networkservicemesh/deployments-k8s
-          repository: networkservicemesh/deployments-k8s
-      - uses: actions/checkout@v2
-        with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
         with:
