@@ -147,21 +147,24 @@ jobs:
           git log -1 >> /tmp/commit-message
           echo "Commit Message:"
           cat /tmp/commit-message
-
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+      - name: Get current integration-tests version
+        id: get-integration-tests-version
+        working-directory: ${{ github.repository }}
+        run: |
+          echo "::set-output name=value::$(go list -m -f '{{ .Version }}' github.com/networkservicemesh/integration-tests)"
       - name: Checkout networkservicemesh/${{ matrix.repository }}
         uses: actions/checkout@v2
         with:
           path: networkservicemesh/${{ matrix.repository }}
           repository: networkservicemesh/${{ matrix.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.15
       - name: Update networkservicemesh/${{ matrix.repository }} locally
         working-directory: networkservicemesh/${{ matrix.repository }}
         run: |
-          version=$(go list -m -f '{{ .Version }}' github.com/networkservicemesh/integration-tests)
-          GOPRIVATE=github.com/networkservicemesh go get github.com/networkservicemesh/integration-tests@"${version}"
+          GOPRIVATE=github.com/networkservicemesh go get github.com/networkservicemesh/integration-tests@${{ steps.get-integration-tests-version.outputs.value }}
           go mod tidy
           git diff
       - name: Push update to the ${{ matrix.repository }}
