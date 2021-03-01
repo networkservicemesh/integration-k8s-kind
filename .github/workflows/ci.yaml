@@ -115,7 +115,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -race -v ./...
+          go test -count 1 -timeout 20m -race -v ./...
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
   update-dependent-repositories:
     continue-on-error: true
