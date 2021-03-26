@@ -117,11 +117,12 @@ jobs:
         run: |
           go test -count 1 -timeout 20m -race -v ./...
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+        if: succeeded() || failed()
       - uses: actions/upload-artifact@v2
         with:
-          name: Container logs
+          name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/logs
-              
+
   update-dependent-repositories:
     continue-on-error: true
     strategy:
