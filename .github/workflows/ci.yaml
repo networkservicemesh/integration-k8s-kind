@@ -117,8 +117,9 @@ jobs:
         run: |
           go test -count 1 -timeout 20m -race -v ./...
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-        if: succeeded() || failed()
-      - uses: actions/upload-artifact@v2
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
         with:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/logs
