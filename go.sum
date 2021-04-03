@@ -114,6 +114,8 @@ github.com/google/pprof v0.0.0-20200229191704-1ebb73c60ed3/go.mod h1:ZgVRPoUq/hf
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
 github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/google/uuid v1.2.0 h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=
+github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+vpHVxEJEs9eg=
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
 github.com/googleapis/gnostic v0.4.1 h1:DLJCy1n/vrD4HPjOvYcT8aYQXpPIzoRZONaYwyycI+I=
@@ -154,8 +156,8 @@ github.com/munnerz/goautoneg v0.0.0-20120707110453-a547fc61f48d/go.mod h1:+n7T8m
 github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f/go.mod h1:ZdcZmHo+o7JKHSa8/e818NopupXU1YMK5fe1lsApnBw=
 github.com/networkservicemesh/gotestmd v0.0.0-20210326113820-7c7fa1e058ed h1:bZqJ1P8Gw7rxVF5ehlqnfTz9ygaRkyBBR4M5slVUw2Q=
 github.com/networkservicemesh/gotestmd v0.0.0-20210326113820-7c7fa1e058ed/go.mod h1:RsxZNZRDhTSkY21gzrJVC4ufT10bfeHRvrRTtypUx+k=
-github.com/networkservicemesh/integration-tests v0.0.0-20210402121443-50a38fa4f137 h1:Kp6Mn3sjLEmWzzMYH63xJjQGFYdUoerfnaLciqqCVUE=
-github.com/networkservicemesh/integration-tests v0.0.0-20210402121443-50a38fa4f137/go.mod h1:0hZVhXZEREf5SZe3WUDO7lFqCUCvHM/+VmcQcUgytsw=
+github.com/networkservicemesh/integration-tests v0.0.0-20210403165611-9efdb50abbc2 h1:DfAAWR/xiDm0QIwDoKhOz4i9yLSFruzCAFxjQzLwIwA=
+github.com/networkservicemesh/integration-tests v0.0.0-20210403165611-9efdb50abbc2/go.mod h1:Df3NLNCMmJ2VFheKPQBvRGpG0htDHB/ymGgOflmlG74=
 github.com/onsi/ginkgo v0.0.0-20170829012221-11459a886d9c/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.11.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
