@@ -13,6 +13,7 @@ jobs:
       matrix:
         repository:
           - integration-k8s-packet
+          - integration-k8s-gke
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
     steps:
