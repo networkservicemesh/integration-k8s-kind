@@ -1,13 +1,11 @@
 ---
 name: automerge
-
 on:
   workflow_run:
     types:
       - completed
     workflows:
       - 'ci'
-
 jobs:
   automerge:
     name: Automerge
@@ -28,7 +26,6 @@ jobs:
         with:
           GITHUB_LOGIN: nsmbot
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
- 
   update-dependent-repositories:
     continue-on-error: true
     strategy:
