@@ -102,4 +102,3 @@ jobs:
         with:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/logs
-
