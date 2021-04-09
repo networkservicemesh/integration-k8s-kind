@@ -63,27 +63,6 @@ jobs:
         run: |
           git diff --name-only --exit-code go.mod || ( echo "Run go tidy" && false )
           git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
-  automerge:
-    name: automerge
-    runs-on: ubuntu-latest
-    needs:
-      - kind
-    if: github.actor == 'nsmbot' && github.event_name == 'pull_request'
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v2
-      - name: Fetch master
-        run: |
-          git remote -v
-          git fetch --depth=1 origin master
-      - name: Only allow go.mod and go.sum changes
-        run: |
-          find . -type f ! -name 'go.mod' ! -name 'go.sum' ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/master -- {} +
-      - name: Automerge nsmbot PR
-        uses: ridedott/merge-me-action@master
-        with:
-          GITHUB_LOGIN: nsmbot
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   kind:
     runs-on: ubuntu-latest
     steps:
@@ -124,68 +103,3 @@ jobs:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/logs
 
-  update-dependent-repositories:
-    continue-on-error: true
-    strategy:
-      fail-fast: false
-      matrix:
-        repository:
-          - integration-k8s-packet
-          - integration-k8s-gke
-    name: Update ${{ matrix.repository }}
-    runs-on: ubuntu-latest
-    needs:
-      - automerge
-    if: github.actor == 'nsmbot' && github.base_ref == 'master' && github.event_name == 'pull_request'
-    steps:
-      - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v2
-        with:
-          path: ${{ github.repository }}
-          ref: master
-          fetch-depth: '0'
-      - name: Create commit message
-        working-directory: ${{ github.repository }}
-        run: |
-          echo "Update go.mod and go.sum to latest version from ${{ github.repository }}@master ${{ github.repository }}#${{ github.event.number }}" >> /tmp/commit-message
-          echo "" >> /tmp/commit-message
-          echo "${{ github.repository }} PR link: https://github.com/${{ github.repository }}/pull/${{ github.event.number }}" >> /tmp/commit-message
-          echo "" >> /tmp/commit-message
-          echo "${{ github.repository }} commit message:" >> /tmp/commit-message
-          git log -1 >> /tmp/commit-message
-          echo "Commit Message:"
-          cat /tmp/commit-message
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.16
-      - name: Get current integration-tests version
-        id: get-integration-tests-version
-        working-directory: ${{ github.repository }}
-        run: |
-          echo "::set-output name=value::$(go list -m -f '{{ .Version }}' github.com/networkservicemesh/integration-tests)"
-      - name: Checkout networkservicemesh/${{ matrix.repository }}
-        uses: actions/checkout@v2
-        with:
-          path: networkservicemesh/${{ matrix.repository }}
-          repository: networkservicemesh/${{ matrix.repository }}
-          token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-      - name: Update networkservicemesh/${{ matrix.repository }} locally
-        working-directory: networkservicemesh/${{ matrix.repository }}
-        run: |
-          GOPRIVATE=github.com/networkservicemesh go get github.com/networkservicemesh/integration-tests@${{ steps.get-integration-tests-version.outputs.value }}
-          go mod tidy
-          git diff
-      - name: Push update to the ${{ matrix.repository }}
-        working-directory: networkservicemesh/${{ matrix.repository }}
-        run: |
-          echo Starting to update repositotry ${{ matrix.repository }}
-          git config --global user.email "nsmbot@networkservicmesh.io"
-          git config --global user.name "NSMBot"
-          git add go.mod go.sum
-          if ! [ -n "$(git diff --cached --exit-code)" ]; then
-            echo ${{ matrix.repository }} is up to date
-            exit 0;
-          fi
-          git commit -s -F /tmp/commit-message
-          git checkout -b update/${{ github.repository }}
-          git push -f origin update/${{ github.repository }}
