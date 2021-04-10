@@ -25,6 +25,7 @@ jobs:
         uses: ridedott/merge-me-action@v2
         with:
           GITHUB_LOGIN: nsmbot
+          ENABLED_FOR_MANUAL_CHANGES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-dependent-repositories:
     continue-on-error: true
