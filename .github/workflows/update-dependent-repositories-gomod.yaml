@@ -20,8 +20,10 @@ jobs:
           - integration-k8s-gke
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.ref == 'refs/heads/main' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
     steps:
+      - name: Print environment with masked secrets
+        run: printenv
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v2
         with:
