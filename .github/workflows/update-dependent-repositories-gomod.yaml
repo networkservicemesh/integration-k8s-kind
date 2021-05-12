@@ -18,6 +18,7 @@ jobs:
         repository:
           - integration-k8s-packet
           - integration-k8s-gke
+          - integration-k8s-aks
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
