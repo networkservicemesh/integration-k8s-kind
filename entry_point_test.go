@@ -28,6 +28,7 @@ import (
 )
 
 func TestRunHealSuite(t *testing.T) {
+	t.Skip("https://github.com/networkservicemesh/deployments-k8s/pull/1789")
 	suite.Run(t, new(heal.Suite))
 }
 
