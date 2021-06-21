@@ -63,6 +63,15 @@ jobs:
           git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
   kind:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - v1.21.1
+          - v1.20.7
+          - v1.19.11
+          - v1.18.15
+          - v1.17.11
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
@@ -83,8 +92,11 @@ jobs:
       - uses: engineerd/setup-kind@v0.5.0
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
+          version: v0.11.1
+          image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
         run: |
+          kubectl version
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
@@ -99,4 +111,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Containers logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
