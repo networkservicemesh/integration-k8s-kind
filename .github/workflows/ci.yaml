@@ -105,6 +105,8 @@ jobs:
       - name: Integration tests
         run: |
           go test -count 1 -timeout 40m -race -v ./...
+        env:
+          ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
