@@ -32,6 +32,8 @@ github.com/Azure/go-autorest/logger v0.2.0/go.mod h1:T9E3cAhj2VqvPOtCYAvby9aBXkZ
 github.com/Azure/go-autorest/tracing v0.6.0/go.mod h1:+vhtPC754Xsa23ID7GlGsrdKBpUA79WCAKPPZVC2DeU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
+github.com/Mixaster995/integration-tests v0.0.0-20210721114603-01d55dcdcdac h1:mS7qzHtk32+PODCzuNBenuCPWoJJoqoxWycM3Ugr4TE=
+github.com/Mixaster995/integration-tests v0.0.0-20210721114603-01d55dcdcdac/go.mod h1:IKdS54nhITEgt/jSqH5kcT5HovywPZiwIuDGwTObSmo=
 github.com/NYTimes/gziphandler v0.0.0-20170623195520-56545f4a5d46/go.mod h1:3wb06e3pkSAbeQ52E9H9iFoQsEEwGN64994WTCIhntQ=
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
@@ -156,8 +158,6 @@ github.com/munnerz/goautoneg v0.0.0-20120707110453-a547fc61f48d/go.mod h1:+n7T8m
 github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f/go.mod h1:ZdcZmHo+o7JKHSa8/e818NopupXU1YMK5fe1lsApnBw=
 github.com/networkservicemesh/gotestmd v0.0.0-20210616071812-739f61445c2f h1:g8ldKuYSKuEwgA4X/9CVbA5gVoeL6auduXb0//cgNAs=
 github.com/networkservicemesh/gotestmd v0.0.0-20210616071812-739f61445c2f/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/networkservicemesh/integration-tests v0.0.0-20210719144646-9523da794998 h1:uT00WLOu9IQXO6ndIZHdta3JB+uRl1LteIBZ+4mb0oU=
-github.com/networkservicemesh/integration-tests v0.0.0-20210719144646-9523da794998/go.mod h1:IKdS54nhITEgt/jSqH5kcT5HovywPZiwIuDGwTObSmo=
 github.com/onsi/ginkgo v0.0.0-20170829012221-11459a886d9c/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.11.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
