@@ -22,7 +22,7 @@ jobs:
         run: |
           find . -type f ! -name 'go.mod' ! -name 'go.sum' ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
       - name: Merge PR
-        uses: ridedott/merge-me-action@v2
+        uses: ridedott/merge-me-action@master
         with:
           GITHUB_LOGIN: nsmbot
           ENABLED_FOR_MANUAL_CHANGES: true
