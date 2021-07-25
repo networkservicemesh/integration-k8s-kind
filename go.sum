@@ -156,8 +156,8 @@ github.com/munnerz/goautoneg v0.0.0-20120707110453-a547fc61f48d/go.mod h1:+n7T8m
 github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f/go.mod h1:ZdcZmHo+o7JKHSa8/e818NopupXU1YMK5fe1lsApnBw=
 github.com/networkservicemesh/gotestmd v0.0.0-20210616071812-739f61445c2f h1:g8ldKuYSKuEwgA4X/9CVbA5gVoeL6auduXb0//cgNAs=
 github.com/networkservicemesh/gotestmd v0.0.0-20210616071812-739f61445c2f/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/networkservicemesh/integration-tests v0.0.0-20210719144646-9523da794998 h1:uT00WLOu9IQXO6ndIZHdta3JB+uRl1LteIBZ+4mb0oU=
-github.com/networkservicemesh/integration-tests v0.0.0-20210719144646-9523da794998/go.mod h1:IKdS54nhITEgt/jSqH5kcT5HovywPZiwIuDGwTObSmo=
+github.com/networkservicemesh/integration-tests v0.0.0-20210725204828-1cc3dfb6ca1f h1:GHzNrKaiKMyjJIdGHv2E+VjjduHsAJcWhLgSK6KUXFA=
+github.com/networkservicemesh/integration-tests v0.0.0-20210725204828-1cc3dfb6ca1f/go.mod h1:IKdS54nhITEgt/jSqH5kcT5HovywPZiwIuDGwTObSmo=
 github.com/onsi/ginkgo v0.0.0-20170829012221-11459a886d9c/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.11.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
