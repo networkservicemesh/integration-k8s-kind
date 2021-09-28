@@ -36,6 +36,6 @@ func TestRunBasicSuite(t *testing.T) {
 	suite.Run(t, new(basic.Suite))
 }
 
-//func TestRunMemorySuite(t *testing.T) {
-//	suite.Run(t, new(memory.Suite))
-//}
+//	func TestRunMemorySuite(t *testing.T) {
+//		suite.Run(t, new(memory.Suite))
+//	}
