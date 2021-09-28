@@ -28,11 +28,11 @@ import (
 )
 
 func TestRunHealSuite(t *testing.T) {
-	 suite.Run(t, new(heal.Suite))
+	suite.Run(t, new(heal.Suite))
 }
 
 func TestRunFeatureSuite(t *testing.T) {
-	 suite.Run(t, new(features.Suite))
+	suite.Run(t, new(features.Suite))
 }
 
 func TestRunBasicSuite(t *testing.T) {
