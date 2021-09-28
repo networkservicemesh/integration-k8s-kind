@@ -22,7 +22,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/basic"
-	"github.com/networkservicemesh/integration-tests/suites/memory"
 )
 
 // func TestRunHealSuite(t *testing.T) {
@@ -37,6 +36,6 @@ func TestRunBasicSuite(t *testing.T) {
 	suite.Run(t, new(basic.Suite))
 }
 
-func TestRunMemorySuite(t *testing.T) {
-	suite.Run(t, new(memory.Suite))
-}
+//func TestRunMemorySuite(t *testing.T) {
+//	suite.Run(t, new(memory.Suite))
+//}
