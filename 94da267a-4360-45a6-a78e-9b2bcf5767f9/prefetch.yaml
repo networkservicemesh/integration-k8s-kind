@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch
+  labels:
+    app: prefetch
+spec:
+  selector:
+    matchLabels:
+      app: prefetch
+  template:
+    metadata:
+      labels:
+        app: prefetch
+    spec:
+      initContainers:
+        - name: prefetch
+          image: docker:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "/root/scripts/prefetch.sh"]
+          volumeMounts:
+            - name: containerd
+              mountPath: /run/containerd/containerd.sock
+            - name: scripts
+              mountPath: /root/scripts
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: containerd
+          hostPath:
+            path: /run/containerd/containerd.sock
+        - name: scripts
+          configMap:
+            name: prefetch
