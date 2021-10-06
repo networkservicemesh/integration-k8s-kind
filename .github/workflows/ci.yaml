@@ -67,10 +67,12 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - v1.22.1
+          # - v1.22.1 TODO: uncomment this when https://github.com/spiffe/spire/issues/2586 will be fixed
           - v1.21.1
           - v1.20.7
           - v1.19.11
+          - v1.18.15
+          - v1.17.11
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
@@ -90,7 +92,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
         with:
-          config: src/github.com/${{ github.repository }}/cluster-config.yaml
+          config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
           version: v0.11.1
           image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
