@@ -3,6 +3,8 @@ module github.com/networkservicemesh/integration-k8s-kind
 go 1.16
 
 require (
-	github.com/networkservicemesh/integration-tests v0.0.0-20211013182421-daa892008f25
+	github.com/googleapis/gnostic v0.5.1 // indirect
+	github.com/networkservicemesh/integration-tests v0.0.0-20211014095213-6fb989ff2918
 	github.com/stretchr/testify v1.7.0
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
