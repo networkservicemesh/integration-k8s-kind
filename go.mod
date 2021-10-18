@@ -11,5 +11,5 @@ require (
 
 replace (
 	github.com/networkservicemesh/gotestmd => github.com/Mixaster995/gotestmd v0.0.0-20211018061647-1f37ae80de01
-	github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211018061752-82f963696869
+	github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211018111701-483ba4905378
 )
