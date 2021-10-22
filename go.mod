@@ -10,4 +10,4 @@ require (
 )
 
 //github.com/networkservicemesh/gotestmd => github.com/Mixaster995/gotestmd v0.0.0-20211018061647-1f37ae80de01
-replace github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211022074355-2a4ea7f71afb
+replace github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211022080418-ae427d1f8ff5
