@@ -17,23 +17,23 @@
 package test
 
 import (
-	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/basic"
-	"github.com/networkservicemesh/integration-tests/suites/features"
+	// "github.com/networkservicemesh/integration-tests/suites/features"
+	// "github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 )
 
-func TestRunHealSuite(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
-}
-
-func TestRunFeatureSuite(t *testing.T) {
-	suite.Run(t, new(features.Suite))
-}
+// func TestRunHealSuite(t *testing.T) {
+//	suite.Run(t, new(heal.Suite))
+// }
+//
+// func TestRunFeatureSuite(t *testing.T) {
+//	suite.Run(t, new(features.Suite))
+// }
 
 func TestRunBasicSuite(t *testing.T) {
 	suite.Run(t, new(basic.Suite))
