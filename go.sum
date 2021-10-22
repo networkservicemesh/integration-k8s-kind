@@ -34,8 +34,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Mixaster995/gotestmd v0.0.0-20211018061647-1f37ae80de01 h1:Bgv22OsBJG2rfx28f+m7EhPjRtBZY4j4KoIYf0ojqXE=
 github.com/Mixaster995/gotestmd v0.0.0-20211018061647-1f37ae80de01/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/Mixaster995/integration-tests v0.0.0-20211019070455-4b68d2f41a0d h1:dLDtWugaDW3WpPD819jM1ohrgoBJB/mRA1zg3otKQXc=
-github.com/Mixaster995/integration-tests v0.0.0-20211019070455-4b68d2f41a0d/go.mod h1:rE7pYkfcgAwJyRy/BHfgzt3dWzhpMvhHjfFO4V60iM8=
+github.com/Mixaster995/integration-tests v0.0.0-20211022034659-f9ac7dfc4a81 h1:uuXrySwS3G4B8i27g9Z3nnJnP5W4HVffpokudERwDSM=
+github.com/Mixaster995/integration-tests v0.0.0-20211022034659-f9ac7dfc4a81/go.mod h1:rE7pYkfcgAwJyRy/BHfgzt3dWzhpMvhHjfFO4V60iM8=
 github.com/NYTimes/gziphandler v0.0.0-20170623195520-56545f4a5d46/go.mod h1:3wb06e3pkSAbeQ52E9H9iFoQsEEwGN64994WTCIhntQ=
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
