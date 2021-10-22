@@ -10,6 +10,6 @@ require (
 )
 
 replace (
-	github.com/networkservicemesh/gotestmd => github.com/Mixaster995/gotestmd v0.0.0-20211018061647-1f37ae80de01
-	github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211022034659-f9ac7dfc4a81
+	github.com/networkservicemesh/gotestmd => github.com/Mixaster995/gotestmd v0.0.0-20211022102757-ca2cb4b9f76d
+	github.com/networkservicemesh/integration-tests => github.com/Mixaster995/integration-tests v0.0.0-20211022103710-9b80da93825b
 )
