@@ -20,7 +20,6 @@ package base
 import (
 	"github.com/networkservicemesh/gotestmd/pkg/suites/shell"
 	"github.com/networkservicemesh/integration-tests/extensions/checkout"
-	"github.com/networkservicemesh/integration-tests/extensions/logs"
 )
 
 // Suite is a base suite for generating tests. Contains extensions that can be used for assertion and automation goals.
@@ -31,29 +30,29 @@ type Suite struct {
 	storeTestLogs, storeSuiteLogs func()
 }
 
-// AfterTest stores logs after each test in the suite.
-func (s *Suite) AfterTest(_, _ string) {
-	s.storeTestLogs()
-}
-
-// BeforeTest starts capture logs for each test in the suite.
-func (s *Suite) BeforeTest(_, _ string) {
-	s.storeTestLogs = logs.Capture(s.T().Name())
-}
-
-// TearDownSuite stores logs from containers that spawned during SuiteSetup.
-func (s *Suite) TearDownSuite() {
-	s.storeSuiteLogs()
-}
+//// AfterTest stores logs after each test in the suite.
+//func (s *Suite) AfterTest(_, _ string) {
+//	s.storeTestLogs()
+//}
+//
+//// BeforeTest starts capture logs for each test in the suite.
+//func (s *Suite) BeforeTest(_, _ string) {
+//	s.storeTestLogs = logs.Capture(s.T().Name())
+//}
+//
+//// TearDownSuite stores logs from containers that spawned during SuiteSetup.
+//func (s *Suite) TearDownSuite() {
+//	s.storeSuiteLogs()
+//}
 
 // SetupSuite runs all extensions
 func (s *Suite) SetupSuite() {
-	s.checkout.Repository = "networkservicemesh/deployments-k8s"
-	s.checkout.Version = "749fbd0d"
-	s.checkout.Dir = "../" // Note: this should be synced with input parameters in gen.go file
-
-	s.checkout.SetT(s.T())
-	s.checkout.SetupSuite()
-
-	s.storeSuiteLogs = logs.Capture(s.T().Name())
+	//s.checkout.Repository = "networkservicemesh/deployments-k8s"
+	//s.checkout.Version = "749fbd0d"
+	//s.checkout.Dir = "../" // Note: this should be synced with input parameters in gen.go file
+	//
+	//s.checkout.SetT(s.T())
+	//s.checkout.SetupSuite()
+	//
+	//s.storeSuiteLogs = logs.Capture(s.T().Name())
 }
