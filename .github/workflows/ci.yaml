@@ -61,7 +61,7 @@ jobs:
         run: |
           git diff --name-only --exit-code go.mod || ( echo "Run go tidy" && false )
           git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
-  kind:
+  kind-calico:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -74,10 +74,6 @@ jobs:
           - v1.18.15
           - v1.17.11
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
       - uses: actions/setup-go@v1
         with:
           go-version: 1.16
@@ -95,17 +91,28 @@ jobs:
           config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
           version: v0.11.1
           image: kindest/node:${{ matrix.image }}
+          wait: ""
+      - name: Setup Calico VPP CNI
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/Bolodya1997/vpp-dataplane/nsm-new/yaml/generated/calico-vpp-kind.yaml
+          kubectl -n kube-system rollout status deploy/calico-kube-controllers
+          kubectl -n kube-system rollout status daemonset/calico-node
       - name: Check kind cluster
         run: |
           kubectl version
           kubectl cluster-info
+          kubectl get pods -n calico-vpp-dataplane
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h -race -v ./...
+          TESTS="${TESTS}|Heal/"
+          TESTS="${TESTS}|Feature/Test[^MN].*[^f]$"
+          TESTS="${TESTS}|Basic/Test[^M].*[^f]$"
+          TESTS="${TESTS}|Memory/Test[^M].*[^f]$"
+          go test -count 1 -timeout 40m -race -v ./... -run "${TESTS}"
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
