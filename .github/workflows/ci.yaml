@@ -67,6 +67,7 @@ jobs:
       fail-fast: false
       matrix:
         image:
+          - v1.23.0
           - v1.22.1
           - v1.21.1
           - v1.20.7
