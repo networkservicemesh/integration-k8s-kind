@@ -116,3 +116,79 @@ jobs:
         with:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
+  interdomain-kind:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Get kind
+        run: go get sigs.k8s.io/kind@v0.11.1
+      - name: Create kind clusters
+        env:
+          CONFIG: 'cluster-config-interdomain.yaml'
+          TIMEOUT: 200s
+          CLUSTER_NAME_1: interdomain-kind-1
+          CLUSTER_NAME_2: interdomain-kind-2
+          CLUSTER_NAME_3: interdomain-kind-3
+          KUBE_CONFIG_PATH_PREFIX: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+        run: |
+          IMAGE="kindest/node:$KUBERNETES_VERSION"
+          if [[ $KUBERNETES_VERSION=="" ]]; then
+              IMAGE="kindest/node:v1.22.1"
+          fi
+
+          echo "creating kind clusters"
+          kind create cluster --name $CLUSTER_NAME_1 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
+          kind create cluster --name $CLUSTER_NAME_2 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
+          kind create cluster --name $CLUSTER_NAME_3 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
+          kind get clusters
+
+          kind get kubeconfig --name "$CLUSTER_NAME_1" > $KUBE_CONFIG_PATH_PREFIX/config1
+          echo "config 1:"
+          cat $KUBE_CONFIG_PATH_PREFIX/config1
+
+          kind get kubeconfig --name "$CLUSTER_NAME_2" > $KUBE_CONFIG_PATH_PREFIX/config2
+          echo "config 2:"
+          cat $KUBE_CONFIG_PATH_PREFIX/config2
+
+          kind get kubeconfig --name "$CLUSTER_NAME_3" > $KUBE_CONFIG_PATH_PREFIX/config3
+          echo "config 3:"
+          cat $KUBE_CONFIG_PATH_PREFIX/config3
+
+          echo KUBECONFIG1="$KUBE_CONFIG_PATH_PREFIX/config1" >> $GITHUB_ENV
+          echo KUBECONFIG2="$KUBE_CONFIG_PATH_PREFIX/config2" >> $GITHUB_ENV
+          echo KUBECONFIG3="$KUBE_CONFIG_PATH_PREFIX/config3" >> $GITHUB_ENV
+
+          echo CLUSTER1_CIDR="172.18.1.128/25" >> $GITHUB_ENV
+          echo CLUSTER2_CIDR="172.18.2.128/25" >> $GITHUB_ENV
+          echo CLUSTER3_CIDR="172.18.3.128/25" >> $GITHUB_ENV
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Interdomain tests
+        run: |
+          go test -count 1 -timeout 1h -race -v ./...
+        env:
+          INTERDOMAIN: enabled
+          ARTIFACTS_DIR: interdomain-logs
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Containers logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/interdomain-logs

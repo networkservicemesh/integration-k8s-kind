@@ -17,6 +17,7 @@
 package test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -24,21 +25,41 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/basic"
 	"github.com/networkservicemesh/integration-tests/suites/features"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 )
 
 func TestRunHealSuite(t *testing.T) {
+	if os.Getenv("INTERDOMAIN-CI") == "enabled" {
+		t.Skip()
+	}
 	suite.Run(t, new(heal.Suite))
 }
 
 func TestRunFeatureSuite(t *testing.T) {
+	if os.Getenv("INTERDOMAIN-CI") == "enabled" {
+		t.Skip()
+	}
 	suite.Run(t, new(features.Suite))
 }
 
 func TestRunBasicSuite(t *testing.T) {
+	if os.Getenv("INTERDOMAIN-CI") == "enabled" {
+		t.Skip()
+	}
 	suite.Run(t, new(basic.Suite))
 }
 
 func TestRunMemorySuite(t *testing.T) {
+	if os.Getenv("INTERDOMAIN-CI") == "enabled" {
+		t.Skip()
+	}
 	suite.Run(t, new(memory.Suite))
+}
+
+func TestRunInterdomainSuite(t *testing.T) {
+	if os.Getenv("INTERDOMAIN") != "enabled" {
+		t.Skip()
+	}
+	suite.Run(t, new(interdomain.Suite))
 }
