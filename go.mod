@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/googleapis/gnostic v0.5.1 // indirect
-	github.com/networkservicemesh/integration-tests v0.0.0-20211213120707-6785682eaec3
+	github.com/networkservicemesh/integration-tests v0.0.0-20211214143751-a4d2d5c76270
 	github.com/stretchr/testify v1.7.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
