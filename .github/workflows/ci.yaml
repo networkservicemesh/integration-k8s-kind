@@ -104,11 +104,15 @@ jobs:
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Install styx
+        run: |
+          go get -v -u github.com/go-pluto/styx
       - name: Integration tests
         run: |
           go test -count 1 -timeout 1h -race -v ./...
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
+          RESULTS_PARENT_DIR: ${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -116,3 +120,9 @@ jobs:
         with:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
+      - name: Upload scalability artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Scalability test results
+          path: ${{ github.workspace }}/src/github.com/networkservicemesh/deployments-k8s/examples/scalability/cases/*/${{ matrix.image }}/results-*/
