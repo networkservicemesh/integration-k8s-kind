@@ -106,7 +106,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h -race -v ./...
+          go test -count 1 -timeout 1h -race -v -tags=single ./...
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -181,9 +181,8 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v ./...
+          go test -count 1 -timeout 1h -race -v -tags=interdomain ./...
         env:
-          INTERDOMAIN: enabled
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts

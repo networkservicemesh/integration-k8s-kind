@@ -14,33 +14,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build single
+// +build interdomain
 
 package test
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 
-	"github.com/networkservicemesh/integration-tests/suites/basic"
-	"github.com/networkservicemesh/integration-tests/suites/features"
-	"github.com/networkservicemesh/integration-tests/suites/heal"
-	"github.com/networkservicemesh/integration-tests/suites/memory"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestRunHealSuite(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
-}
-
-func TestRunFeatureSuite(t *testing.T) {
-	suite.Run(t, new(features.Suite))
-}
-
-func TestRunBasicSuite(t *testing.T) {
-	suite.Run(t, new(basic.Suite))
-}
-
-func TestRunMemorySuite(t *testing.T) {
-	suite.Run(t, new(memory.Suite))
+func TestRunInterdomainSuite(t *testing.T) {
+	suite.Run(t, new(interdomain.Suite))
 }
