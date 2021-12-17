@@ -14,8 +14,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build single
-
 package test
 
 import (
@@ -26,21 +24,26 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/basic"
 	"github.com/networkservicemesh/integration-tests/suites/features"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 )
 
-func TestRunHealSuite(t *testing.T) {
+func TestRunHealSuiteSingle(t *testing.T) {
 	suite.Run(t, new(heal.Suite))
 }
 
-func TestRunFeatureSuite(t *testing.T) {
+func TestRunFeatureSuiteSingle(t *testing.T) {
 	suite.Run(t, new(features.Suite))
 }
 
-func TestRunBasicSuite(t *testing.T) {
+func TestRunBasicSuiteSingle(t *testing.T) {
 	suite.Run(t, new(basic.Suite))
 }
 
-func TestRunMemorySuite(t *testing.T) {
+func TestRunMemorySuiteSingle(t *testing.T) {
 	suite.Run(t, new(memory.Suite))
+}
+
+func TestRunInterdomainSuite(t *testing.T) {
+	suite.Run(t, new(interdomain.Suite))
 }
