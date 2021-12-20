@@ -106,7 +106,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h -race -v ./...
+          go test -count 1 -timeout 1h -race -v -run Single
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -116,3 +116,54 @@ jobs:
         with:
           name: Containers logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
+  interdomain-kind:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Get kind
+        run: go get sigs.k8s.io/kind@v0.11.1
+      - name: Create kind clusters
+        run: |
+          if [[ $KUBERNETES_VERSION=="" ]]; then
+              KUBERNETES_VERSION="v1.22.1"
+          fi
+          for (( i = 1; i <= 3; i++ )); do
+              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
+              configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
+              kind get kubeconfig --name "kind-${i}" > ${configPath}
+              echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
+              echo CLUSTER${i}_CIDR="172.18.${i}.128/25" >> $GITHUB_ENV
+          done
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Interdomain tests
+        run: |
+          go test -count 1 -timeout 1h -race -v -run Interdomain
+        env:
+          ARTIFACTS_DIR: interdomain-logs
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Cleanup resources
+        if: ${{ success() || failure() || cancelled() }}
+        run: kind delete clusters $(kind get clusters)
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Containers logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/interdomain-logs
