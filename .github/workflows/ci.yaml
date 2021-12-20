@@ -140,44 +140,14 @@ jobs:
       - name: Get kind
         run: go get sigs.k8s.io/kind@v0.11.1
       - name: Create kind clusters
-        env:
-          CONFIG: 'cluster-config-interdomain.yaml'
-          TIMEOUT: 200s
-          CLUSTER_NAME_1: interdomain-kind-1
-          CLUSTER_NAME_2: interdomain-kind-2
-          CLUSTER_NAME_3: interdomain-kind-3
-          KUBE_CONFIG_PATH_PREFIX: ${{ github.workspace }}/src/github.com/${{ github.repository }}
         run: |
-          IMAGE="kindest/node:$KUBERNETES_VERSION"
-          if [[ $KUBERNETES_VERSION=="" ]]; then
-              IMAGE="kindest/node:v1.22.1"
-          fi
-
-          echo "creating kind clusters"
-          kind create cluster --name $CLUSTER_NAME_1 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
-          kind create cluster --name $CLUSTER_NAME_2 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
-          kind create cluster --name $CLUSTER_NAME_3 --config $CONFIG --wait $TIMEOUT --image="$IMAGE"
-          kind get clusters
-
-          kind get kubeconfig --name "$CLUSTER_NAME_1" > $KUBE_CONFIG_PATH_PREFIX/config1
-          echo "config 1:"
-          cat $KUBE_CONFIG_PATH_PREFIX/config1
-
-          kind get kubeconfig --name "$CLUSTER_NAME_2" > $KUBE_CONFIG_PATH_PREFIX/config2
-          echo "config 2:"
-          cat $KUBE_CONFIG_PATH_PREFIX/config2
-
-          kind get kubeconfig --name "$CLUSTER_NAME_3" > $KUBE_CONFIG_PATH_PREFIX/config3
-          echo "config 3:"
-          cat $KUBE_CONFIG_PATH_PREFIX/config3
-
-          echo KUBECONFIG1="$KUBE_CONFIG_PATH_PREFIX/config1" >> $GITHUB_ENV
-          echo KUBECONFIG2="$KUBE_CONFIG_PATH_PREFIX/config2" >> $GITHUB_ENV
-          echo KUBECONFIG3="$KUBE_CONFIG_PATH_PREFIX/config3" >> $GITHUB_ENV
-
-          echo CLUSTER1_CIDR="172.18.1.128/25" >> $GITHUB_ENV
-          echo CLUSTER2_CIDR="172.18.2.128/25" >> $GITHUB_ENV
-          echo CLUSTER3_CIDR="172.18.3.128/25" >> $GITHUB_ENV
+          for (( i = 0; i < 3; i++ )); do
+              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
+              configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
+              kind get kubeconfig --name "kind-${i}" > ${configPath}
+              echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
+              echo CLUSTER${i}_CIDR="172.18.${i}.128/25" >> $GITHUB_ENV
+          done
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
@@ -185,6 +155,9 @@ jobs:
         env:
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Cleanup resources
+        if: ${{ success() || failure() || cancelled() }}
+        run: kind delete clusters $(kind get clusters)
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v2
