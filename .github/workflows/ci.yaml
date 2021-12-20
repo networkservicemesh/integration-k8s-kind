@@ -106,7 +106,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h -race -v -run "[a-zA-Z]*Single[a-zA-Z]*"
+          go test -count 1 -timeout 1h -race -v -run Single
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -141,7 +141,10 @@ jobs:
         run: go get sigs.k8s.io/kind@v0.11.1
       - name: Create kind clusters
         run: |
-          for (( i = 0; i < 3; i++ )); do
+          if [[ $KUBERNETES_VERSION=="" ]]; then
+              KUBERNETES_VERSION="v1.22.1"
+          fi
+          for (( i = 1; i <= 3; i++ )); do
               kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
               configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
               kind get kubeconfig --name "kind-${i}" > ${configPath}
@@ -151,7 +154,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v -run "[a-zA-Z]*Interdomain[a-zA-Z]*"
+          go test -count 1 -timeout 1h -race -v -run Interdomain
         env:
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
