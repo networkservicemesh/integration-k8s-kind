@@ -31,9 +31,9 @@ kind get kubeconfig --name kind-3 > /tmp/config3
 
 3. Run interdomain tests with necessary environment variables set
 ```bash
-export KUBECONFIG1==/tmp/config1
-export KUBECONFIG2==/tmp/config2 
-export KUBECONFIG3==/tmp/config3 
+export KUBECONFIG1=/tmp/config1
+export KUBECONFIG2=/tmp/config2 
+export KUBECONFIG3=/tmp/config3 
 export CLUSTER1_CIDR="172.18.1.128/25" 
 export CLUSTER2_CIDR="172.18.2.128/25"
 export CLUSTER3_CIDR="172.18.3.128/25"
