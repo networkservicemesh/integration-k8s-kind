@@ -17,6 +17,7 @@
 package test
 
 import (
+	"github.com/networkservicemesh/integration-tests/suites/calico"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -46,4 +47,8 @@ func TestRunMemorySuiteSingle(t *testing.T) {
 
 func TestRunInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(interdomain.Suite))
+}
+
+func TestRunCalicoSuite(t *testing.T) {
+	suite.Run(t, new(calico.Suite))
 }
