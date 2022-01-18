@@ -39,3 +39,6 @@ export CLUSTER2_CIDR="172.18.2.128/25"
 export CLUSTER3_CIDR="172.18.3.128/25"
 go test -count 1 -timeout 1h -race -v -run Interdomain
 ```
+
+
+fff
