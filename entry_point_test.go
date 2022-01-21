@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Doc.ai and/or its affiliates.
+// Copyright (c) 2021-2022 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,6 +26,7 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
+	"github.com/networkservicemesh/integration-tests/suites/observability"
 )
 
 func TestRunHealSuiteSingle(t *testing.T) {
@@ -46,4 +47,8 @@ func TestRunMemorySuiteSingle(t *testing.T) {
 
 func TestRunInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(interdomain.Suite))
+}
+
+func TestRunObservabilitySuite(t *testing.T) {
+	suite.Run(t, new(observability.Suite))
 }
