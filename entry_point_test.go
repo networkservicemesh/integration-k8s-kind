@@ -45,10 +45,10 @@ func TestRunMemorySuiteSingle(t *testing.T) {
 	suite.Run(t, new(memory.Suite))
 }
 
-func TestRunInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(interdomain.Suite))
+func TestRunObservabilitySuiteSingle(t *testing.T) {
+	suite.Run(t, new(observability.Suite))
 }
 
-func TestRunObservabilitySuite(t *testing.T) {
-	suite.Run(t, new(observability.Suite))
+func TestRunInterdomainSuite(t *testing.T) {
+	suite.Run(t, new(interdomain.Suite))
 }
