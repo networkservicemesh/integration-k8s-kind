@@ -1,4 +1,5 @@
 // Copyright (c) 2021-2022 Doc.ai and/or its affiliates.
+// Copyright (c) 2022 Nordix and/or its affiliates.
 //
 // Copyright (c) 2022 Cisco and/or its affiliates.
 //
@@ -29,6 +30,7 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
+	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
 )
 
 func TestRunHealSuiteSingle(t *testing.T) {
@@ -45,6 +47,10 @@ func TestRunBasicSuiteSingle(t *testing.T) {
 
 func TestRunMemorySuiteSingle(t *testing.T) {
 	suite.Run(t, new(memory.Suite))
+}
+
+func TestRunRvlanSuiteSingle(t *testing.T) {
+	suite.Run(t, new(remotevlan.Suite))
 }
 
 func TestRunObservabilitySuiteSingle(t *testing.T) {
