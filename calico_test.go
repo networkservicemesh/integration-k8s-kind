@@ -14,8 +14,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build calico_test
-
 package main
 
 import (
@@ -29,18 +27,18 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/observability"
 )
 
-func TestRunHealSuite(t *testing.T) {
+func TestRunHealSuiteCalico(t *testing.T) {
 	suite.Run(t, new(heal.Suite))
 }
 
-func TestRunBasicSuite(t *testing.T) {
+func TestRunBasicSuiteCalico(t *testing.T) {
 	suite.Run(t, new(basic.Suite))
 }
 
-func TestRunMemorySuite(t *testing.T) {
+func TestRunMemorySuiteCalico(t *testing.T) {
 	suite.Run(t, new(memory.Suite))
 }
 
-func TestRunObservabilitySuite(t *testing.T) {
+func TestRunObservabilitySuiteCalico(t *testing.T) {
 	suite.Run(t, new(observability.Suite))
 }
