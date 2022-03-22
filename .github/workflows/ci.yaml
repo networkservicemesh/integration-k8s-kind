@@ -73,7 +73,6 @@ jobs:
           - v1.20.7
           - v1.19.11
           - v1.18.15
-          - v1.17.11
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
