@@ -22,23 +22,44 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/basic"
+	"github.com/networkservicemesh/integration-tests/suites/features"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
 )
 
 func TestRunHealSuiteCalico(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(heal.Suite))
 }
 
 func TestRunBasicSuiteCalico(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(basic.Suite))
 }
 
 func TestRunMemorySuiteCalico(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(memory.Suite))
 }
 
 func TestRunObservabilitySuiteCalico(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(observability.Suite))
+}
+
+// TestMutually_aware_nses is temporarily disabled
+type featuresSuite struct {
+	features.Suite
+}
+
+func (s *featuresSuite) BeforeTest(suiteName, testName string) {
+	if testName == "TestMutually_aware_nses" {
+		s.T().Skip()
+	}
+	s.Suite.BeforeTest(suiteName, testName)
+}
+
+func TestRunFeatureSuiteCalico(t *testing.T) {
+	suite.Run(t, new(featuresSuite))
 }

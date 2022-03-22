@@ -27,5 +27,6 @@ import (
 )
 
 func TestRunInterdomainSuite(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(interdomain.Suite))
 }

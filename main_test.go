@@ -31,6 +31,7 @@ import (
 )
 
 func TestRunHealSuiteSingle(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(heal.Suite))
 }
 
@@ -39,13 +40,16 @@ func TestRunFeatureSuiteSingle(t *testing.T) {
 }
 
 func TestRunBasicSuiteSingle(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(basic.Suite))
 }
 
 func TestRunMemorySuiteSingle(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(memory.Suite))
 }
 
 func TestRunObservabilitySuiteSingle(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(observability.Suite))
 }
