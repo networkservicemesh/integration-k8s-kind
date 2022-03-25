@@ -22,6 +22,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/basic"
+	"github.com/networkservicemesh/integration-tests/suites/features"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
@@ -41,4 +42,23 @@ func TestRunMemorySuiteCalico(t *testing.T) {
 
 func TestRunObservabilitySuiteCalico(t *testing.T) {
 	suite.Run(t, new(observability.Suite))
+}
+
+// Disabled tests:
+// TestMutually_aware_nses - https://github.com/networkservicemesh/integration-k8s-kind/issues/627
+// TestNse_composition     - https://github.com/networkservicemesh/integration-k8s-kind/issues/625
+type featuresSuite struct {
+	features.Suite
+}
+
+func (s *featuresSuite) BeforeTest(suiteName, testName string) {
+	if testName == "TestMutually_aware_nses" ||
+		testName == "TestNse_composition" {
+		s.T().Skip()
+	}
+	s.Suite.BeforeTest(suiteName, testName)
+}
+
+func TestRunFeatureSuiteCalico(t *testing.T) {
+	suite.Run(t, new(featuresSuite))
 }
