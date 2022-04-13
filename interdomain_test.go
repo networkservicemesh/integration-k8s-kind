@@ -23,7 +23,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/networkservicemesh/integration-tests/suites/interdomain"
+	"github.com/Nordix/integration-tests/suites/interdomain"
 )
 
 func TestRunInterdomainSuite(t *testing.T) {

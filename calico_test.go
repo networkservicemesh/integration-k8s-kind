@@ -21,11 +21,11 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/networkservicemesh/integration-tests/suites/basic"
-	"github.com/networkservicemesh/integration-tests/suites/features"
-	"github.com/networkservicemesh/integration-tests/suites/heal"
-	"github.com/networkservicemesh/integration-tests/suites/memory"
-	"github.com/networkservicemesh/integration-tests/suites/observability"
+	"github.com/Nordix/integration-tests/suites/basic"
+	"github.com/Nordix/integration-tests/suites/features"
+	"github.com/Nordix/integration-tests/suites/heal"
+	"github.com/Nordix/integration-tests/suites/memory"
+	"github.com/Nordix/integration-tests/suites/observability"
 )
 
 func TestRunHealSuiteCalico(t *testing.T) {
