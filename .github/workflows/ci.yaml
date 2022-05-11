@@ -71,6 +71,7 @@ jobs:
       fail-fast: false
       matrix:
         image:
+          - v1.24.0
           - v1.23.0
           - v1.22.1
           - v1.21.1
@@ -97,7 +98,7 @@ jobs:
       - uses: engineerd/setup-kind@v0.5.0
         with:
           config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
-          version: v0.11.1
+          version: v0.13.0
           image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
         run: |
