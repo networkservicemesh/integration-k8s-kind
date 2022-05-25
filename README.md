@@ -14,6 +14,30 @@ kind create cluster --config cluster-config.yaml --wait 120s
 go test -count 1 -timeout 1h -race -v -run Single
 ```
 
+## Calico single cluster tests
+
+1. Create kind cluster:
+```bash
+kind create cluster --config cluster-config-calico.yaml
+```
+
+2. Apply calico:
+```bash
+kubectl apply -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/v3.23.0/yaml/calico/installation-default.yaml
+kubectl apply -k calico
+```
+
+3. Wait for a calico-vpp rollout:
+```bash
+kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
+```
+
+4. Run tests:
+```bash
+go test -count 1 -timeout 1h -race -v -run Calico
+```
+
 ## Multiple cluster scenario(interdomain tests)
 1. Create 3 kind clusters:
 ```bash
