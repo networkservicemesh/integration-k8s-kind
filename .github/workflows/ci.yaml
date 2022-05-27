@@ -110,7 +110,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h20m -race -v -run Single
+          go test -count 1 -timeout 1h30m -race -v -run Single
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -168,7 +168,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 1h20m -race -v -run Calico
+          go test -count 1 -timeout 1h30m -race -v -run Calico
         env:
           ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
