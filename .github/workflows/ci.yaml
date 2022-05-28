@@ -108,6 +108,9 @@ jobs:
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Set loadbalancer CIDR
+        run: |
+          echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
       - name: Integration tests
         run: |
           go test -count 1 -timeout 1h30m -race -v -run Single
