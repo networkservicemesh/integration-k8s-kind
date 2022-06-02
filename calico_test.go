@@ -47,15 +47,19 @@ func TestRunObservabilitySuiteCalico(t *testing.T) {
 // Disabled tests:
 // TestMutually_aware_nses - https://github.com/networkservicemesh/integration-k8s-kind/issues/627
 // TestNse_composition     - https://github.com/networkservicemesh/integration-k8s-kind/issues/625
-// TestVl3                 - https://github.com/networkservicemesh/integration-k8s-kind/issues/633
+// TestVl3_basic           - https://github.com/networkservicemesh/integration-k8s-kind/issues/633
+// TestVl3_scale_from_zero - https://github.com/networkservicemesh/integration-k8s-kind/issues/633
 type featuresSuite struct {
 	features.Suite
 }
 
 func (s *featuresSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestMutually_aware_nses" ||
-		testName == "TestNse_composition" ||
-		testName == "TestVl3" {
+	switch testName {
+	case
+		"TestMutually_aware_nses",
+		"TestNse_composition",
+		"TestVl3_basic",
+		"TestVl3_scale_from_zero":
 		s.T().Skip()
 	}
 	s.Suite.BeforeTest(suiteName, testName)
