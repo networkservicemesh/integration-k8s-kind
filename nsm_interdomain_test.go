@@ -26,6 +26,6 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/basic_interdomain"
 )
 
-func TestRunInterdomainSuite(t *testing.T) {
+func TestRunNsmInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(basic_interdomain.Suite))
 }
