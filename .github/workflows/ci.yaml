@@ -103,7 +103,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: NSM Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v -run Interdomain
+          go test -count 1 -timeout 1h -race -v -run NsmInterdomain
         env:
           ARTIFACTS_DIR: nsm-interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
