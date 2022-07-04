@@ -65,122 +65,122 @@ jobs:
         run: |
           git diff --name-only --exit-code go.mod || ( echo "Run go tidy" && false )
           git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
-  kind:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        image:
-          - v1.24.0
-          - v1.23.0
-          - v1.22.1
-          - v1.21.1
-          - v1.20.7
-          - v1.19.11
-          - v1.18.15
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.16
-          github-token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
-        with:
-          config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
-          version: v0.13.0
-          image: kindest/node:${{ matrix.image }}
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl cluster-info
-          kubectl get pods -n kube-system
-          echo "current-context:" $(kubectl config current-context)
-          echo "environment-kubeconfig:" ${KUBECONFIG}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Set loadbalancer CIDR
-        run: |
-          echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 1h30m -race -v -run Single
-        env:
-          ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: Single logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
-  calico-kind:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.16
-          github-token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - name: Set kubernetes version
-        run: |
-          if [[ $KUBERNETES_VERSION=="" ]]; then
-              echo "KUBERNETES_VERSION=v1.22.1" >> $GITHUB_ENV
-          fi
-      - uses: actions/checkout@v2
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
-          version: v0.11.1
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
-          wait: 0s
-      - name: Setup external CNI plugin
-        run: |
-          kubectl apply -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
-          kubectl apply -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/v3.23.0/yaml/calico/installation-default.yaml
-          kubectl apply -k ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico
-          kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl cluster-info
-          kubectl get pods --all-namespaces
-          echo "current-context:" $(kubectl config current-context)
-          echo "environment-kubeconfig:" ${KUBECONFIG}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 1h30m -race -v -run Calico
-        env:
-          ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: Calico logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico-logs
+#  kind:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        image:
+#          - v1.24.0
+#          - v1.23.0
+#          - v1.22.1
+#          - v1.21.1
+#          - v1.20.7
+#          - v1.19.11
+#          - v1.18.15
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.9.0
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v1
+#        with:
+#          go-version: 1.16
+#          github-token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v2
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: engineerd/setup-kind@v0.5.0
+#        with:
+#          config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
+#          version: v0.13.0
+#          image: kindest/node:${{ matrix.image }}
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl cluster-info
+#          kubectl get pods -n kube-system
+#          echo "current-context:" $(kubectl config current-context)
+#          echo "environment-kubeconfig:" ${KUBECONFIG}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Set loadbalancer CIDR
+#        run: |
+#          echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 1h30m -race -v -run Single
+#        env:
+#          ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Single logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
+#  calico-kind:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.9.0
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v1
+#        with:
+#          go-version: 1.16
+#          github-token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - name: Set kubernetes version
+#        run: |
+#          if [[ $KUBERNETES_VERSION=="" ]]; then
+#              echo "KUBERNETES_VERSION=v1.22.1" >> $GITHUB_ENV
+#          fi
+#      - uses: actions/checkout@v2
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: engineerd/setup-kind@v0.5.0
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
+#          version: v0.11.1
+#          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#          wait: 0s
+#      - name: Setup external CNI plugin
+#        run: |
+#          kubectl apply -f https://projectcalico.docs.tigera.io/archive/v3.23/manifests/tigera-operator.yaml
+#          kubectl apply -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/v3.23.0/yaml/calico/installation-default.yaml
+#          kubectl apply -k ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico
+#          kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl cluster-info
+#          kubectl get pods --all-namespaces
+#          echo "current-context:" $(kubectl config current-context)
+#          echo "environment-kubeconfig:" ${KUBECONFIG}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 1h30m -race -v -run Calico
+#        env:
+#          ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Calico logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico-logs
   interdomain-kind:
     runs-on: ubuntu-latest
     env:
@@ -209,7 +209,7 @@ jobs:
           if [[ $KUBERNETES_VERSION=="" ]]; then
               KUBERNETES_VERSION="v1.22.1"
           fi
-          for (( i = 1; i <= 3; i++ )); do
+          for (( i = 1; i <= 2; i++ )); do
               kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
               configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
               kind get kubeconfig --name "kind-${i}" > ${configPath}
