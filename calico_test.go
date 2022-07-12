@@ -59,6 +59,7 @@ func (s *featuresSuite) BeforeTest(suiteName, testName string) {
 		"TestMutually_aware_nses",
 		"TestNse_composition",
 		"TestVl3_basic",
+		"TestNsm_istio",
 		"TestVl3_scale_from_zero":
 		s.T().Skip()
 	}
