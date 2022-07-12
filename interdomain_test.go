@@ -29,3 +29,12 @@ import (
 func TestRunInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(basic_interdomain.Suite))
 }
+
+func (s *featuresSuite) BeforeTest(suiteName, testName string) {
+	switch testName {
+	case
+		"TestNsm_istio":
+		s.T().Skip()
+	}
+	s.Suite.BeforeTest(suiteName, testName)
+}
