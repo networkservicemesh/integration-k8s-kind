@@ -26,6 +26,19 @@ import (
 	"github.com/networkservicemesh/integration-tests/suites/basic_interdomain"
 )
 
+type basicInterdomainSuite struct {
+	basic_interdomain.Suite
+}
+
+func (s *basicInterdomainSuite) BeforeTest(suiteName, testName string) {
+	switch testName {
+	case
+		"TestNsm_istio":
+		s.T().Skip()
+	}
+	s.Suite.BeforeTest(suiteName, testName)
+}
+
 func TestRunInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(basic_interdomain.Suite))
+	suite.Run(t, new(basicInterdomainSuite))
 }
