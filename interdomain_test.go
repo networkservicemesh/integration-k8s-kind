@@ -31,9 +31,7 @@ type basicInterdomainSuite struct {
 }
 
 func (s *basicInterdomainSuite) BeforeTest(suiteName, testName string) {
-	switch testName {
-	case
-		"TestNsm_istio":
+	if testName == "TestNsm_istio_booking" {
 		s.T().Skip()
 	}
 	s.Suite.BeforeTest(suiteName, testName)
