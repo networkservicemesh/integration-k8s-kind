@@ -24,6 +24,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/basic_interdomain"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 )
 
 type basicInterdomainSuite struct {
@@ -37,6 +38,10 @@ func (s *basicInterdomainSuite) BeforeTest(suiteName, testName string) {
 	s.Suite.BeforeTest(suiteName, testName)
 }
 
-func TestRunInterdomainSuite(t *testing.T) {
+func TestRunBasicInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(basicInterdomainSuite))
+}
+
+func TestRunInterdomainSuite(t *testing.T) {
+	suite.Run(t, new(interdomain.Suite))
 }
