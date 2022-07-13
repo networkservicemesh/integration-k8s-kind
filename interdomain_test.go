@@ -23,23 +23,12 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/networkservicemesh/integration-tests/suites/basic_interdomain"
+	"github.com/networkservicemesh/integration-tests/suites/floating_interdomain"
 	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 )
 
-type basicInterdomainSuite struct {
-	basic_interdomain.Suite
-}
-
-func (s *basicInterdomainSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestNsm_istio_booking" {
-		s.T().Skip()
-	}
-	s.Suite.BeforeTest(suiteName, testName)
-}
-
-func TestRunBasicInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(basicInterdomainSuite))
+func TestRunFloatingInterdomainSuite(t *testing.T) {
+	suite.Run(t, new(floating_interdomain.Suite))
 }
 
 func TestRunInterdomainSuite(t *testing.T) {
