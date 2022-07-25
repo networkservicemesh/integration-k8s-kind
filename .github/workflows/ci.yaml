@@ -170,6 +170,7 @@ jobs:
           echo "environment-kubeconfig:" ${KUBECONFIG}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
+        continue-on-error: true
         run: |
           go test -count 1 -timeout 1h30m -race -v -run Calico
         env:
