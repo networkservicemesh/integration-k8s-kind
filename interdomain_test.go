@@ -24,6 +24,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/floating_interdomain"
+
 	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 )
 
