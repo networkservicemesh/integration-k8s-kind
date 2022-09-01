@@ -9,4 +9,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/networkservicemesh/integration-tests => github.com/anastasia-malysheva/integration-tests v0.0.0-20220901055640-1d7ec9c33443
+replace github.com/networkservicemesh/integration-tests => github.com/anastasia-malysheva/integration-tests v0.0.0-20220901073322-f23d706e0c77
