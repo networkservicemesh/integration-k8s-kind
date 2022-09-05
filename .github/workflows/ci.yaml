@@ -220,7 +220,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v -run Interdomain
+          go test -count 1 -timeout 1h30m -race -v -run Interdomain
         env:
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
