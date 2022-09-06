@@ -26,16 +26,11 @@ import (
 
 	"github.com/networkservicemesh/integration-tests/suites/basic"
 	"github.com/networkservicemesh/integration-tests/suites/features"
-	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 	"github.com/networkservicemesh/integration-tests/suites/memory"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
 	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
 )
-
-func TestRunHealSuiteSingle(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
-}
 
 func TestRunFeatureSuiteSingle(t *testing.T) {
 	suite.Run(t, new(features.Suite))
