@@ -24,34 +24,9 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/networkservicemesh/integration-tests/suites/basic"
-	"github.com/networkservicemesh/integration-tests/suites/features"
-	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
-	"github.com/networkservicemesh/integration-tests/suites/memory"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
-	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
 )
-
-func TestRunFeatureSuiteSingle(t *testing.T) {
-	suite.Run(t, new(features.Suite))
-}
-
-func TestRunBasicSuiteSingle(t *testing.T) {
-	suite.Run(t, new(basic.Suite))
-}
-
-func TestRunMemorySuiteSingle(t *testing.T) {
-	suite.Run(t, new(memory.Suite))
-}
-
-func TestRunRvlanSuiteSingle(t *testing.T) {
-	suite.Run(t, new(remotevlan.Suite))
-}
 
 func TestRunObservabilitySuiteSingle(t *testing.T) {
 	suite.Run(t, new(observability.Suite))
-}
-
-func TestK8sMonolithSuiteSingle(t *testing.T) {
-	suite.Run(t, new(k8s_monolith.Suite))
 }
