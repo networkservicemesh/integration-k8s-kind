@@ -22,11 +22,10 @@ package main
 import (
 	"testing"
 
+	"github.com/networkservicemesh/integration-tests/suites/heal"
 	"github.com/stretchr/testify/suite"
-
-	"github.com/networkservicemesh/integration-tests/suites/observability"
 )
 
-func TestRunObservabilitySuiteSingle(t *testing.T) {
-	suite.Run(t, new(observability.Suite))
+func TestRunHealSuiteSingle(t *testing.T) {
+	suite.Run(t, new(heal.Suite))
 }
