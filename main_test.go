@@ -22,29 +22,15 @@ package main
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/suites/basic"
 	"github.com/networkservicemesh/integration-tests/suites/features"
-	"github.com/networkservicemesh/integration-tests/suites/heal"
-	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
 	"github.com/stretchr/testify/suite"
 )
-
-func TestRunHealSuiteSingle(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
-}
 
 func TestRunFeatureSuiteSingle(t *testing.T) {
 	suite.Run(t, new(features.Suite))
 }
 
-func TestRunBasicSuiteSingle(t *testing.T) {
-	suite.Run(t, new(basic.Suite))
-}
 func TestRunObservabilitySuiteSingle(t *testing.T) {
 	suite.Run(t, new(observability.Suite))
-}
-
-func TestK8sMonolithSuiteSingle(t *testing.T) {
-	suite.Run(t, new(k8s_monolith.Suite))
 }
