@@ -10,5 +10,5 @@ require (
 )
 
 replace (
-	github.com/networkservicemesh/integration-tests => github.com/thetadr/integration-tests v0.0.0-20220919061048-7dcc51e8a19c
+	github.com/networkservicemesh/integration-tests => github.com/thetadr/integration-tests v0.0.0-20220919070910-2304f1b9af86
 )
