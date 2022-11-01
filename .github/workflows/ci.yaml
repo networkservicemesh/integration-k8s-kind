@@ -21,6 +21,7 @@ jobs:
   checkgomod:
     uses: networkservicemesh/.github/.github/workflows/checkgomod.yaml@main
 
+  ### SINGLE CLUSTER
   kind:
     runs-on: ubuntu-latest
     strategy:
@@ -52,7 +53,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
         with:
-          config: src/github.com/${{ github.repository }}/${{matrix.image <= 'v1.19.11' && 'cluster-config-old.yaml' || 'cluster-config.yaml'}}
+          config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
           image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
@@ -68,7 +69,7 @@ jobs:
           echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 2h10m -race -v -run Single
+          go test -count 1 -timeout 2h10m -race -v ./tests_single
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -77,7 +78,59 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Single logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/${{ matrix.image }}-logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
+
+  ### SINGLE IPv6 CLUSTER
+  kind-ipv6:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: "v1.25.0"
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
+          version: v0.13.0
+          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+      - name: Check kind cluster
+        run: |
+          kubectl version
+          kubectl get pods -A -o wide
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Set loadbalancer CIDR
+        run: |
+          echo CLUSTER_CIDR="fc00:f853:ccd:e793:1::/80" >> $GITHUB_ENV
+      - name: Integration tests
+        run: |
+          go test -count 1 -timeout 2h10m -race -v \
+          ./tests_single/basic_test.go \
+          ./tests_single/memory_test.go
+        env:
+          ARTIFACTS_DIR: ipv6-logs/${{ env.KUBERNETES_VERSION }}
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Single IPv6 logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
+
+  ### SINGLE CALICO CLUSTER
   calico-kind:
     runs-on: ubuntu-latest
     env:
@@ -127,7 +180,13 @@ jobs:
       - name: Integration tests
         continue-on-error: true
         run: |
-          go test -count 1 -timeout 1h30m -race -v -run Calico
+          go test -count 1 -timeout 1h30m -race -v \
+          ./tests_single/basic_test.go             \
+          ./tests_single/heal_test.go              \
+          ./tests_single/memory_test.go            \
+          ./tests_single/observability_test.go     \
+          ./tests_single/feature_test.go           \
+          -calico
         env:
           ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -136,7 +195,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Calico logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico-logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
+
+  ### INTERDOMAIN CLUSTER
   interdomain-kind:
     runs-on: ubuntu-latest
     env:
@@ -175,7 +236,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v -run Interdomain
+          go test -count 1 -timeout 1h -race -v ./tests_interdomain
         env:
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -187,4 +248,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Interdomain logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/interdomain-logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
