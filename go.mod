@@ -3,7 +3,7 @@ module github.com/networkservicemesh/integration-k8s-kind
 go 1.18
 
 require (
-	github.com/networkservicemesh/integration-tests v0.0.0-20221023172725-a239c379e3bd
+	github.com/networkservicemesh/integration-tests v0.0.0-20221110104102-e9e494df395c
 	github.com/stretchr/testify v1.7.0
 )
 
