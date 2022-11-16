@@ -160,8 +160,6 @@ github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc h1:1L/
 github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
 github.com/networkservicemesh/integration-tests v0.0.0-20221116110129-3ac85b6c05e8 h1:f92QaIdamAZD0SyF7tJ3gw/J5EUl/RWloh7CemeWR4I=
 github.com/networkservicemesh/integration-tests v0.0.0-20221116110129-3ac85b6c05e8/go.mod h1:qkqJgckg5vY5STByxzKhzhDB+TKCAU0qasuwfJ0cG+s=
-github.com/networkservicemesh/integration-tests v1.6.1 h1:7XOECTS/xHAFtaW6mz7wcUB3632xlDIuBruiXNH/w1o=
-github.com/networkservicemesh/integration-tests v1.6.1/go.mod h1:FiN76Emti1ZyhWMIG6vg6kXG//0wSCoKokBvp6i8bjM=
 github.com/onsi/ginkgo v0.0.0-20170829012221-11459a886d9c/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.11.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
