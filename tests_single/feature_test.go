@@ -49,9 +49,5 @@ func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 }
 
 func TestRunFeatureSuite(t *testing.T) {
-	if *calicoFlag {
-		suite.Run(t, new(calicoFeatureSuite))
-	} else {
-		suite.Run(t, new(features.Suite))
-	}
+	suite.Run(t, new(features.Suite))
 }
