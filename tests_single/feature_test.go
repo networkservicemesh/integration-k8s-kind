@@ -17,15 +17,12 @@
 package single
 
 import (
-	"flag"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/suites/features"
 )
-
-var calicoFlag = flag.Bool("calico", false, "selects calico tests")
 
 // Disabled tests for Calico-vpp:
 // TestMutually_aware_nses - https://github.com/networkservicemesh/integration-k8s-kind/issues/627
