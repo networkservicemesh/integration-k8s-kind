@@ -69,7 +69,7 @@ jobs:
           echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
       - name: Integration tests
         run: |
-          go test -count 10 -timeout 2h10m -race ./tests_single/feature_test.go
+          go test -count 20 -timeout 2h10m -race ./tests_single/feature_test.go
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
