@@ -35,8 +35,8 @@ github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym
 github.com/NYTimes/gziphandler v0.0.0-20170623195520-56545f4a5d46/go.mod h1:3wb06e3pkSAbeQ52E9H9iFoQsEEwGN64994WTCIhntQ=
 github.com/NikitaSkrynnik/gotestmd v0.0.0-20221126100229-f6bb0f98763d h1:ijvkU/ymg+619G+NG28D0x7tFwBFq0o3FaaYoyydhkU=
 github.com/NikitaSkrynnik/gotestmd v0.0.0-20221126100229-f6bb0f98763d/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/NikitaSkrynnik/integration-tests v0.0.0-20221126100419-a6feef6284af h1:tW8KRathwIzG+4GQM0BHbRXOW0MubZQtRxxjtY/tmew=
-github.com/NikitaSkrynnik/integration-tests v0.0.0-20221126100419-a6feef6284af/go.mod h1:rPyI/Eq5/AfOUkPA70oR/E65R6GcZqL0QpN8m9LWyTA=
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20221128072153-c079792fc4cf h1:TeTQjnEOpQaVarXgYCJJEZ7ChOl5KpX2EDX/VDSarPg=
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20221128072153-c079792fc4cf/go.mod h1:rPyI/Eq5/AfOUkPA70oR/E65R6GcZqL0QpN8m9LWyTA=
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
 github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
