@@ -186,8 +186,8 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/wazsone/integration-tests v0.0.0-20230131102850-f57da8c310ea h1:jfzuj709ZliuAuwAlFaiZiWg4xVt046Mmijb97nw+Eo=
-github.com/wazsone/integration-tests v0.0.0-20230131102850-f57da8c310ea/go.mod h1:qkqJgckg5vY5STByxzKhzhDB+TKCAU0qasuwfJ0cG+s=
+github.com/wazsone/integration-tests v0.0.0-20230131113055-fa860ef43336 h1:b1ZrDy7Eb2Q+rKorNO8SxuMY6SHLP/1pO1jb6I78tN4=
+github.com/wazsone/integration-tests v0.0.0-20230131113055-fa860ef43336/go.mod h1:qkqJgckg5vY5STByxzKhzhDB+TKCAU0qasuwfJ0cG+s=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=

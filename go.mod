@@ -2,7 +2,7 @@ module github.com/networkservicemesh/integration-k8s-kind
 
 go 1.18
 
-replace github.com/networkservicemesh/integration-tests v0.0.0-20230126075806-722f601e950b => github.com/wazsone/integration-tests v0.0.0-20230131102850-f57da8c310ea
+replace github.com/networkservicemesh/integration-tests v0.0.0-20230126075806-722f601e950b => github.com/wazsone/integration-tests v0.0.0-20230131113055-fa860ef43336
 
 require (
 	github.com/networkservicemesh/integration-tests v0.0.0-20230126075806-722f601e950b
