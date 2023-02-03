@@ -10,12 +10,12 @@ spec:
     spec:
       containers:
         - name: agent
-          image: artgl/calico-agent:5ff9517
+          image: artgl/calico-agent:82c88a14
           resources:
             requests:
               cpu: 150m
         - name: vpp
-          image: artgl/calico-vpp:5ff9517
+          image: artgl/calico-vpp:82c88a14
           resources:
             requests:
               cpu: 250m
