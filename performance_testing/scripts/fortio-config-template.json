@@ -1,0 +1,9 @@
+{
+    "url": "<url>",
+    "qps": "<qps>",
+    "r": "<resolution>",
+    "c": "<connections>",
+    "t": "<duration>",
+    "headers": [],
+    "save": "on"
+}
