@@ -46,7 +46,7 @@ jobs:
         run: |
           performance_testing/scripts/full_ci_run.sh $NSM_VERSION $ARTIFACTS_DIR
         env:
-          NSM_VERSION: ${{ env.GITHUB_REF_NAME }}
+          NSM_VERSION: ${{ github.ref_name }}
           ARTIFACTS_DIR: perf-test-results
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Cleanup resources
