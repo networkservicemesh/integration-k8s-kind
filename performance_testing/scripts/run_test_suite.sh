@@ -40,7 +40,7 @@ qps3=1000000
 connections1=1
 duration1=60s
 
-echo running tests for "$url"
+echo running tests for "$test_url"
 # for current_qps in $qps3
 for current_qps in $qps1 $qps2 $qps3
 do

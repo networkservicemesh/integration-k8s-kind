@@ -108,9 +108,8 @@ function runTest() {
         "$clear_script" > "$deploy_logs/$test_full_name-clear-apps.log" 2>&1
         echo clearing nsm...
         "$nsm_deploy_folder/nsm_clear_nsm.sh" > "$deploy_logs/$test_full_name-clear-nsm.log" 2>&1
-        $(exit "$result_code") || exit
+        (exit "$result_code") || exit
     done
 }
 
 runTest "$test_iterations" "$test_url" "$test_qps" "$test_connections" "$test_duration" "$deploy_script" "$clear_script" "$nsm_version"
-

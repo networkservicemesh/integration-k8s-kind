@@ -3,7 +3,7 @@
 echo CLUSTER1_CIDR is "'$CLUSTER1_CIDR'"
 echo CLUSTER2_CIDR is "'$CLUSTER2_CIDR'"
 
-if [[ ! -z $CLUSTER1_CIDR ]]; then
+if [[ -n $CLUSTER1_CIDR ]]; then
     kubectl "--kubeconfig=$KUBECONFIG1" apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
     kubectl "--kubeconfig=$KUBECONFIG1" apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
     cat > metallb-config.yaml <<EOF
@@ -24,7 +24,7 @@ EOF
     kubectl "--kubeconfig=$KUBECONFIG1" wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 
-if [[ ! -z $CLUSTER2_CIDR ]]; then
+if [[ -n $CLUSTER2_CIDR ]]; then
     kubectl "--kubeconfig=$KUBECONFIG2" apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
     kubectl "--kubeconfig=$KUBECONFIG2" apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
     cat > metallb-config.yaml <<EOF
