@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo CLUSTER1_CIDR is \'$CLUSTER1_CIDR\'
-echo CLUSTER2_CIDR is \'$CLUSTER2_CIDR\'
+echo CLUSTER1_CIDR is "'$CLUSTER1_CIDR'"
+echo CLUSTER2_CIDR is "'$CLUSTER2_CIDR'"
 
 if [[ ! -z $CLUSTER1_CIDR ]]; then
     kubectl "--kubeconfig=$KUBECONFIG1" apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml

@@ -2,8 +2,8 @@
 
 parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 
-function k1() { kubectl --kubeconfig $KUBECONFIG1 "$@" ; }
-function k2() { kubectl --kubeconfig $KUBECONFIG2 "$@" ; }
+function k1() { kubectl --kubeconfig "$KUBECONFIG1" "$@" ; }
+function k2() { kubectl --kubeconfig "$KUBECONFIG2" "$@" ; }
 
 if [ -z "$1" ]; then echo 1st arg 'test_name' is missing; exit 1; fi
 if [ -z "$2" ]; then echo 2nd arg 'result_folder' is missing; exit 1; fi
@@ -38,8 +38,8 @@ echo "test_connections: $test_connections"
 echo "test_duration: $test_duration"
 echo "deploy_script: $deploy_script"
 echo "clear_script: $clear_script"
-echo nsm_version: $nsm_version
-echo nsm_deploy_folder: $nsm_deploy_folder
+echo "nsm_version: $nsm_version"
+echo "nsm_deploy_folder: $nsm_deploy_folder"
 
 echo ------
 
@@ -76,14 +76,14 @@ function runTest() {
     clear_script=$7
     nsm_version=$8
 
-    config=$(makeConfig $url $qps 0.00005 $connections $duration) || exit
+    config=$(makeConfig "$url" "$qps" 0.00005 "$connections" "$duration") || exit
     config_name="q$qps-c$connections-d$duration"
 
     warmup_results=$result_folder/warmup
-    mkdir -p $warmup_results
+    mkdir -p "$warmup_results"
 
     deploy_logs=$result_folder/deploy
-    mkdir -p $deploy_logs
+    mkdir -p "$deploy_logs"
 
     echo "config name: $config_name"
     
@@ -108,7 +108,7 @@ function runTest() {
         "$clear_script" > "$deploy_logs/$test_full_name-clear-apps.log" 2>&1
         echo clearing nsm...
         "$nsm_deploy_folder/nsm_clear_nsm.sh" > "$deploy_logs/$test_full_name-clear-nsm.log" 2>&1
-        $(exit $result_code) || exit
+        $(exit "$result_code") || exit
     done
 }
 

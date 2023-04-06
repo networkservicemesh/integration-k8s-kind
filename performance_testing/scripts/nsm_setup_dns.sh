@@ -14,26 +14,26 @@ echo
 ip1=$(kubectl "--kubeconfig=$KUBECONFIG1" get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}') || exit
 if [[ $ip1 == *"no value"* ]]; then 
     hostname1=$(kubectl "--kubeconfig=$KUBECONFIG1" get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}') || exit
-    echo hostname1 is $hostname1
-    ip1=$(dig +short $hostname1 | head -1) || exit
+    echo hostname1 is "$hostname1"
+    ip1=$(dig +short "$hostname1" | head -1) || exit
 fi
 # if IPv6
-if [[ $ip1 =~ ":" ]]; then ip1=[$ip1]; fi
+if [[ $ip1 =~ ":" ]]; then ip1="[$ip1]"; fi
 
-echo Selected externalIP: $ip1 for cluster1
+echo Selected externalIP: "$ip1" for cluster1
 
 if [[ -z "$ip1" ]]; then echo ip1 is empty; exit 1; fi
 
 ip2=$(kubectl "--kubeconfig=$KUBECONFIG2" get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}') || exit
 if [[ $ip2 == *"no value"* ]]; then 
     hostname2=$(kubectl "--kubeconfig=$KUBECONFIG2" get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}') || exit
-    echo hostname2 is $hostname2
-    ip2=$(dig +short $hostname2 | head -1) || exit
+    echo hostname2 is "$hostname2"
+    ip2=$(dig +short "$hostname2" | head -1) || exit
 fi
 # if IPv6
-if [[ $ip2 =~ ":" ]]; then ip2=[$ip2]; fi
+if [[ $ip2 =~ ":" ]]; then ip2="[$ip2]"; fi
 
-echo Selected externalIP: $ip2 for cluster2
+echo Selected externalIP: "$ip2" for cluster2
 
 if [[ -z "$ip2" ]]; then echo ip2 is empty; exit 1; fi
 

@@ -5,7 +5,7 @@ parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 function k1() { kubectl --kubeconfig "$KUBECONFIG1" "$@" ; }
 function k2() { kubectl --kubeconfig "$KUBECONFIG2" "$@" ; }
 
-echo running $0
+echo running "$0"
 
 if [ -z "$1" ]; then echo 1st arg 'nsm_version' is missing; exit 1; fi
 

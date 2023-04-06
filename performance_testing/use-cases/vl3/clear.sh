@@ -5,7 +5,7 @@ parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 function k1() { kubectl --kubeconfig "$KUBECONFIG1" "$@" ; }
 function k2() { kubectl --kubeconfig "$KUBECONFIG2" "$@" ; }
 
-echo running $0
+echo running "$0"
 
 pkill -f "port-forward svc/fortio-service 8080:8080"
 

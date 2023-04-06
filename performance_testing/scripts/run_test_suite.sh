@@ -1,7 +1,7 @@
 #!/bin/bash
 
-function k1() { kubectl --kubeconfig $KUBECONFIG1 "$@" ; }
-function k2() { kubectl --kubeconfig $KUBECONFIG2 "$@" ; }
+function k1() { kubectl --kubeconfig "$KUBECONFIG1" "$@" ; }
+function k2() { kubectl --kubeconfig "$KUBECONFIG2" "$@" ; }
 
 parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 
@@ -40,7 +40,7 @@ qps3=1000000
 connections1=1
 duration1=60s
 
-echo running tests for $url
+echo running tests for "$url"
 # for current_qps in $qps3
 for current_qps in $qps1 $qps2 $qps3
 do

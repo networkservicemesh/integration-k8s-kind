@@ -14,5 +14,5 @@ kubectl "--kubeconfig=$KUBECONFIG2" wait -n spire --timeout=1m --for=condition=r
 bundle1=$(kubectl "--kubeconfig=$KUBECONFIG1" exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe) || exit
 bundle2=$(kubectl "--kubeconfig=$KUBECONFIG2" exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe) || exit
 
-echo $bundle2 | kubectl "--kubeconfig=$KUBECONFIG1" exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster2" || exit
-echo $bundle1 | kubectl "--kubeconfig=$KUBECONFIG2" exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster1" || exit
+echo "$bundle2" | kubectl "--kubeconfig=$KUBECONFIG1" exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster2" || exit
+echo "$bundle1" | kubectl "--kubeconfig=$KUBECONFIG2" exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster1" || exit

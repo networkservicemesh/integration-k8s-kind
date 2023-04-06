@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo running $0
+echo running "$0"
 
 parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 
