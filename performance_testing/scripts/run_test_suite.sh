@@ -23,14 +23,16 @@ clear_script=$6
 nsm_version=$7
 nsm_deploy_folder=$8
 
-echo test_name: $test_name
-echo result_folder: $result_folder
-echo test_iterations: $test_iterations
-echo test_url: $test_url
-echo deploy_script: $deploy_script
-echo clear_script: $clear_script
+echo "test_name: $test_name"
+echo "result_folder: $result_folder"
+echo "test_iterations: $test_iterations"
+echo "test_url: $test_url"
+echo "deploy_script: $deploy_script"
+echo "clear_script: $clear_script"
+echo "nsm_version: $nsm_version"
+echo "nsm_deploy_folder: $nsm_deploy_folder"
 
-mkdir -p $result_folder || exit
+mkdir -p "$result_folder" || exit
 
 qps1=100
 qps2=1000
@@ -42,9 +44,9 @@ echo running tests for $url
 # for current_qps in $qps3
 for current_qps in $qps1 $qps2 $qps3
 do
-    echo testing qps $current_qps
-    $parent_path/run_test_single.sh \
-        $test_name \
+    echo "testing qps $current_qps"
+    "$parent_path/run_test_single.sh" \
+        "$test_name" \
         "$result_folder" \
         "$test_iterations" \
         "$test_url" \

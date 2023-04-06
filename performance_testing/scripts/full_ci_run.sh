@@ -10,15 +10,15 @@ if [ -z "$2" ]; then echo 2nd arg 'result_folder' is missing; exit 1; fi
 nsm_version=$1
 result_folder=$2
 
-echo nsm_version: $nsm_version
-echo result_folder: $result_folder
+echo nsm_version: "$nsm_version"
+echo result_folder: "$result_folder"
 
-$parent_path/setup_metallb.sh || exit
+"$parent_path/setup_metallb.sh" || exit
 
-$parent_path/nsm_setup_dns.sh || exit
-$parent_path/nsm_setup_spire.sh || exit
+"$parent_path/nsm_setup_dns.sh" || exit
+"$parent_path/nsm_setup_spire.sh" || exit
 
-$parent_path/run_test_suite.sh \
+"$parent_path/run_test_suite.sh" \
     vl3 \
     "$result_folder" \
     3 \
@@ -29,7 +29,7 @@ $parent_path/run_test_suite.sh \
     "$parent_path/../nsm" \
     || exit
 
-$parent_path/run_test_suite.sh \
+"$parent_path/run_test_suite.sh" \
     k2wireguard2k \
     "$result_folder" \
     3 \
@@ -40,7 +40,7 @@ $parent_path/run_test_suite.sh \
     "$parent_path/../nsm" \
     || exit
 
-$parent_path/nsm_clear_spire.sh
-$parent_path/nsm_clear_dns.sh
+"$parent_path/nsm_clear_spire.sh"
+"$parent_path/nsm_clear_dns.sh"
 
 true

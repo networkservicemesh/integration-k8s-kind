@@ -29,15 +29,15 @@ clear_script=$9
 nsm_version=${10}
 nsm_deploy_folder=${11}
 
-echo test_name: $test_name
-echo result_folder: $result_folder
-echo test_iterations: $test_iterations
-echo test_url: $test_url
-echo test_qps: $test_qps
-echo test_connections: $test_connections
-echo test_duration: $test_duration
-echo deploy_script: $deploy_script
-echo clear_script: $clear_script
+echo "test_name: $test_name"
+echo "result_folder: $result_folder"
+echo "test_iterations: $test_iterations"
+echo "test_url: $test_url"
+echo "test_qps: $test_qps"
+echo "test_connections: $test_connections"
+echo "test_duration: $test_duration"
+echo "deploy_script: $deploy_script"
+echo "clear_script: $clear_script"
 echo nsm_version: $nsm_version
 echo nsm_deploy_folder: $nsm_deploy_folder
 
@@ -55,15 +55,15 @@ function makeConfig() {
         -e "s/<resolution>/$resolution/g" \
         -e "s/<connections>/$connections/g" \
         -e "s/<duration>/$duration/g" \
-        $parent_path/fortio-config-template.json
+        "$parent_path/fortio-config-template.json"
 }
 
 function captureState() {
     result_folder=$1
-    k1 get pod -A -o wide > $result_folder/pods-k1.log
-    k1 get svc -A -o wide > $result_folder/svc-k1.log
-    k2 get pod -A -o wide > $result_folder/pods-k2.log
-    k2 get svc -A -o wide > $result_folder/svc-k2.log
+    k1 get pod -A -o wide > "$result_folder/pods-k1.log"
+    k1 get svc -A -o wide > "$result_folder/svc-k1.log"
+    k2 get pod -A -o wide > "$result_folder/pods-k2.log"
+    k2 get svc -A -o wide > "$result_folder/svc-k2.log"
 }
 
 function runTest() {
@@ -85,32 +85,32 @@ function runTest() {
     deploy_logs=$result_folder/deploy
     mkdir -p $deploy_logs
 
-    echo config name: $config_name
+    echo "config name: $config_name"
     
-    echo measure for $iterations iterations
-    for i in $(seq -w 1 1 $iterations)
+    echo "measure for $iterations iterations"
+    for i in $(seq -w 1 1 "$iterations")
     do
-        echo round $i
+        echo "round $i"
         test_full_name=$test_name-$config_name-$i
         echo deploying nsm...
-        $nsm_deploy_folder/nsm_setup_nsm.sh > $deploy_logs/$test_full_name-deploy-nsm.log $nsm_version 2>&1 || exit
+        "$nsm_deploy_folder/nsm_setup_nsm.sh" > "$deploy_logs/$test_full_name-deploy-nsm.log" "$nsm_version" 2>&1 || exit
         echo deploying apps...
-        $deploy_script > $deploy_logs/$test_full_name-deploy-apps.log $nsm_version 2>&1 || exit
+        "$deploy_script" > "$deploy_logs/$test_full_name-deploy-apps.log" "$nsm_version" 2>&1 || exit
         echo doing warmup run...
-        curl -s -d "$config" "localhost:8080/fortio/rest/run" > $warmup_results/$test_full_name-warmup.json
+        curl -s -d "$config" "localhost:8080/fortio/rest/run" > "$warmup_results/$test_full_name-warmup.json"
         echo doing main run...
-        curl -s -d "$config" "localhost:8080/fortio/rest/run" > $result_folder/$test_full_name.json
+        curl -s -d "$config" "localhost:8080/fortio/rest/run" > "$result_folder/$test_full_name.json"
         result_code=$?
         echo saving pod layout
-        k1 get pod -A -o wide > $deploy_logs/$test_full_name-k1-pods.log
-        k2 get pod -A -o wide > $deploy_logs/$test_full_name-k2-pods.log
+        k1 get pod -A -o wide > "$deploy_logs/$test_full_name-k1-pods.log"
+        k2 get pod -A -o wide > "$deploy_logs/$test_full_name-k2-pods.log"
         echo clearing apps...
-        $clear_script > $deploy_logs/$test_full_name-clear-apps.log 2>&1
+        "$clear_script" > "$deploy_logs/$test_full_name-clear-apps.log" 2>&1
         echo clearing nsm...
-        $nsm_deploy_folder/nsm_clear_nsm.sh > $deploy_logs/$test_full_name-clear-nsm.log 2>&1
+        "$nsm_deploy_folder/nsm_clear_nsm.sh" > "$deploy_logs/$test_full_name-clear-nsm.log" 2>&1
         $(exit $result_code) || exit
     done
 }
 
-runTest $test_iterations $test_url $test_qps $test_connections $test_duration $deploy_script $clear_script $nsm_version
+runTest "$test_iterations" "$test_url" "$test_qps" "$test_connections" "$test_duration" "$deploy_script" "$clear_script" "$nsm_version"
 

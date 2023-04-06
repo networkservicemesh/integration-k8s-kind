@@ -2,8 +2,8 @@
 
 parent_path=$( cd "$(dirname "$0")" ; pwd -P ) || exit
 
-function k1() { kubectl --kubeconfig $KUBECONFIG1 "$@" ; }
-function k2() { kubectl --kubeconfig $KUBECONFIG2 "$@" ; }
+function k1() { kubectl --kubeconfig "$KUBECONFIG1" "$@" ; }
+function k2() { kubectl --kubeconfig "$KUBECONFIG2" "$@" ; }
 
 echo running $0
 
