@@ -11,7 +11,8 @@ kind create cluster --config cluster-config.yaml --wait 120s
 
 2. Run tests
 ```bash
-go test -count 1 -timeout 1h -race -v -run Single
+export CLUSTER_CIDR="172.18.1.128/25" # for monolith suite
+go test -count 1 -timeout 2h30m -race -v ./tests_single
 ```
 
 ## Calico single cluster tests
@@ -35,7 +36,13 @@ kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
 
 4. Run tests:
 ```bash
-go test -count 1 -timeout 1h -race -v -run Calico
+ go test -count 1 -timeout 1h30m -race -v \
+    ./tests_single/basic_test.go          \
+    ./tests_single/heal_test.go           \
+    ./tests_single/memory_test.go         \
+    ./tests_single/observability_test.go  \
+    ./tests_single/feature_test.go        \
+    -calico
 ```
 
 ## Multiple cluster scenario(interdomain tests)
