@@ -10,5 +10,5 @@ folders="$result_folder/*"
 
 for folder in $folders
 do
-    "$parent_path/print_summary.sh" "$folder"
+    "$parent_path/print_summary.sh" "$folder"/results
 done
