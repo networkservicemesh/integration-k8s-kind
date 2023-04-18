@@ -52,6 +52,11 @@ jobs:
         DURATION: 60s
         CONNECTIONS: 1
         ITERATIONS: 3
+    - name: Print results
+      run: |
+        print_all_summaries.sh "$ARTIFACTS_DIR"
+      env:
+        ARTIFACTS_DIR: perf-test-results
       working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
     - name: Cleanup resources
       if: ${{ success() || failure() || cancelled() }}

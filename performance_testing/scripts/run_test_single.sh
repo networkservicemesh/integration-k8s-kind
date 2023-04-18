@@ -85,6 +85,9 @@ function runTest() {
     deploy_logs=$result_folder/deploy
     mkdir -p "$deploy_logs"
 
+    final_results=$result_folder/results
+    mkdir -p "$final_results"
+
     echo "config name: $config_name"
     
     echo "measure for $iterations iterations"
@@ -99,7 +102,7 @@ function runTest() {
         echo doing warmup run...
         curl -s -d "$config" "localhost:8080/fortio/rest/run" > "$warmup_results/$test_full_name-warmup.json"
         echo doing main run...
-        curl -s -d "$config" "localhost:8080/fortio/rest/run" > "$result_folder/$test_full_name.json"
+        curl -s -d "$config" "localhost:8080/fortio/rest/run" > "$final_results/$test_full_name.json"
         result_code=$?
         echo saving pod layout
         k1 get pod -A -o wide > "$deploy_logs/$test_full_name-k1-pods.log"
