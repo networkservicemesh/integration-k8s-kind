@@ -15,7 +15,7 @@ function printForFile() {
     p50=$(< "$filepath" jq .DurationHistogram.Percentiles[0].Value)
     p99=$(< "$filepath" jq .DurationHistogram.Percentiles[4].Value)
     
-    echo ----------------------
+    echo -----------------------
     echo From "$filepath"
     echo QPS: "$qps"
     echo Total queries: "$count"
@@ -24,7 +24,7 @@ function printForFile() {
     echo Avg: "$(awk '{print $1 * 1000}' <<<"$avg")" ms
     echo p50: "$(awk '{print $1 * 1000}' <<<"$p50")" ms
     echo p99: "$(awk '{print $1 * 1000}' <<<"$p99")" ms
-    echo ----------------------
+    echo -----------------------
 }
 
 files="$result_folder/*"
