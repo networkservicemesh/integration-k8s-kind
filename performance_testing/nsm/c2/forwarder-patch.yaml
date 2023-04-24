@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+  labels:
+    app: forwarder-vpp
+spec:
+  template:
+    spec:
+      containers:
+        - name: forwarder-vpp
+          resources:
+            limits:
+              cpu: null
