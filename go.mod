@@ -7,8 +7,9 @@ require (
 	github.com/stretchr/testify v1.7.0
 )
 
-// replace github.com/networkservicemesh/integration-tests => ../integration-tests
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230525085537-a70e3bc0e28e
+replace github.com/networkservicemesh/gotestmd => ../gotestmd
+
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230530074058-96c6014ac147
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

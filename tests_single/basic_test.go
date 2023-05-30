@@ -19,11 +19,13 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/networkservicemesh/integration-tests/suites/basic"
+	"github.com/stretchr/testify/suite"
 )
 
 func TestRunBasicSuite(t *testing.T) {
-	suite.Run(t, new(basic.Suite))
+	basicSuite := &basic.Suite{}
+	basicSuite.WorkerCount = 5
+
+	suite.Run(t, basicSuite)
 }
