@@ -25,7 +25,7 @@ import (
 
 func TestRunBasicSuite(t *testing.T) {
 	basicSuite := &basic.Suite{}
-	basicSuite.WorkerCount = 5
+	basicSuite.WorkerCount = 1
 
 	suite.Run(t, basicSuite)
 }
