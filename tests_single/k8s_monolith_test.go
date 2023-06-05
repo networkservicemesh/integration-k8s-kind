@@ -19,11 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 )
 
 func TestK8sMonolithSuite(t *testing.T) {
-	suite.Run(t, new(k8s_monolith.Suite))
+	parallel.Run(t, new(k8s_monolith.Suite))
 }
