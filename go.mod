@@ -8,6 +8,7 @@ require (
 )
 
 replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230606100136-cd085c04e3bf
+
 // replace github.com/networkservicemesh/integration-tests => ../integration-tests
 
 require (
