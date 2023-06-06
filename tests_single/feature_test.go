@@ -22,6 +22,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/features"
 )
 
@@ -52,6 +53,6 @@ func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
 		suite.Run(t, new(calicoFeatureSuite))
 	} else {
-		suite.Run(t, new(features.Suite))
+		parallel.Run(t, new(features.Suite))
 	}
 }

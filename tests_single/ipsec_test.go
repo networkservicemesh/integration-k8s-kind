@@ -19,11 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/ipsec_mechanism"
 )
 
 func TestRunIpsecSuite(t *testing.T) {
-	suite.Run(t, new(ipsec_mechanism.Suite))
+	parallel.Run(t, new(ipsec_mechanism.Suite))
 }
