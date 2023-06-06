@@ -1,5 +1,5 @@
-github.com/NikitaSkrynnik/integration-tests v0.0.0-20230606151029-38ec2af2a6ba h1:SKq13U2TPeSDiPEkRh6TnEwZi2hvV7KQCLz9o6ubyHo=
-github.com/NikitaSkrynnik/integration-tests v0.0.0-20230606151029-38ec2af2a6ba/go.mod h1:qkqJgckg5vY5STByxzKhzhDB+TKCAU0qasuwfJ0cG+s=
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20230606151635-d9982dfac34f h1:zTl1qEIB/ywqygut/hAysctxjFq5sL1amGcK4empdq8=
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20230606151635-d9982dfac34f/go.mod h1:qkqJgckg5vY5STByxzKhzhDB+TKCAU0qasuwfJ0cG+s=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
