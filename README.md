@@ -2,6 +2,17 @@
 
 How to run integration tests locally?
 
+```
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete ns nsm-system
+kubectl delete crd clusterspiffeids.spire.spiffe.io
+kubectl delete crd clusterfederatedtrustdomains.spire.spiffe.io
+kubectl delete validatingwebhookconfiguration.admissionregistration.k8s.io/spire-controller-manager-webhook
+kubectl delete ns spire
+kubectl delete ns prefetch
+```
+
 ## Single cluster tests
 
 1. Create kind cluster:
