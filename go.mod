@@ -7,7 +7,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 )
 
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230609090218-f28038da6547
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230609091822-3f4c87bd2085
 
 // replace github.com/networkservicemesh/integration-tests => ../integration-tests
 
