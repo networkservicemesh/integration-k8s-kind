@@ -3,6 +3,7 @@
 How to run integration tests locally?
 
 ```
+kubectl delete ns ns-kernel2ethernet2kernel ns-kernel2kernel ns-memif2memif
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system

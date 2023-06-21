@@ -24,5 +24,5 @@ import (
 )
 
 func TestRunFeatureSuite(t *testing.T) {
-	parallel.Run(t, new(features.Suite), []string{"TestVl3_scale_from_zero", "TestVl3_dns"}...)
+	parallel.Run(t, new(features.Suite), "TestVl3_basic", "TestVl3_scale_from_zero", "TestVl3_dns", "TestNse_composition")
 }
