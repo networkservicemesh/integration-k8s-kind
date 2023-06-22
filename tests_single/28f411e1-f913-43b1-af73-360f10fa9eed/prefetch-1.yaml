@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch-1
+  labels:
+    app: prefetch-1
+spec:
+  selector:
+    matchLabels:
+      app: prefetch-1
+  template:
+    metadata:
+      labels:
+        app: prefetch-1
+    spec:
+      initContainers:
+        - name: return
+          image: rrandom312/return
+          imagePullPolicy: IfNotPresent
+          command: ["cp", "/bin/return", "/out/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /out
+
+        - name: 1b7aa92b-5af3-4ec3-9108-2a8ff0d8f498
+          image: docker.io/frolvlad/alpine-bash:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 4a19bcd0-9d50-483f-acbf-e8bedb3fcdfb
+          image: docker.io/travelping/nettools:1.10.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: efd5c2b4-c385-47a7-b442-803a48152d67
+          image: k8s.gcr.io/e2e-test-images/jessie-dnsutils:1.3
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: b90831de-1899-43af-8460-8726cd5c8c4a
+          image: jaegertracing/all-in-one:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: a03beb73-236a-4108-a73c-3601e55ae175
+          image: otel/opentelemetry-collector:0.35.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: ef7aa052-0896-481e-b4be-967dc9a97938
+          image: prom/prometheus:v2.37.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: c6c101d4-e9c5-4c9e-b6f6-66134a7c5eff
+          image: networkstatic/iperf3:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 7363691e-90a2-4baa-af73-0ff1a2853929
+          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:13cf707
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 7bae3798-53b7-4d8a-a501-39cffca9f58b
+          image: ghcr.io/networkservicemesh/ci/cmd-cluster-info-k8s:7a9eda8
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 77492f62-c3ba-4d72-90ea-49ebabfaf54b
+          image: ghcr.io/networkservicemesh/ci/cmd-forwarder-ovs:8f2c1aa
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: bin
+          emptyDir: { }

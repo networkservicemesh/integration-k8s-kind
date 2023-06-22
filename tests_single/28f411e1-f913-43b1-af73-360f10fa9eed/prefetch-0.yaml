@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch-0
+  labels:
+    app: prefetch-0
+spec:
+  selector:
+    matchLabels:
+      app: prefetch-0
+  template:
+    metadata:
+      labels:
+        app: prefetch-0
+    spec:
+      initContainers:
+        - name: return
+          image: rrandom312/return
+          imagePullPolicy: IfNotPresent
+          command: ["cp", "/bin/return", "/out/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /out
+
+        - name: 5baaed70-307e-4766-a8d0-f1deab59cfce
+          image: docker.io/library/postgres:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: bcbf1e7d-57ce-4ec4-a260-e024339dfd65
+          image: docker.io/library/nginx:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 37c613a3-50c5-42e6-add7-aedfa9b9c688
+          image: docker.io/coredns/coredns:1.8.3
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: fe097c66-a1e8-47c5-b008-c17e177d70f5
+          image: ghcr.io/spiffe/spire-agent:1.6.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: badcd7e7-f294-455e-bfd5-a6cf131ae4ee
+          image: ghcr.io/spiffe/spire-server:1.6.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 2f1ac1e0-25ee-435d-a0cc-6dde0cec2ffe
+          image: gcr.io/spiffe-io/wait-for-it:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 83bd731f-e6e5-4351-b094-51ebb82de09b
+          image: ghcr.io/spiffe/spire-controller-manager:0.2.2
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: ef866b65-4108-4bbe-97f6-54cff8f0f9ff
+          image: quay.io/metallb/speaker:v0.12.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: f948e03c-e59b-4428-a89a-2a910ea42f25
+          image: quay.io/metallb/controller:v0.12.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 2f8da0d1-9ff2-41a0-bdf7-e7cfae1512ef
+          image: docker.io/library/alpine:3.15.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: bin
+          emptyDir: { }

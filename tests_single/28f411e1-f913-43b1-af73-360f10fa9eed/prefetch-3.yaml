@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch-3
+  labels:
+    app: prefetch-3
+spec:
+  selector:
+    matchLabels:
+      app: prefetch-3
+  template:
+    metadata:
+      labels:
+        app: prefetch-3
+    spec:
+      initContainers:
+        - name: return
+          image: rrandom312/return
+          imagePullPolicy: IfNotPresent
+          command: ["cp", "/bin/return", "/out/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /out
+
+        - name: 53fa6a6e-d531-4e05-9d9f-3c570488307f
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:e70bc39
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 97b7a70e-9f55-4864-bbef-4f1f37268ffd
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-remote-vlan:15c451b
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: fb3ec099-9bdb-47ed-8a02-0d1e22cdb571
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-simple-vl3-docker:cec1649
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 87a37541-ed16-41e8-9be2-0f6dcdc37b91
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:c6835ed
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 33887e2c-e101-4b5e-9340-b21ce09df83b
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:b4c710f
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: f524df0e-7128-41f0-adcf-044e1b5803f5
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vlan-vpp:956abd3
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 64338cd4-c7a8-47dd-a064-0d480e743dd3
+          image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:a8cd396
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 279d62b8-9fe5-4590-b972-e88d7c3b4262
+          image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:23de61c
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 3a3c5721-8260-4f0b-a710-4d271859459b
+          image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:d9c7859
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 48452af5-a3b0-4f0b-9f0c-dc75c3bf2fc3
+          image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:2ed9ec2
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: bin
+          emptyDir: { }

@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch-4
+  labels:
+    app: prefetch-4
+spec:
+  selector:
+    matchLabels:
+      app: prefetch-4
+  template:
+    metadata:
+      labels:
+        app: prefetch-4
+    spec:
+      initContainers:
+        - name: return
+          image: rrandom312/return
+          imagePullPolicy: IfNotPresent
+          command: ["cp", "/bin/return", "/out/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /out
+
+        - name: 24132829-4d0b-4a40-adee-43945a51c0fe
+          image: ghcr.io/networkservicemesh/ci/cmd-registry-k8s:0a45002
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 040e7dec-9d73-483c-be65-3796cc5fd1ba
+          image: ghcr.io/networkservicemesh/ci/cmd-registry-memory:5fdf8d9
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 1a1e7733-588e-4dd1-ad0d-a356237319be
+          image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:a623234
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 43d15d37-8390-4cf3-8a5a-a6dbb8b7206a
+          image: ghcr.io/networkservicemesh/ci/cmd-ipam-vl3:0b9bb85
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: bin
+          emptyDir: { }

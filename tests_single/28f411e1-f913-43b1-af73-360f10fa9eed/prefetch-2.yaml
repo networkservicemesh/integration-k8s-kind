@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prefetch-2
+  labels:
+    app: prefetch-2
+spec:
+  selector:
+    matchLabels:
+      app: prefetch-2
+  template:
+    metadata:
+      labels:
+        app: prefetch-2
+    spec:
+      initContainers:
+        - name: return
+          image: rrandom312/return
+          imagePullPolicy: IfNotPresent
+          command: ["cp", "/bin/return", "/out/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /out
+
+        - name: 9f712b84-5efc-4ce5-b033-cf814f8385a8
+          image: ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:eb7f7bb
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 60936ba3-8cff-4332-b0d9-2122b18e2fa5
+          image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:9858b1f
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 87452461-d56c-4646-a808-2b3246f1ac58
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc:beef06c
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: e5f33964-9277-4faf-87c3-4c46e9b2d440
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:ed76fd7
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: af47addf-f9f8-4564-9354-5c1545889b3d
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc-simple-docker:a7427f0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 8a46b180-6c64-4b61-8935-639af9d5d42c
+          image: artgl/dpdk-pingpong:20.11.6
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: db126488-9d9a-46ba-bc6d-3e784f1947ab
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:e373c34
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: c036edfa-912e-49bc-8d7a-c59b93d39a86
+          image: frolvlad/alpine-bash:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: deb88a78-6f67-471c-82ff-65d6b755ac97
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:07d89d1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+        - name: 9d71bb36-496b-4289-bec2-20299d0fd20d
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder-vpp:9b6acda
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/return"]
+          volumeMounts:
+            - name: bin
+              mountPath: /bin
+
+      containers:
+        - name: pause
+          image: google/pause:latest
+      volumes:
+        - name: bin
+          emptyDir: { }
