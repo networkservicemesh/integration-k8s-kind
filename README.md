@@ -13,11 +13,6 @@ kind create cluster --config cluster-config.yaml --wait 120s
 ```bash
 export CLUSTER_CIDR="172.18.1.128/25" # for monolith suite
 go test -count 1 -timeout 2h30m -race -v ./tests_single
-go test -count 1 -timeout 1h -race -v -run Single
-go test -count 1 -timeout 2h30m -race -v ./tests_single -run TestRunHealSuite/TestRegistry_remote_forwarder > heal-5-reg-fwd.log
-go test -count 1 -timeout 2h30m -race -v ./tests_single -run TestRunHealSuite/TestRegistry_remote_forwarder > heal-33.log
-go test -count 1 -timeout 2h30m -race -v ./tests_single -run TestRunHealSuite > heal-21.log
-go test -count 1 -timeout 2h30m -race -v ./tests_interdomain -run TestRunMulticlusterSuite > interdomain-20.log
 ```
 
 ## Calico single cluster tests
