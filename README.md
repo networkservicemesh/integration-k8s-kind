@@ -46,6 +46,7 @@ kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
 ```
 
 ## Multiple cluster scenario(interdomain tests)
+
 1. Create 3 kind clusters:
 ```bash
 kind create cluster --name kind-1 --config cluster-config-interdomain.yaml --wait 120s
