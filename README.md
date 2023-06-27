@@ -11,6 +11,7 @@ kind create cluster --config cluster-config.yaml --wait 120s
 ```
 
 2. Run tests
+
 ```bash
 export CLUSTER_CIDR="172.18.1.128/25" # for monolith suite
 go test -count 1 -timeout 2h30m -race -v ./tests_single
