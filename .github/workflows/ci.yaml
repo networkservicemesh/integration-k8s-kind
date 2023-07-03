@@ -74,6 +74,7 @@ jobs:
           go test -count 1 -timeout 2h30m -race -v ./tests_single -parallel 4
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
+          LOGS_LOG_COLLECTION_ENABLED: false
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -123,6 +124,7 @@ jobs:
           ./tests_single/basic_test.go \
           ./tests_single/memory_test.go -parallel 4
         env:
+          LOGS_LOG_COLLECTION_ENABLED: false
           ARTIFACTS_DIR: ipv6-logs/${{ env.KUBERNETES_VERSION }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
@@ -169,6 +171,7 @@ jobs:
           go test -count 1 -timeout 1h -race -v ./tests_afxdp
         env:
           ARTIFACTS_DIR: afxdp-logs/${{ env.KUBERNETES_VERSION }}
+          LOGS_LOG_COLLECTION_ENABLED: false
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -244,6 +247,7 @@ jobs:
           ./tests_single/feature_test.go           \
           -calico -parallel 4
         env:
+          LOGS_LOG_COLLECTION_ENABLED: false
           ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
