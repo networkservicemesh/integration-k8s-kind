@@ -28,7 +28,7 @@ jobs:
       with:
         path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
     - name: Get kind
-      run: go get sigs.k8s.io/kind@v0.11.1
+      run: go install sigs.k8s.io/kind@v0.11.1
     - name: Create kind clusters
       run: |
         if [[ $KUBERNETES_VERSION=="" ]]; then

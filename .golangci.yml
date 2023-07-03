@@ -1,6 +1,7 @@
 ---
 run:
   # concurrency: 6
+  go: '1.20'
   timeout: 2m
   issues-exit-code: 1
   tests: true
@@ -41,13 +42,11 @@ linters-settings:
     min-len: 2
     min-occurrences: 2
   depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - errors
-    packages-with-error-message:
-      # specify an error message to output when a blacklisted package is used
-      - errors: "Please use \"github.com/pkg/errors\" instead of \"errors\" in go imports"
+    rules:
+      main:
+        deny:
+          - pkg: errors
+            desc: Please use github.com/pkg/errors instead of errors in go imports
   misspell:
     locale: US
   unparam:
@@ -128,13 +127,11 @@ linters-settings:
 linters:
   disable-all: true
   enable:
-    # - rowserrcheck
     - goheader
     - bodyclose
     - deadcode
     - depguard
     - dogsled
-    # - dupl
     - errcheck
     - funlen
     - gochecknoinits
@@ -149,7 +146,6 @@ linters:
     - govet
     - ineffassign
     - interfacer
-    # - lll
     - misspell
     - nakedret
     - scopelint
@@ -159,7 +155,6 @@ linters:
     - typecheck
     - unconvert
     - unparam
-    # - unused
     - varcheck
     - whitespace
 issues:
