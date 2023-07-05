@@ -7,11 +7,12 @@ require (
 	github.com/stretchr/testify v1.7.0
 )
 
-// replace github.com/networkservicemesh/integration-tests => ../integration-tests
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230705043426-293cb8eb7aa5
+//replace github.com/networkservicemesh/integration-tests => ../integration-tests
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230705090718-92cff511470b
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/edwarnicke/genericsync v0.0.0-20220910010113-61a344f9bc29 // indirect
 	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
