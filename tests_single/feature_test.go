@@ -45,7 +45,6 @@ func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 		"TestVl3_scale_from_zero":
 		s.T().Skip()
 	}
-	s.Suite.BeforeTest(suiteName, testName)
 }
 
 func TestRunFeatureSuite(t *testing.T) {
