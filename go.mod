@@ -9,11 +9,10 @@ require (
 
 // replace github.com/networkservicemesh/integration-tests => ../integration-tests
 
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230707094420-904c7fa4577e
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20230707114244-d35b724d032a
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/edwarnicke/genericsync v0.0.0-20220910010113-61a344f9bc29 // indirect
 	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
