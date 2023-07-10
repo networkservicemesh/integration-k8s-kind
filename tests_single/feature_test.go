@@ -48,8 +48,8 @@ func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 
 func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
-		parallel.Run(t, new(calicoFeatureSuite), "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition")
+		parallel.Run(t, new(calicoFeatureSuite), "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition", "TestSelect_forwarder")
 	} else {
-		parallel.Run(t, new(features.Suite), "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition")
+		parallel.Run(t, new(features.Suite), "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition", "TestSelect_forwarder")
 	}
 }
