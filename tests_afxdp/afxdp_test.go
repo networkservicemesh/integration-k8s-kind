@@ -19,11 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/afxdp"
 )
 
 func TestRunAfxdpSuite(t *testing.T) {
-	suite.Run(t, new(afxdp.Suite))
+	parallel.Run(t, new(afxdp.Suite))
 }

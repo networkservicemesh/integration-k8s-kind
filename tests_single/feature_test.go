@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Cisco and/or its affiliates.
+// Copyright (c) 2022-2023 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -20,8 +20,7 @@ import (
 	"flag"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/features"
 )
 
@@ -45,13 +44,12 @@ func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 		"TestVl3_scale_from_zero":
 		s.T().Skip()
 	}
-	s.Suite.BeforeTest(suiteName, testName)
 }
 
 func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
-		suite.Run(t, new(calicoFeatureSuite))
+		parallel.Run(t, new(calicoFeatureSuite), "TestScale_from_zero", "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition")
 	} else {
-		suite.Run(t, new(features.Suite))
+		parallel.Run(t, new(features.Suite), "TestScale_from_zero", "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition")
 	}
 }
