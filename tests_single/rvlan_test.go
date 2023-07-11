@@ -19,10 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
+	"github.com/stretchr/testify/suite"
 )
 
 func TestRunRvlanSuite(t *testing.T) {
-	parallel.Run(t, new(remotevlan.Suite))
+	suite.Run(t, new(remotevlan.Suite))
 }

@@ -19,10 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/observability"
+	"github.com/stretchr/testify/suite"
 )
 
 func TestRunObservabilitySuite(t *testing.T) {
-	parallel.Run(t, new(observability.Suite))
+	suite.Run(t, new(observability.Suite))
 }
