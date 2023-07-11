@@ -19,8 +19,9 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/suites/observability"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/networkservicemesh/integration-tests/suites/observability"
 )
 
 func TestRunObservabilitySuite(t *testing.T) {

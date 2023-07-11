@@ -19,8 +19,9 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/networkservicemesh/integration-tests/suites/k8s_monolith"
 )
 
 func TestK8sMonolithSuite(t *testing.T) {
