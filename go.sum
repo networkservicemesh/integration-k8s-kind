@@ -159,8 +159,8 @@ github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc h1:1L/OisEFsOyhwaqeJpYmM1nlJ2dBusUMiszPDBlUip0=
 github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/networkservicemesh/integration-tests v0.0.0-20230711093055-1203945e53b8 h1:U0aopbZ7OI9HPeZqx7AHezmhMT1sFuGCNEq3KxqNdvk=
-github.com/networkservicemesh/integration-tests v0.0.0-20230711093055-1203945e53b8/go.mod h1:KYoutmRvNpy3lSYHkhTocqaSHKxCsO3ww7FkS4Fb4+U=
+github.com/networkservicemesh/integration-tests v1.10.0-rc.1 h1:MCcQvFcAP7I4bu0A6O9odV/PHX+EDByqkCISBEKn2nU=
+github.com/networkservicemesh/integration-tests v1.10.0-rc.1/go.mod h1:KYoutmRvNpy3lSYHkhTocqaSHKxCsO3ww7FkS4Fb4+U=
 github.com/onsi/ginkgo/v2 v2.9.1 h1:zie5Ly042PD3bsCvsSOPvRnFwyo3rKe64TJlD6nu0mk=
 github.com/onsi/gomega v1.27.4 h1:Z2AnStgsdSayCMDiCU42qIz+HLqEPcgiOCXjAU/w+8E=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
