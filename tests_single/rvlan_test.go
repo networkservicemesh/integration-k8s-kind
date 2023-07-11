@@ -19,8 +19,9 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
 )
 
 func TestRunRvlanSuite(t *testing.T) {
