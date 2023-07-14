@@ -19,11 +19,10 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
 )
 
 func TestRunHealSuite(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
+	parallel.Run(t, new(heal.Suite))
 }
