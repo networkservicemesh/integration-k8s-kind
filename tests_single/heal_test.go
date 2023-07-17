@@ -24,5 +24,9 @@ import (
 )
 
 func TestRunHealSuite(t *testing.T) {
-	parallel.Run(t, new(heal.Suite))
+	parallel.Run(t, new(heal.Suite),
+		"TestRemote_nsm_system_restart_memif_ip",
+		"TestLocal_nsm_system_restart",
+		"TestVl3_nscs_death",
+		"TestVl3_nse_death")
 }
