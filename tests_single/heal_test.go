@@ -45,5 +45,6 @@ func TestRunHealSuite(t *testing.T) {
 		"TestSpire_upgrade",
 		"TestVl3_nscs_death",
 		"TestVl3_nse_death",
+		"TestLocal_nsmgr_local_nse_memif",
 	)
 }
