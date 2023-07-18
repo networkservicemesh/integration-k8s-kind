@@ -3,7 +3,7 @@ module github.com/networkservicemesh/integration-k8s-kind
 go 1.20
 
 require (
-	github.com/networkservicemesh/integration-tests v0.0.0-20230713101629-7c5ec8ee3683
+	github.com/networkservicemesh/integration-tests v0.0.0-20230718113509-5e2e355e0fe7
 	github.com/stretchr/testify v1.8.1
 )
 
@@ -43,9 +43,9 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/api v0.27.2 // indirect
-	k8s.io/apimachinery v0.27.2 // indirect
-	k8s.io/client-go v0.27.2 // indirect
+	k8s.io/api v0.27.3 // indirect
+	k8s.io/apimachinery v0.27.3 // indirect
+	k8s.io/client-go v0.27.3 // indirect
 	k8s.io/klog/v2 v2.90.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20230501164219-8b0f38b5fd1f // indirect
 	k8s.io/utils v0.0.0-20230209194617-a36077c30491 // indirect
