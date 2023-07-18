@@ -43,5 +43,6 @@ func TestRunHealSuite(t *testing.T) {
 		"TestRemote_nsmgr_remote_endpoint",
 		"TestRemote_nsmgr_restart",
 		"TestRemote_nsmgr_restart_ip",
+		"TestSpire_server_restart",
 	)
 }
