@@ -25,17 +25,14 @@ import (
 
 func TestRunHealSuite(t *testing.T) {
 	parallel.Run(t, new(heal.Suite),
-		"TestVl3_nscs_death",
-		"TestVl3_nse_death",
-		"TestLocal_forwarder_death",
 		"TestLocal_forwarder_remote_forwarder",
 		"TestLocal_nsm_system_restart",
 		"TestLocal_nsmgr_local_forwarder_memif",
-		"TestLocal_nsmgr_local_nse_memif",
 		"TestLocal_nsmgr_remote_nsmgr",
 		"TestLocal_nsmgr_restart",
 		"TestRegistry_remote_forwarder",
 		"TestRegistry_remote_nsmgr",
+		"TestRegistry_restart",
 		"TestRemote_forwarder_death",
 		"TestRemote_forwarder_death_ip",
 		"TestRemote_nsm_system_restart_memif_ip",
@@ -43,6 +40,10 @@ func TestRunHealSuite(t *testing.T) {
 		"TestRemote_nsmgr_remote_endpoint",
 		"TestRemote_nsmgr_restart",
 		"TestRemote_nsmgr_restart_ip",
+		"TestSpire_server_agent_restart",
 		"TestSpire_server_restart",
+		"TestSpire_upgrade",
+		"TestVl3_nscs_death",
+		"TestVl3_nse_death",
 	)
 }
