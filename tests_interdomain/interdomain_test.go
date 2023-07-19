@@ -19,18 +19,19 @@
 package interdomain
 
 import (
+	"os"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
-	"github.com/networkservicemesh/integration-tests/suites/interdomain"
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/multicluster"
 )
 
 func TestRunMulticlusterSuite(t *testing.T) {
-	suite.Run(t, new(multicluster.Suite))
-}
-
-func TestRunBasicInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(interdomain.Suite))
+	os.Setenv("KUBECONFIG1", "/tmp/config1")
+	os.Setenv("KUBECONFIG2", "/tmp/config2")
+	os.Setenv("KUBECONFIG3", "/tmp/config3")
+	os.Setenv("CLUSTER1_CIDR", "172.18.1.128/25")
+	os.Setenv("CLUSTER2_CIDR", "172.18.2.128/25")
+	os.Setenv("CLUSTER3_CIDR", "172.18.3.128/25")
+	parallel.Run(t, new(multicluster.Suite))
 }
