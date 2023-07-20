@@ -19,11 +19,32 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/heal"
 )
 
 func TestRunHealSuite(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
+	parallel.Run(t, new(heal.Suite),
+		"TestLocal_forwarder_remote_forwarder",
+		"TestLocal_nsm_system_restart",
+		"TestLocal_nsmgr_local_forwarder_memif",
+		"TestLocal_nsmgr_remote_nsmgr",
+		"TestLocal_nsmgr_restart",
+		"TestRegistry_remote_forwarder",
+		"TestRegistry_remote_nsmgr",
+		"TestRegistry_restart",
+		"TestRemote_forwarder_death",
+		"TestRemote_forwarder_death_ip",
+		"TestRemote_nsm_system_restart_memif_ip",
+		"TestRemote_nsmgr_death",
+		"TestRemote_nsmgr_remote_endpoint",
+		"TestRemote_nsmgr_restart",
+		"TestRemote_nsmgr_restart_ip",
+		"TestSpire_server_agent_restart",
+		"TestSpire_server_restart",
+		"TestSpire_upgrade",
+		"TestVl3_nscs_death",
+		"TestVl3_nse_death",
+		"TestLocal_nsmgr_local_nse_memif",
+		"TestRegistry_local_endpoint")
 }
