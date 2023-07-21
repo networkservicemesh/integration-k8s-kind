@@ -46,5 +46,6 @@ func TestRunHealSuite(t *testing.T) {
 		"TestVl3_nscs_death",
 		"TestVl3_nse_death",
 		"TestLocal_nsmgr_local_nse_memif",
-		"TestRegistry_local_endpoint")
+		"TestRegistry_local_endpoint",
+		"TestSpire_agent_restart")
 }
