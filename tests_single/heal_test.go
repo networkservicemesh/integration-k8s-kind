@@ -43,6 +43,7 @@ func TestRunHealSuite(t *testing.T) {
 		"TestSpire_server_agent_restart",
 		"TestSpire_server_restart",
 		"TestSpire_upgrade",
+		"TestLocal_forwarder_death",
 		"TestVl3_nscs_death",
 		"TestVl3_nse_death",
 		"TestLocal_nsmgr_local_nse_memif",
