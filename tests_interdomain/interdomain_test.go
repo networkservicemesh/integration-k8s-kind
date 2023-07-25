@@ -21,16 +21,10 @@ package interdomain
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/interdomain"
-	"github.com/networkservicemesh/integration-tests/suites/multicluster"
 )
 
-func TestRunMulticlusterSuite(t *testing.T) {
-	suite.Run(t, new(multicluster.Suite))
-}
-
 func TestRunBasicInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(interdomain.Suite))
+	parallel.Run(t, new(interdomain.Suite))
 }
