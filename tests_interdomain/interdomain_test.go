@@ -30,6 +30,7 @@ import (
 
 func TestRunMulticlusterSuite(t *testing.T) {
 	parallel.Run(t, new(multicluster.Suite),
+		"TestFloating_vl3_basic",
 		"TestFloating_vl3_scale_from_zero",
 		"TestFloating_vl3_dns",
 		"TestFloating_nse_composition",
