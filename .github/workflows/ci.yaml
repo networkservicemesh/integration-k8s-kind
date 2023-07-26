@@ -292,7 +292,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Interdomain tests
         run: |
-          go test -count 1 -timeout 1h -race -v ./tests_interdomain
+          go test -count 1 -timeout 1h -race -v ./tests_interdomain -parallel 4
         env:
           ARTIFACTS_DIR: interdomain-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
