@@ -20,5 +20,6 @@ jobs:
         "integration-k8s-aks",
         "integration-k8s-aws",
         "integration-interdomain-k8s"]
+      base_repository: "networkservicemesh/integration-tests"
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
