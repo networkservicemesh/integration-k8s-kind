@@ -10,12 +10,41 @@ spec:
     spec:
       containers:
         - name: agent
-          image: artgl/calico-agent:82c88a14
+          image: artgl/calicovpp-agent:ba374a0
           resources:
             requests:
               cpu: 150m
         - name: vpp
-          image: artgl/calico-vpp:82c88a14
+          image: artgl/calicovpp-vpp:ba374a0
           resources:
             requests:
-              cpu: 250m
+              memory: 350Mi
+              cpu: 150m
+            limits:
+              memory: 500Mi
+              cpu: 525m
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: calico-vpp-config
+  namespace: calico-vpp-dataplane
+data:
+  CALICOVPP_INITIAL_CONFIG: |-
+    {
+      "vppStartupSleepSeconds": 1,
+      "corePattern": "/var/lib/vpp/vppcore.%e.%p",
+      "redirectToHostRules": [
+        {
+          "proto": "udp",
+          "port": 53,
+          "ip": "172.18.0.1"
+        },
+        {
+          "proto": "tcp",
+          "port": 53,
+          "ip": "172.18.0.1"
+        }
+      ]
+    }

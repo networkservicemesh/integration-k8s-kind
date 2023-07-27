@@ -20,6 +20,8 @@ import (
 	"flag"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/features"
 )
@@ -38,7 +40,6 @@ type calicoFeatureSuite struct {
 func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 	switch testName {
 	case
-		"TestMutually_aware_nses",
 		"TestNse_composition",
 		"TestVl3_basic",
 		"TestVl3_scale_from_zero":
@@ -48,7 +49,7 @@ func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
 
 func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
-		parallel.Run(t, new(calicoFeatureSuite), "TestScale_from_zero", "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition", "TestSelect_forwarder")
+		suite.Run(t, new(calicoFeatureSuite))
 	} else {
 		parallel.Run(t, new(features.Suite), "TestScale_from_zero", "TestVl3_dns", "TestVl3_scale_from_zero", "TestNse_composition", "TestSelect_forwarder")
 	}

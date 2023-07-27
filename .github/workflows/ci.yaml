@@ -213,7 +213,7 @@ jobs:
       - name: Setup external CNI plugin
         shell: bash {0}
         run: |
-          kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.24/manifests/tigera-operator.yaml
+          kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
           for i in {1..5}; do
             kubectl wait --for condition=established --timeout=1s crd/installations.operator.tigera.io
             result=$?
@@ -222,7 +222,7 @@ jobs:
             fi
             sleep 1s
           done
-          kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/82c88a14e5e0e3cc5d7f70c52cdbc01c999d3a42/yaml/calico/installation-default.yaml
+          kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/ba374a0583d8ab7938d0e46056c148563ee911ec/yaml/calico/installation-default.yaml
           kubectl apply -k ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico
           kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
       - name: Check kind cluster
