@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Cisco and/or its affiliates.
+// Copyright (c) 2022-2023 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -19,11 +19,15 @@ package single
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
-	"github.com/networkservicemesh/integration-tests/suites/remotevlan"
+	"github.com/networkservicemesh/integration-tests/extensions/parallel"
+	"github.com/networkservicemesh/integration-tests/suites/remotevlan_ovs"
+	"github.com/networkservicemesh/integration-tests/suites/remotevlan_vpp"
 )
 
-func TestRunRvlanSuite(t *testing.T) {
-	suite.Run(t, new(remotevlan.Suite))
+func TestRunRvlanVPPSuite(t *testing.T) {
+	parallel.Run(t, new(remotevlan_vpp.Suite))
+}
+
+func TestRunRvlanOVSSuite(t *testing.T) {
+	parallel.Run(t, new(remotevlan_ovs.Suite))
 }
