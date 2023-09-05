@@ -362,3 +362,48 @@ jobs:
         with:
           name: Interdomain logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
+
+  ### EXTENDED OVS SUITE
+  kind-ovs-extra:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: "v1.25.0"
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.5
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v4
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          config: src/github.com/${{ github.repository }}/cluster-config.yaml
+          version: v0.13.0
+          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+      - name: Check kind cluster
+        run: |
+          kubectl version
+          kubectl get pods -A -o wide
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Integration tests
+        run: |
+          go test -count 1 -timeout 25m -race -v ./tests_ovs_extended -parallel 4
+        env:
+          ARTIFACTS_DIR: ovs_extra-logs/${{ env.KUBERNETES_VERSION }}
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ovs_extra logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
