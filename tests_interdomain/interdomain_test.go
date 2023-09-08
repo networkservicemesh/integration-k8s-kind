@@ -26,6 +26,7 @@ import (
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
 	"github.com/networkservicemesh/integration-tests/suites/interdomain"
 	"github.com/networkservicemesh/integration-tests/suites/multicluster"
+	"github.com/networkservicemesh/integration-tests/suites/multicluster_heal"
 )
 
 func TestRunMulticlusterSuite(t *testing.T) {
@@ -39,4 +40,8 @@ func TestRunMulticlusterSuite(t *testing.T) {
 
 func TestRunBasicInterdomainSuite(t *testing.T) {
 	suite.Run(t, new(interdomain.Suite))
+}
+
+func TestRunMulticlusterHealSuite(t *testing.T) {
+	suite.Run(t, new(multicluster_heal.Suite))
 }
