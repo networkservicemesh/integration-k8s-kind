@@ -24,8 +24,8 @@ kind create cluster --config cluster-config-calico.yaml
 
 2. Apply calico:
 ```bash
-kubectl create -f https://projectcalico.docs.tigera.io/archive/v3.24/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/82c88a14e5e0e3cc5d7f70c52cdbc01c999d3a42/yaml/calico/installation-default.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/ba374a0583d8ab7938d0e46056c148563ee911ec/yaml/calico/installation-default.yaml
 kubectl apply -k calico
 ```
 
