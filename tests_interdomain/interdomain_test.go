@@ -19,6 +19,8 @@
 package interdomain
 
 import (
+	"fmt"
+	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -30,18 +32,35 @@ import (
 )
 
 func TestRunMulticlusterSuite(t *testing.T) {
+	printDiskSpace()
 	parallel.Run(t, new(multicluster.Suite),
 		"TestFloating_vl3_basic",
 		"TestFloating_vl3_scale_from_zero",
 		"TestFloating_vl3_dns",
 		"TestFloating_nse_composition",
 	)
+	printDiskSpace()
 }
 
 func TestRunBasicInterdomainSuite(t *testing.T) {
+	printDiskSpace()
 	suite.Run(t, new(interdomain.Suite))
+	printDiskSpace()
 }
 
 func TestRunMulticlusterHealSuite(t *testing.T) {
+	printDiskSpace()
 	suite.Run(t, new(multicluster_heal.Suite))
+	printDiskSpace()
+}
+
+func printDiskSpace() {
+	cmd := exec.Command("df", "-h")
+	stdout, err := cmd.Output()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	// Print the output
+	fmt.Println(string(stdout))
 }

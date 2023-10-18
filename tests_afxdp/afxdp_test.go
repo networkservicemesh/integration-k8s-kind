@@ -17,6 +17,8 @@
 package single
 
 import (
+	"fmt"
+	"os/exec"
 	"testing"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
@@ -24,5 +26,18 @@ import (
 )
 
 func TestRunAfxdpSuite(t *testing.T) {
+	printDiskSpace()
 	parallel.Run(t, new(afxdp.Suite))
+	printDiskSpace()
+}
+
+func printDiskSpace() {
+	cmd := exec.Command("df", "-h")
+	stdout, err := cmd.Output()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	// Print the output
+	fmt.Println(string(stdout))
 }
