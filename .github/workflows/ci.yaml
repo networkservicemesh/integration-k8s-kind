@@ -290,6 +290,12 @@ jobs:
               echo CLUSTER${i}_CIDR="172.18.${i}.128/25" >> $GITHUB_ENV
           done
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Remove unnecessary files
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
       - name: Interdomain tests
         run: |
           go test -count 1 -timeout 1h -race -v ./tests_interdomain -parallel 4
