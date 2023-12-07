@@ -7,6 +7,7 @@ How to run integration tests locally?
 1. Create kind cluster:
 ```bash
 kind create cluster --config cluster-config.yaml --wait 120s
+kind create cluster --config cluster-config.yaml --wait 120s --image kindest/node:v1.20.15
 ```
 
 2. Run tests
