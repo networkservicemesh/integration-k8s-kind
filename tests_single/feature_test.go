@@ -51,6 +51,13 @@ func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
 		suite.Run(t, new(calicoFeatureSuite))
 	} else {
-		parallel.Run(t, new(features.Suite), "TestScale_from_zero", "TestVl3_dns", "TestVl3_scale_from_zero", "TestVl3_lb", "TestNse_composition", "TestSelect_forwarder")
+		parallel.Run(t, new(features.Suite),
+			"TestScale_from_zero",
+			"TestVl3_dns",
+			"TestVl3_scale_from_zero",
+			"TestVl3_lb",
+			"TestNse_composition",
+			"TestSelect_forwarder",
+			"TestScaled_registry")
 	}
 }
