@@ -58,6 +58,7 @@ func TestRunFeatureSuite(t *testing.T) {
 			"TestVl3_lb",
 			"TestNse_composition",
 			"TestSelect_forwarder",
+			"TestChange_nse_dynamically",
 			"TestScaled_registry")
 	}
 }
