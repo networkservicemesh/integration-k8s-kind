@@ -17,13 +17,12 @@
 package single
 
 import (
+	"github.com/networkservicemesh/integration-tests/suites/heal_extended"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-
-	"github.com/networkservicemesh/integration-tests/suites/heal"
 )
 
 func TestRunHealSuite(t *testing.T) {
-	suite.Run(t, new(heal.Suite))
+	suite.Run(t, new(heal_extended.Suite))
 }
