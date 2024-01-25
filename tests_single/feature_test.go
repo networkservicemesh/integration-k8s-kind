@@ -53,6 +53,7 @@ func TestRunFeatureSuite(t *testing.T) {
 	} else {
 		parallel.Run(t, new(features.Suite),
 			"TestScale_from_zero",
+			"TestVl3_basic",
 			"TestVl3_dns",
 			"TestVl3_scale_from_zero",
 			"TestVl3_lb",
