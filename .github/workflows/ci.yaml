@@ -85,6 +85,9 @@ jobs:
   ### SINGLE IPv6 CLUSTER
   kind-ipv6:
     runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: ${{ secrets.KUBERNETES_VERSION }}
+      KUBE_VERSION: "v1.25.0"
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
@@ -99,6 +102,10 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+          echo "kube $KUBERNETES_VERSION"
+          echo "kube ${{ env.KUBERNETES_VERSION }}"
+          echo "kube $KUBE_VERSION"
+          echo "kube ${{ env.KUBE_VERSION }}"
       - uses: actions/checkout@v2
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -106,7 +113,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
           version: v0.13.0
-          image: kindest/node:${{ secrets.NSM_KUBERNETES_VERSION }}
+          image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -121,7 +128,7 @@ jobs:
           ./tests_single/basic_test.go \
           ./tests_single/memory_test.go -parallel 4
         env:
-          ARTIFACTS_DIR: ipv6-logs/${{ secrets.NSM_KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: ipv6-logs/${{ env.KUBERNETES_VERSION }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
