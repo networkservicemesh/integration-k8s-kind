@@ -86,8 +86,6 @@ jobs:
   ### SINGLE IPv6 CLUSTER
   kind-ipv6:
     runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: ${{ vars.NSM_KUBERNETES_VERSION }}
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
