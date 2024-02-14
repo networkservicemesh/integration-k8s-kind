@@ -50,7 +50,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: 
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
