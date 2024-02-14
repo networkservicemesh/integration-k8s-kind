@@ -38,10 +38,10 @@ jobs:
           - v1.21.14
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
           github-token: ${{ github.token }}
@@ -50,7 +50,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: 
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
@@ -77,7 +77,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Single logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
@@ -89,10 +89,10 @@ jobs:
       KUBERNETES_VERSION: "v1.25.0"
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
           github-token: ${{ github.token }}
@@ -101,7 +101,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
@@ -127,7 +127,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Single IPv6 logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
@@ -139,10 +139,10 @@ jobs:
       KUBERNETES_VERSION: "v1.25.0"
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
           github-token: ${{ github.token }}
@@ -151,7 +151,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
@@ -172,7 +172,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: afxdp logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
@@ -184,7 +184,7 @@ jobs:
       KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
       - name: Remove unnecessary files
@@ -193,7 +193,7 @@ jobs:
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
           df -h
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
           github-token: ${{ github.token }}
@@ -207,7 +207,7 @@ jobs:
           if [[ $KUBERNETES_VERSION=="" ]]; then
               echo "KUBERNETES_VERSION=v1.22.1" >> $GITHUB_ENV
           fi
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
@@ -254,7 +254,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Calico logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
@@ -266,10 +266,10 @@ jobs:
       KUBERNETES_VERSION: "v1.28.0"
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.11
           github-token: ${{ github.token }}
@@ -278,7 +278,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.5.0
@@ -299,7 +299,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: heal-ext logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
@@ -311,7 +311,7 @@ jobs:
       KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
       - name: Remove unnecessary files
@@ -320,7 +320,7 @@ jobs:
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
           df -h
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
           github-token: ${{ github.token }}
@@ -329,7 +329,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Get kind
@@ -358,7 +358,7 @@ jobs:
         run: kind delete clusters $(kind get clusters)
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Interdomain logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
