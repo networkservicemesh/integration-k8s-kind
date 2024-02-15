@@ -5,5 +5,5 @@ kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/projectcalico/vpp-dataplane/ba374a0583d8ab7938d0e46056c148563ee911ec/yaml/generated/calico-vpp-kind.yaml
 
-patchesStrategicMerge:
-  - patch.yaml
+patches:
+  - path: patch.yaml

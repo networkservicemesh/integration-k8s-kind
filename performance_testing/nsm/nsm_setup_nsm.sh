@@ -18,8 +18,8 @@ kind: Kustomization
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=$nsm_version
 
-patchesStrategicMerge:
-- forwarder-patch.yaml
+patches:
+- path: forwarder-patch.yaml
 EOF
 
 cat <<EOF > "$parent_path/c2/kustomization.yaml"
@@ -30,8 +30,8 @@ kind: Kustomization
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=$nsm_version
 
-patchesStrategicMerge:
-- forwarder-patch.yaml
+patches:
+- path: forwarder-patch.yaml
 EOF
 
 kubectl "--kubeconfig=$KUBECONFIG1" apply -k "$parent_path/c1" || (sleep 10 && kubectl "--kubeconfig=$KUBECONFIG1" apply -k "$parent_path/c1") || exit

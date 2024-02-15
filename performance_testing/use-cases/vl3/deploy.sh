@@ -31,8 +31,8 @@ resources:
 - namespace.yaml
 - vl3-netsvc.yaml
 
-patchesStrategicMerge:
-- nse-patch.yaml
+patches:
+- path: nse-patch.yaml
 EOF
 
 # Start vl3 NSE

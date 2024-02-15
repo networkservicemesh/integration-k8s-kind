@@ -26,8 +26,8 @@ namespace: perf-test-wg
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=$nsm_version
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml
 EOF
 
 # Deploy nginx
