@@ -132,6 +132,49 @@ jobs:
           name: Single IPv6 logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
 
+  tanzu-unmanaged:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: "v1.25.0"
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.20.5
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+
+      - name: Install and deploy ummanaged cluster
+        run: |
+          curl -H "Accept: application/vnd.github.v3.raw" -L https://api.github.com/repos/vmware-tanzu/community-edition/contents/hack/get-tce-release.sh | bash -s v0.12.1 linux
+          tar xzvf ~//tce-linux-amd64-v0.12.0.tar.gz
+          ./tce-linux-amd64-v0.12.0/install.sh
+          tanzu version
+          tanzu unmanaged-cluster create vembu-tce –worker-node-count=2
+          tanzu package installed list
+          kubectl version
+          kubectl get pods -A -o wide
+
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Integration tests
+        run: |
+          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4
+        env:
+          ARTIFACTS_DIR: tanzu-unmanaged
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tanzu-unmanaged logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
+
   ### AF_XDP SUITE
   kind-afxdp:
     runs-on: ubuntu-latest
