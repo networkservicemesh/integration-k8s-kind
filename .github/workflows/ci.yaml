@@ -53,11 +53,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
+      - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
-          image: kindest/node:${{ matrix.image }}
+          node- image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -104,11 +104,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
+      - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
           version: v0.13.0
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -154,11 +154,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
+      - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -210,11 +210,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
+      - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
           version: v0.11.1
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
           wait: 0s
       - name: Setup external CNI plugin
         shell: bash {0}
@@ -281,11 +281,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
+      - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.20.0
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
