@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -57,7 +57,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
-          node- image: kindest/node:${{ matrix.image }}
+          node_image: kindest/node:${{ matrix.image }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -95,7 +95,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -145,7 +145,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -158,7 +158,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
-          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -196,7 +196,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -214,7 +214,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
           version: v0.11.1
-          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
           wait: 0s
       - name: Setup external CNI plugin
         shell: bash {0}
@@ -272,7 +272,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.11
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -285,7 +285,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.20.0
-          node-image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -323,7 +323,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.20.5
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
