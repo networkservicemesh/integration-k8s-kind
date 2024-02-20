@@ -149,30 +149,38 @@ jobs:
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
-
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Install and deploy ummanaged cluster
         run: |
           curl -H "Accept: application/vnd.github.v3.raw" -L https://api.github.com/repos/vmware-tanzu/community-edition/contents/hack/get-tce-release.sh | bash -s v0.12.1 linux
-          tar xzvf ~/tce-linux-amd64-v0.12.0.tar.gz
-          ./tce-linux-amd64-v0.12.0/install.sh
+          tar xzvf tce-linux-amd64-v0.12.1.tar.gz
+          ./tce-linux-amd64-v0.12.1/install.sh
           tanzu version
-          tanzu unmanaged-cluster create vembu-tce –worker-node-count=2
+          tanzu unmanaged-cluster create cluster1 --worker-node-count 2
           tanzu package installed list
           kubectl version
           kubectl get pods -A -o wide
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
           go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4
         env:
           ARTIFACTS_DIR: tanzu-unmanaged
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v2
         with:
           name: tanzu-unmanaged logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
-
+      - name: Cleanup resources
+        if: ${{ success() || failure() || cancelled() }}
+        run: tanzu unmanaged delete cluster1
   # ### AF_XDP SUITE
   # kind-afxdp:
   #   runs-on: ubuntu-latest
