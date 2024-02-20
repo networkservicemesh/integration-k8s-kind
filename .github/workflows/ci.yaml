@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - 'release/**'
+
+env:
+  KIND_VERSION: v0.22.0
+
 jobs:
   yamllint:
     uses: networkservicemesh/.github/.github/workflows/yamllint.yaml@main
@@ -56,7 +60,7 @@ jobs:
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.13.0
+          version: ${{ env.KIND_VERSION }}
           node_image: kindest/node:${{ matrix.image }}
           cluster_name: kind
       - name: Check kind cluster
@@ -106,7 +110,7 @@ jobs:
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
-          version: v0.22.0
+          version: ${{ env.KIND_VERSION }}
           node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
@@ -154,8 +158,8 @@ jobs:
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.22.0
-          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION  }}
+          version: ${{ env.KIND_VERSION }}
+          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -203,7 +207,7 @@ jobs:
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
-          version: v0.23.0
+          version: ${{ env.KIND_VERSION }}
           node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
           wait: 0s
       - name: Setup external CNI plugin
@@ -272,7 +276,7 @@ jobs:
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.20.0
+          version: ${{ env.KIND_VERSION }}
           node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
       - name: Check kind cluster
         run: |
@@ -319,7 +323,7 @@ jobs:
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Get kind
-        run: go install sigs.k8s.io/kind@v0.22.0
+        run: go install sigs.k8s.io/kind@${{ env.KIND_VERSION }}
       - name: Create kind clusters
         run: |
           for (( i = 1; i <= 3; i++ )); do
