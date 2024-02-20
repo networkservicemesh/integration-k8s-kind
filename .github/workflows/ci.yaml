@@ -168,7 +168,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
-          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4
+          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4 -gotestmd.t 10m
         env:
           ARTIFACTS_DIR: tanzu-unmanaged
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
