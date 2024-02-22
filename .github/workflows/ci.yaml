@@ -58,6 +58,7 @@ jobs:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
           node_image: kindest/node:${{ matrix.image }}
+          cluster_name: kind
       - name: Check kind cluster
         run: |
           kubectl version
