@@ -159,7 +159,7 @@ jobs:
           tar xzvf tce-linux-amd64-v0.12.1.tar.gz
           ./tce-linux-amd64-v0.12.1/install.sh
           tanzu version
-          tanzu unmanaged-cluster create cluster1 --worker-node-count 2
+          tanzu unmanaged-cluster create cluster1 --worker-node-count 2 --node-image kindest/node:v1.27.2
           tanzu package installed list
           kubectl version
           kubectl get pods -A -o wide
