@@ -407,3 +407,57 @@ jobs:
         with:
           name: ovs_extra logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
+
+  ### Tanzu mechanism permutation testing
+  tanzu-unmanaged:
+    runs-on: ubuntu-latest
+    env:
+      KUBERNETES_VERSION: "v1.27.2"
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - name: Remove unnecessary files
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.20.5
+          github-token: ${{ github.token }}
+      - name: Set go env
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Install and deploy ummanaged cluster
+        run: |
+          curl -H "Accept: application/vnd.github.v3.raw" -L https://api.github.com/repos/vmware-tanzu/community-edition/contents/hack/get-tce-release.sh | bash -s v0.12.1 linux
+          tar xzvf tce-linux-amd64-v0.12.1.tar.gz
+          ./tce-linux-amd64-v0.12.1/install.sh
+          tanzu version
+          tanzu unmanaged-cluster create tanzu-unamanged-cluster --worker-node-count 2 --node-image kindest/node:kindest/node:${{ env.KUBERNETES_VERSION }}
+          tanzu package installed list
+          kubectl version
+          kubectl get pods -A -o wide
+      - name: Integration tests
+        run: |
+          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4 -gotestmd.t 10m
+        env:
+          ARTIFACTS_DIR: tanzu-unmanaged
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
+      - name: Upload artifacts
+        if: ${{ success() || failure() || cancelled() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tanzu-unmanaged logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
+      - name: Cleanup resources
+        if: ${{ success() || failure() || cancelled() }}
+        run: tanzu unmanaged delete tanzu-unamanged-cluster
