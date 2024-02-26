@@ -141,6 +141,12 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.0
         with:
           access_token: ${{ github.token }}
+      - name: Remove unnecessary files
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
       - uses: actions/setup-go@v1
         with:
           go-version: 1.20.5
@@ -163,9 +169,6 @@ jobs:
           tanzu package installed list
           kubectl version
           kubectl get pods -A -o wide
-      - uses: actions/checkout@v2
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
         run: |
           go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4 -gotestmd.t 10m
