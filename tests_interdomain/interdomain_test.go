@@ -1,6 +1,6 @@
 // Copyright (c) 2021-2022 Doc.ai and/or its affiliates.
 //
-// Copyright (c) 2022-2023 Cisco and/or its affiliates.
+// Copyright (c) 2022-2024 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -24,13 +24,14 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
-	"github.com/networkservicemesh/integration-tests/suites/interdomain"
-	"github.com/networkservicemesh/integration-tests/suites/multicluster"
-	"github.com/networkservicemesh/integration-tests/suites/multicluster_heal"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain/suites/basic"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain/suites/heal"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain/suites/ipsec"
+	"github.com/networkservicemesh/integration-tests/suites/interdomain/suites/multiservicemesh"
 )
 
-func TestRunMulticlusterSuite(t *testing.T) {
-	parallel.Run(t, new(multicluster.Suite),
+func TestRunBasicInterdomainSuite(t *testing.T) {
+	parallel.Run(t, new(basic.Suite),
 		"TestFloating_vl3_basic",
 		"TestFloating_vl3_scale_from_zero",
 		"TestFloating_vl3_dns",
@@ -38,10 +39,14 @@ func TestRunMulticlusterSuite(t *testing.T) {
 	)
 }
 
-func TestRunBasicInterdomainSuite(t *testing.T) {
-	suite.Run(t, new(interdomain.Suite))
+func TestRunInterdomainIPSecSuite(t *testing.T) {
+	parallel.Run(t, new(ipsec.Suite))
 }
 
-func TestRunMulticlusterHealSuite(t *testing.T) {
-	suite.Run(t, new(multicluster_heal.Suite))
+func TestRunInterdomainHealSuite(t *testing.T) {
+	suite.Run(t, new(heal.Suite))
+}
+
+func TestRunMultiServiceMeshSuite(t *testing.T) {
+	suite.Run(t, new(multiservicemesh.Suite))
 }
