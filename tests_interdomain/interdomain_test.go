@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2022-2024 Cisco and/or its affiliates.
 //
+// Copyright (c) 2024 Pragmagic Inc. and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,12 +33,13 @@ import (
 )
 
 func TestRunBasicInterdomainSuite(t *testing.T) {
-	parallel.Run(t, new(basic.Suite),
+	excludedTests := []string{
 		"TestFloating_vl3_basic",
 		"TestFloating_vl3_scale_from_zero",
 		"TestFloating_vl3_dns",
-		"TestFloating_nse_composition",
-	)
+		"TestFloating_nse_composition"}
+
+	parallel.Run(t, new(basic.Suite), parallel.WithExcludedTests(excludedTests))
 }
 
 func TestRunInterdomainIPSecSuite(t *testing.T) {
