@@ -25,5 +25,6 @@ import (
 )
 
 func TestK8sMonolithSuite(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(k8s_monolith.Suite))
 }

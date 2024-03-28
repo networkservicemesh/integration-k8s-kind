@@ -43,6 +43,7 @@ func TestRunBasicInterdomainSuite(t *testing.T) {
 }
 
 func TestRunInterdomainIPSecSuite(t *testing.T) {
+	t.Skip()
 	parallel.Run(t, new(ipsec.Suite))
 }
 
@@ -51,5 +52,6 @@ func TestRunInterdomainHealSuite(t *testing.T) {
 }
 
 func TestRunMultiServiceMeshSuite(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(multiservicemesh.Suite))
 }

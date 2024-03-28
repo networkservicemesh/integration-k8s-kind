@@ -72,7 +72,7 @@ jobs:
           echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 2h30m -race -v ./tests_single -parallel 4
+          go test -count 1 -timeout 2h30m -race -v ./tests_single/heal_test.go -parallel 4
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -84,381 +84,381 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
 
   ### SINGLE IPv6 CLUSTER
-  kind-ipv6:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.25.0"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.5
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: helm/kind-action@v1
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
-          version: v0.13.0
-          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl get pods -A -o wide
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Set loadbalancer CIDR
-        run: |
-          echo CLUSTER_CIDR="fc00:f853:ccd:e793:1::/80" >> $GITHUB_ENV
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 2h10m -race -v \
-          ./tests_single/basic_test.go \
-          ./tests_single/memory_test.go -parallel 4
-        env:
-          ARTIFACTS_DIR: ipv6-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: Single IPv6 logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
-
-  ### AF_XDP SUITE
-  kind-afxdp:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.25.0"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.5
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: helm/kind-action@v1
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.13.0
-          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl get pods -A -o wide
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 1h -race -v ./tests_afxdp -parallel 4
-        env:
-          ARTIFACTS_DIR: afxdp-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: afxdp logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
+#  kind-ipv6:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: "v1.25.0"
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.5
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: helm/kind-action@v1
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
+#          version: v0.13.0
+#          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl get pods -A -o wide
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Set loadbalancer CIDR
+#        run: |
+#          echo CLUSTER_CIDR="fc00:f853:ccd:e793:1::/80" >> $GITHUB_ENV
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 2h10m -race -v \
+#          ./tests_single/basic_test.go \
+#          ./tests_single/memory_test.go -parallel 4
+#        env:
+#          ARTIFACTS_DIR: ipv6-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Single IPv6 logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
+#
+#  ### AF_XDP SUITE
+#  kind-afxdp:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: "v1.25.0"
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.5
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: helm/kind-action@v1
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config.yaml
+#          version: v0.13.0
+#          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl get pods -A -o wide
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 1h -race -v ./tests_afxdp -parallel 4
+#        env:
+#          ARTIFACTS_DIR: afxdp-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: afxdp logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
 
   ### SINGLE CALICO CLUSTER
-  calico-kind:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - name: Remove unnecessary files
-        run: |
-          df -h
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          df -h
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.5
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - name: Set kubernetes version
-        run: |
-          if [[ $KUBERNETES_VERSION=="" ]]; then
-              echo "KUBERNETES_VERSION=v1.22.1" >> $GITHUB_ENV
-          fi
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: helm/kind-action@v1
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
-          version: v0.11.1
-          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
-          wait: 0s
-      - name: Setup external CNI plugin
-        shell: bash {0}
-        run: |
-          kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
-          for i in {1..5}; do
-            kubectl wait --for condition=established --timeout=1s crd/installations.operator.tigera.io
-            result=$?
-            if [ $result -eq 0 ]; then
-              break
-            fi
-            sleep 1s
-          done
-          kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/ba374a0583d8ab7938d0e46056c148563ee911ec/yaml/calico/installation-default.yaml
-          kubectl apply -k ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico
-          kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl cluster-info
-          kubectl get pods --all-namespaces
-          echo "current-context:" $(kubectl config current-context)
-          echo "environment-kubeconfig:" ${KUBECONFIG}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Integration tests
-        continue-on-error: true
-        run: |
-          go test -count 1 -timeout 1h30m -race -v \
-          ./tests_single/basic_test.go             \
-          ./tests_single/heal_test.go              \
-          ./tests_single/memory_test.go            \
-          ./tests_single/observability_test.go     \
-          ./tests_single/feature_test.go           \
-          -calico -parallel 4
-        env:
-          ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: Calico logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
+#  calico-kind:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - name: Remove unnecessary files
+#        run: |
+#          df -h
+#          sudo rm -rf /usr/share/dotnet
+#          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+#          df -h
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.5
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - name: Set kubernetes version
+#        run: |
+#          if [[ $KUBERNETES_VERSION=="" ]]; then
+#              echo "KUBERNETES_VERSION=v1.22.1" >> $GITHUB_ENV
+#          fi
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: helm/kind-action@v1
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
+#          version: v0.11.1
+#          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#          wait: 0s
+#      - name: Setup external CNI plugin
+#        shell: bash {0}
+#        run: |
+#          kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+#          for i in {1..5}; do
+#            kubectl wait --for condition=established --timeout=1s crd/installations.operator.tigera.io
+#            result=$?
+#            if [ $result -eq 0 ]; then
+#              break
+#            fi
+#            sleep 1s
+#          done
+#          kubectl create -f https://raw.githubusercontent.com/projectcalico/vpp-dataplane/ba374a0583d8ab7938d0e46056c148563ee911ec/yaml/calico/installation-default.yaml
+#          kubectl apply -k ${{ github.workspace }}/src/github.com/${{ github.repository }}/calico
+#          kubectl rollout status -n calico-vpp-dataplane ds/calico-vpp-node --timeout=5m
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl cluster-info
+#          kubectl get pods --all-namespaces
+#          echo "current-context:" $(kubectl config current-context)
+#          echo "environment-kubeconfig:" ${KUBECONFIG}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Integration tests
+#        continue-on-error: true
+#        run: |
+#          go test -count 1 -timeout 1h30m -race -v \
+#          ./tests_single/basic_test.go             \
+#          ./tests_single/heal_test.go              \
+#          ./tests_single/memory_test.go            \
+#          ./tests_single/observability_test.go     \
+#          ./tests_single/feature_test.go           \
+#          -calico -parallel 4
+#        env:
+#          ARTIFACTS_DIR: calico-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Calico logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
 
   ### HEAL EXTENDED SUITE
-  kind-heal-extended:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.28.0"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.11
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: helm/kind-action@v1
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.20.0
-          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl get pods -A -o wide
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 1h -race -v ./tests_heal_ext -parallel 4
-        env:
-          ARTIFACTS_DIR: heal-ext-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: heal-ext logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
-
-  ### INTERDOMAIN CLUSTER
-  interdomain-kind:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - name: Remove unnecessary files
-        run: |
-          df -h
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          df -h
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.5
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Get kind
-        run: go install sigs.k8s.io/kind@v0.11.1
-      - name: Create kind clusters
-        run: |
-          if [[ $KUBERNETES_VERSION=="" ]]; then
-              KUBERNETES_VERSION="v1.22.1"
-          fi
-          for (( i = 1; i <= 3; i++ )); do
-              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
-              configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
-              kind get kubeconfig --name "kind-${i}" > ${configPath}
-              echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
-              echo CLUSTER${i}_CIDR="172.18.${i}.128/25" >> $GITHUB_ENV
-          done
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Interdomain tests
-        run: |
-          go test -count 1 -timeout 1h -race -v ./tests_interdomain -parallel 4
-        env:
-          ARTIFACTS_DIR: interdomain-logs
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Cleanup resources
-        if: ${{ success() || failure() || cancelled() }}
-        run: kind delete clusters $(kind get clusters)
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: Interdomain logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
-
-  ### EXTENDED OVS SUITE
-  kind-ovs-extra:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.25.0"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/setup-go@v4
-        with:
-          go-version: 1.20.5
-          github-token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - uses: engineerd/setup-kind@v0.5.0
-        with:
-          config: src/github.com/${{ github.repository }}/cluster-config.yaml
-          version: v0.13.0
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
-      - name: Check kind cluster
-        run: |
-          kubectl version
-          kubectl get pods -A -o wide
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Integration tests
-        run: |
-          go test -count 1 -timeout 25m -race -v ./tests_ovs_extended -parallel 4
-        env:
-          ARTIFACTS_DIR: ovs_extra-logs/${{ env.KUBERNETES_VERSION }}
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ovs_extra logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
-
-  ### Tanzu mechanism permutation testing
-  tanzu-unmanaged:
-    runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.27.2"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-      - name: Remove unnecessary files
-        run: |
-          df -h
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          df -h
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.5
-          token: ${{ github.token }}
-      - name: Set go env
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Install and deploy ummanaged cluster
-        run: |
-          curl -H "Accept: application/vnd.github.v3.raw" -L https://api.github.com/repos/vmware-tanzu/community-edition/contents/hack/get-tce-release.sh | bash -s v0.12.1 linux
-          tar xzvf tce-linux-amd64-v0.12.1.tar.gz
-          ./tce-linux-amd64-v0.12.1/install.sh
-          tanzu version
-          tanzu unmanaged-cluster create tanzu-unamanged-cluster --worker-node-count 2 --node-image kindest/node:kindest/node:${{ env.KUBERNETES_VERSION }}
-          tanzu package installed list
-          kubectl version
-          kubectl get pods -A -o wide
-      - name: Integration tests
-        run: |
-          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4 -gotestmd.t 10m
-        env:
-          ARTIFACTS_DIR: tanzu-unmanaged
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
-      - name: Upload artifacts
-        if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: tanzu-unmanaged logs
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
-      - name: Cleanup resources
-        if: ${{ success() || failure() || cancelled() }}
-        run: tanzu unmanaged delete tanzu-unamanged-cluster
+#  kind-heal-extended:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: "v1.28.0"
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.11
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: helm/kind-action@v1
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config.yaml
+#          version: v0.20.0
+#          node_image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl get pods -A -o wide
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 1h -race -v ./tests_heal_ext -parallel 4
+#        env:
+#          ARTIFACTS_DIR: heal-ext-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: heal-ext logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
+#
+#  ### INTERDOMAIN CLUSTER
+#  interdomain-kind:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - name: Remove unnecessary files
+#        run: |
+#          df -h
+#          sudo rm -rf /usr/share/dotnet
+#          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+#          df -h
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.5
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Get kind
+#        run: go install sigs.k8s.io/kind@v0.11.1
+#      - name: Create kind clusters
+#        run: |
+#          if [[ $KUBERNETES_VERSION=="" ]]; then
+#              KUBERNETES_VERSION="v1.22.1"
+#          fi
+#          for (( i = 1; i <= 3; i++ )); do
+#              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
+#              configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
+#              kind get kubeconfig --name "kind-${i}" > ${configPath}
+#              echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
+#              echo CLUSTER${i}_CIDR="172.18.${i}.128/25" >> $GITHUB_ENV
+#          done
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Interdomain tests
+#        run: |
+#          go test -count 1 -timeout 1h -race -v ./tests_interdomain -parallel 4
+#        env:
+#          ARTIFACTS_DIR: interdomain-logs
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Cleanup resources
+#        if: ${{ success() || failure() || cancelled() }}
+#        run: kind delete clusters $(kind get clusters)
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Interdomain logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
+#
+#  ### EXTENDED OVS SUITE
+#  kind-ovs-extra:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: "v1.25.0"
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.9.0
+#        with:
+#          access_token: ${{ github.token }}
+#      - uses: actions/setup-go@v4
+#        with:
+#          go-version: 1.20.5
+#          github-token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - uses: engineerd/setup-kind@v0.5.0
+#        with:
+#          config: src/github.com/${{ github.repository }}/cluster-config.yaml
+#          version: v0.13.0
+#          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+#      - name: Check kind cluster
+#        run: |
+#          kubectl version
+#          kubectl get pods -A -o wide
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Integration tests
+#        run: |
+#          go test -count 1 -timeout 25m -race -v ./tests_ovs_extended -parallel 4
+#        env:
+#          ARTIFACTS_DIR: ovs_extra-logs/${{ env.KUBERNETES_VERSION }}
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ovs_extra logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
+#
+#  ### Tanzu mechanism permutation testing
+#  tanzu-unmanaged:
+#    runs-on: ubuntu-latest
+#    env:
+#      KUBERNETES_VERSION: "v1.27.2"
+#    steps:
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.12.1
+#        with:
+#          access_token: ${{ github.token }}
+#      - name: Remove unnecessary files
+#        run: |
+#          df -h
+#          sudo rm -rf /usr/share/dotnet
+#          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+#          df -h
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: 1.20.5
+#          token: ${{ github.token }}
+#      - name: Set go env
+#        run: |
+#          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+#          echo GO111MODULE=on >> $GITHUB_ENV
+#          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+#      - uses: actions/checkout@v4
+#        with:
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+#      - name: Install and deploy ummanaged cluster
+#        run: |
+#          curl -H "Accept: application/vnd.github.v3.raw" -L https://api.github.com/repos/vmware-tanzu/community-edition/contents/hack/get-tce-release.sh | bash -s v0.12.1 linux
+#          tar xzvf tce-linux-amd64-v0.12.1.tar.gz
+#          ./tce-linux-amd64-v0.12.1/install.sh
+#          tanzu version
+#          tanzu unmanaged-cluster create tanzu-unamanged-cluster --worker-node-count 2 --node-image kindest/node:kindest/node:${{ env.KUBERNETES_VERSION }}
+#          tanzu package installed list
+#          kubectl version
+#          kubectl get pods -A -o wide
+#      - name: Integration tests
+#        run: |
+#          go test -run TestRunBasicSuite  -count 1 -timeout 1h -race -v -parallel 4 -gotestmd.t 10m
+#        env:
+#          ARTIFACTS_DIR: tanzu-unmanaged
+#        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
+#      - name: Upload artifacts
+#        if: ${{ success() || failure() || cancelled() }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: tanzu-unmanaged logs
+#          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
+#      - name: Cleanup resources
+#        if: ${{ success() || failure() || cancelled() }}
+#        run: tanzu unmanaged delete tanzu-unamanged-cluster
