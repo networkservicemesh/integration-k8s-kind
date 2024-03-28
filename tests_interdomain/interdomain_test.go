@@ -33,13 +33,13 @@ import (
 )
 
 func TestRunBasicInterdomainSuite(t *testing.T) {
-	excludedTests := []string{
-		"TestFloating_vl3_basic",
-		"TestFloating_vl3_scale_from_zero",
-		"TestFloating_vl3_dns",
-		"TestFloating_nse_composition"}
-
-	parallel.Run(t, new(basic.Suite), parallel.WithExcludedTests(excludedTests))
+	basicSuite := new(basic.Suite)
+	parallel.Run(t, basicSuite,
+		parallel.WithRunningTestsSynchronously(
+			basicSuite.TestFloating_vl3_basic,
+			basicSuite.TestFloating_vl3_scale_from_zero,
+			basicSuite.TestFloating_vl3_dns,
+			basicSuite.TestFloating_nse_composition))
 }
 
 func TestRunInterdomainIPSecSuite(t *testing.T) {

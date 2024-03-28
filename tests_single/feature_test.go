@@ -53,15 +53,15 @@ func TestRunFeatureSuite(t *testing.T) {
 	if *calicoFlag {
 		suite.Run(t, new(calicoFeatureSuite))
 	} else {
-		excludedTests := []string{
-			"TestScale_from_zero",
-			"TestVl3_dns",
-			"TestVl3_scale_from_zero",
-			"TestVl3_lb",
-			"TestNse_composition",
-			"TestSelect_forwarder",
-			"TestScaled_registry"}
-
-		parallel.Run(t, new(features.Suite), parallel.WithExcludedTests(excludedTests))
+		featuresSuite := new(features.Suite)
+		parallel.Run(t, featuresSuite,
+			parallel.WithRunningTestsSynchronously(
+				featuresSuite.TestScale_from_zero,
+				featuresSuite.TestVl3_dns,
+				featuresSuite.TestVl3_scale_from_zero,
+				featuresSuite.TestVl3_lb,
+				featuresSuite.TestNse_composition,
+				featuresSuite.TestSelect_forwarder,
+				featuresSuite.TestScaled_registry))
 	}
 }

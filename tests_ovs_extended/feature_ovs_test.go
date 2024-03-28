@@ -42,18 +42,16 @@ func (s *kindFeatOvsSuite) BeforeTest(suiteName, testName string) {
 
 func TestRunFeatureOvsSuite(t *testing.T) {
 	if !*smartVFFlag {
-		excludedTests := []string{
-			"TestScale_from_zero",
-			"TestNse_composition",
-			"TestSelect_forwarder"}
-
-		parallel.Run(t, new(kindFeatOvsSuite), parallel.WithExcludedTests(excludedTests))
+		featureOvsSuite := new(kindFeatOvsSuite)
+		parallel.Run(t, featureOvsSuite,
+			parallel.WithRunningTestsSynchronously(
+				featureOvsSuite.TestScale_from_zero,
+				featureOvsSuite.TestSelect_forwarder))
 	} else {
-		excludedTests := []string{
-			"TestScale_from_zero",
-			"TestNse_composition",
-			"TestSelect_forwarder"}
-
-		parallel.Run(t, new(features_ovs.Suite), parallel.WithExcludedTests(excludedTests))
+		featureOvsSuite := new(features_ovs.Suite)
+		parallel.Run(t, featureOvsSuite,
+			parallel.WithRunningTestsSynchronously(
+				featureOvsSuite.TestScale_from_zero,
+				featureOvsSuite.TestSelect_forwarder))
 	}
 }
