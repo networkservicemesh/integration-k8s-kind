@@ -1,5 +1,7 @@
 // Copyright (c) 2024 Nordix and/or its affiliates.
 //
+// Copyright (c) 2024 Pragmagic Inc. and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,8 +42,16 @@ func (s *kindFeatOvsSuite) BeforeTest(suiteName, testName string) {
 
 func TestRunFeatureOvsSuite(t *testing.T) {
 	if !*smartVFFlag {
-		parallel.Run(t, new(kindFeatOvsSuite), "TestScale_from_zero", "TestNse_composition", "TestSelect_forwarder")
+		featureOvsSuite := new(kindFeatOvsSuite)
+		parallel.Run(t, featureOvsSuite,
+			parallel.WithRunningTestsSynchronously(
+				featureOvsSuite.TestScale_from_zero,
+				featureOvsSuite.TestSelect_forwarder))
 	} else {
-		parallel.Run(t, new(features_ovs.Suite), "TestScale_from_zero", "TestNse_composition", "TestSelect_forwarder")
+		featureOvsSuite := new(features_ovs.Suite)
+		parallel.Run(t, featureOvsSuite,
+			parallel.WithRunningTestsSynchronously(
+				featureOvsSuite.TestScale_from_zero,
+				featureOvsSuite.TestSelect_forwarder))
 	}
 }
