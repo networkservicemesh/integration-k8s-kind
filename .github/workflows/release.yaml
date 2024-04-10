@@ -6,6 +6,8 @@ on:
       - completed
     workflows:
       - "ci"
+    branches:
+      - release/*
 jobs:
   print-debug-info:
     name: Print debug info for Release workflow
@@ -15,7 +17,7 @@ jobs:
 
   create-release:
     name: Create release
-    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     uses: networkservicemesh/.github/.github/workflows/release.yaml@main
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
