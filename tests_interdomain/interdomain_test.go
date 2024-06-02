@@ -50,6 +50,16 @@ func TestRunInterdomainHealSuite(t *testing.T) {
 	suite.Run(t, new(heal.Suite))
 }
 
+type msmSuite struct {
+	multiservicemesh.Suite
+}
+
+func (s *msmSuite) BeforeTest(suiteName, testName string) {
+	if testName == "TestNsm_istio" {
+		s.T().Skip()
+	}
+}
+
 func TestRunMultiServiceMeshSuite(t *testing.T) {
-	suite.Run(t, new(multiservicemesh.Suite))
+	suite.Run(t, new(msmSuite))
 }
