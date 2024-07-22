@@ -18,3 +18,5 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/networkservicemesh/integration-tests => github.com/Ex4amp1e/integration-tests v0.0.0-20240722103841-9ea4f611ad9b
