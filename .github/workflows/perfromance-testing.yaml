@@ -8,8 +8,6 @@ jobs:
   ### INTERDOMAIN CLUSTER
   interdomain-kind:
     runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: ${{ secrets.NSM_KUBERNETES_VERSION }}
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.0
@@ -31,11 +29,8 @@ jobs:
       run: go install sigs.k8s.io/kind@v0.11.1
     - name: Create kind clusters
       run: |
-        if [[ $KUBERNETES_VERSION=="" ]]; then
-            KUBERNETES_VERSION="v1.22.1"
-        fi
         for (( i = 1; i <= 2; i++ )); do
-            kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:$KUBERNETES_VERSION"
+            kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}"
             configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
             kind get kubeconfig --name "kind-${i}" > ${configPath}
             echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
