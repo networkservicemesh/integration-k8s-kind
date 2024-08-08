@@ -8,7 +8,7 @@ require (
 )
 
 // replace github.com/networkservicemesh/integration-tests => ../integration-tests
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20240808090017-4e8320b9bc6d
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20240808091356-61ed7e621873
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

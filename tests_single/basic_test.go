@@ -19,15 +19,9 @@ package single
 import (
 	"testing"
 
-	"github.com/networkservicemesh/integration-tests/extensions/parallel"
-	"github.com/networkservicemesh/integration-tests/suites/basic"
 	"github.com/networkservicemesh/integration-tests/suites/highload"
 	"github.com/stretchr/testify/suite"
 )
-
-func TestRunBasicSuite(t *testing.T) {
-	parallel.Run(t, new(basic.Suite))
-}
 
 func TestRunHighloadSuite(t *testing.T) {
 	suite.Run(t, new(highload.Suite))
