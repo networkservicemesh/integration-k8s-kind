@@ -25,5 +25,5 @@ import (
 
 func TestRunIpsecSuite(t *testing.T) {
 	ipsecSuite := new(ipsec_mechanism.Suite)
-	parallel.Run(t, new(ipsec_mechanism.Suite), parallel.WithRunningTestsSynchronously(ipsecSuite.TestVl3_basic))
+	parallel.Run(t, ipsecSuite, parallel.WithRunningTestsSynchronously(ipsecSuite.TestVl3_basic))
 }
