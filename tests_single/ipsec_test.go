@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2023 Cisco and/or its affiliates.
+// Copyright (c) 2022-2024 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -24,5 +24,6 @@ import (
 )
 
 func TestRunIpsecSuite(t *testing.T) {
-	parallel.Run(t, new(ipsec_mechanism.Suite))
+	ipsecSuite := new(ipsec_mechanism.Suite)
+	parallel.Run(t, ipsecSuite, parallel.WithRunningTestsSynchronously(ipsecSuite.TestVl3_basic))
 }
