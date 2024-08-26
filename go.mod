@@ -5,7 +5,7 @@ go 1.20
 require github.com/networkservicemesh/integration-tests v0.0.0-20240822093638-8fc4e97de1be
 
 // replace github.com/networkservicemesh/integration-tests => ../integration-tests
-replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20240826074933-c219f818262e
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20240826085034-70d7aed54721
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
