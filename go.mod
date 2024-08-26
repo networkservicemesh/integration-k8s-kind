@@ -2,10 +2,10 @@ module github.com/networkservicemesh/integration-k8s-kind
 
 go 1.20
 
-require (
-	github.com/networkservicemesh/integration-tests v0.0.0-20240819095428-05eab8719e5b
-	github.com/stretchr/testify v1.8.4
-)
+require github.com/networkservicemesh/integration-tests v0.0.0-20240822093638-8fc4e97de1be
+
+// replace github.com/networkservicemesh/integration-tests => ../integration-tests
+replace github.com/networkservicemesh/integration-tests => github.com/NikitaSkrynnik/integration-tests v0.0.0-20240826045254-0043d8c05c70
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -15,6 +15,7 @@ require (
 	github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

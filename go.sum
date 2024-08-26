@@ -1,3 +1,5 @@
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20240826045254-0043d8c05c70 h1:r9QG8U+9qkYvf6XqlFLOHeYiaZVQ86jdHMX0l5VOlig=
+github.com/NikitaSkrynnik/integration-tests v0.0.0-20240826045254-0043d8c05c70/go.mod h1:cT5l2gQd8TEjjgoxLEEF9oR2DB4AH/KlLQEeNvba4U4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -14,8 +16,6 @@ github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
 github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
 github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc h1:1L/OisEFsOyhwaqeJpYmM1nlJ2dBusUMiszPDBlUip0=
 github.com/networkservicemesh/gotestmd v0.0.0-20220628095933-eabbdc09e0dc/go.mod h1:8EWnekTRNX+NxBdTFE24WqUoM7SgJHbiafDBrIIdOmQ=
-github.com/networkservicemesh/integration-tests v0.0.0-20240819095428-05eab8719e5b h1:90FDM3ssjsj4bRBmIf4TcsJgciDK/TWPSTCfLjDub/M=
-github.com/networkservicemesh/integration-tests v0.0.0-20240819095428-05eab8719e5b/go.mod h1:cT5l2gQd8TEjjgoxLEEF9oR2DB4AH/KlLQEeNvba4U4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
