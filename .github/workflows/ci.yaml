@@ -81,6 +81,7 @@ jobs:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Describe pods
+        if: ${{ success() || failure() || cancelled() }}
         run: |
           kubectl describe pods -A
       - name: Upload artifacts
