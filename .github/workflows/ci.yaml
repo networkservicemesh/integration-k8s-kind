@@ -80,10 +80,12 @@ jobs:
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
-      - name: Describe pods
+      - name: Describe nodes and pods
         if: ${{ success() || failure() || cancelled() }}
         run: |
+          kubectl describe nodes
           kubectl describe pods -A
+          kubectl get pods -A
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v3
