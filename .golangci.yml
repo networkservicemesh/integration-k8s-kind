@@ -1,7 +1,7 @@
 ---
 run:
   # concurrency: 6
-  go: '1.20'
+  go: '1.23'
   timeout: 2m
   issues-exit-code: 1
   tests: true
@@ -11,13 +11,14 @@ linters-settings:
     values:
       regexp:
         company: .*
-        copyright-holder: Copyright \(c\) ({{year-range}}) {{company}}\n\n
+        copyright-holder: Copyright \(c\) ({{mod-year-range}}) {{company}}\n\n
         copyright-holders: ({{copyright-holder}})+
   errcheck:
     check-type-assertions: false
     check-blank: false
   govet:
-    check-shadowing: true
+    enable:
+      - shadow
     settings:
       printf:
         funcs:
@@ -25,19 +26,15 @@ linters-settings:
           - (github.com/sirupsen/logrus.FieldLogger).Warnf
           - (github.com/sirupsen/logrus.FieldLogger).Errorf
           - (github.com/sirupsen/logrus.FieldLogger).Fatalf
-  golint:
-    min-confidence: 0.8
   goimports:
     local-prefixes: github.com/networkservicemesh
   gocyclo:
     min-complexity: 15
-  maligned:
-    suggest-new: true
   dupl:
     threshold: 150
   funlen:
-    Lines: 100
-    Statements: 50
+    lines: 100
+    statements: 50
   goconst:
     min-len: 2
     min-occurrences: 2
@@ -129,7 +126,6 @@ linters:
   enable:
     - goheader
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - errcheck
@@ -140,23 +136,20 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - golint
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - misspell
     - nakedret
-    - scopelint
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
-    - varcheck
     - whitespace
+    - unused
+    - copyloopvar
 issues:
   exclude-rules:
     # We really *do* want to pass a pointer to an interface in these cases.  See comments in file for New{Server,Client}
