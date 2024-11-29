@@ -76,10 +76,17 @@ jobs:
           echo CLUSTER_CIDR="172.18.1.128/25" >> $GITHUB_ENV
       - name: Integration tests
         run: |
-          go test -count 1 -timeout 2h30m -race -v ./tests_single -parallel 4
+          go test -count 1 -timeout 1h30m -race -v ./tests_single -parallel 4
         env:
           ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Describe nodes and pods
+        if: ${{ success() || failure() || cancelled() }}
+        run: |
+          kubectl describe nodes
+          kubectl describe pods -A
+          kubectl get pods -A
+          kubectl get pods -n nsm-system -o name | sed 's/pod\///' | xargs -I {} sh -c 'echo " Logs from pod: {}"; kubectl logs -n nsm-system {}'
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v3
