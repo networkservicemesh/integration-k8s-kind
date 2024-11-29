@@ -64,6 +64,7 @@ func TestRunFeatureSuite(t *testing.T) {
 				featuresSuite.TestVl3_ipv6,
 				featuresSuite.TestNse_composition,
 				featuresSuite.TestSelect_forwarder,
-				featuresSuite.TestScaled_registry))
+				featuresSuite.TestScaled_registry,
+				featuresSuite.TestIpam_policies))
 	}
 }
