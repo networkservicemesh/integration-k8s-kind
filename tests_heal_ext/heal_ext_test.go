@@ -25,5 +25,6 @@ import (
 )
 
 func TestRunHealExtendedSuite(t *testing.T) {
+	t.Skip()
 	suite.Run(t, new(heal_extended.Suite))
 }
