@@ -1,5 +1,7 @@
 // Copyright (c) 2022-2023 Cisco and/or its affiliates.
 //
+// Copyright (c) 2024 Pragmagic Inc. and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,5 +26,5 @@ import (
 )
 
 func TestRunBasicSuite(t *testing.T) {
-	parallel.Run(t, new(basic.Suite))
+	parallel.Run(t, new(basic.Suite), "TestVl3_basic")
 }
