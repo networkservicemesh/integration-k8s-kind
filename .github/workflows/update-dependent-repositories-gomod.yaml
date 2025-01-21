@@ -9,11 +9,7 @@ jobs:
     uses: networkservicemesh/.github/.github/workflows/update-dependent-repositories-gomod.yaml@main
     with:
       dependent_repositories: |
-        ["integration-k8s-packet",
-        "integration-k8s-gke",
-        "integration-k8s-aks",
-        "integration-k8s-aws",
-        "integration-interdomain-k8s"]
+        ["integration-k8s-gke"]
       base_repository: "networkservicemesh/integration-tests"
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
