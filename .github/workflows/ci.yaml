@@ -8,6 +8,7 @@ on:
 
 env:
   KIND_VERSION: v0.24.0
+  KUBERNETES_VERSION: "v1.27.2"
 
 jobs:
   yamllint:
@@ -25,6 +26,22 @@ jobs:
   checkgomod:
     uses: networkservicemesh/.github/.github/workflows/checkgomod.yaml@main
 
+  envsetup:
+    name: Setup kind node version
+    runs-on: ubuntu-latest
+    outputs:
+      default-node-version: ${{ steps.set-output-defaults.outputs.default-node-version }}
+    steps:
+      - name: set outputs with default kind node version
+        id: set-output-defaults
+        run: |
+          if [ \"$DEFAULT_NODE_IMAGE_VERSION\"  != \"\" ]; then
+            echo "default-node-version=$DEFAULT_NODE_IMAGE_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "default-node-version=$KUBERNETES_VERSION" >> $GITHUB_OUTPUT
+          fi
+        env:
+          DEFAULT_NODE_IMAGE_VERSION: ${{ vars.NSM_KUBERNETES_VERSION }}
   ### SINGLE CLUSTER
   kind:
     runs-on: ubuntu-latest
@@ -89,6 +106,7 @@ jobs:
   ### SINGLE IPv6 CLUSTER
   kind-ipv6:
     runs-on: ubuntu-latest
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -110,7 +128,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
           version: ${{ env.KIND_VERSION }}
-          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ needs.envsetup.outputs.default-node-version }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -125,7 +143,7 @@ jobs:
           ./tests_single/basic_test.go \
           ./tests_single/memory_test.go -parallel 4
         env:
-          ARTIFACTS_DIR: ipv6-logs/${{ vars.NSM_KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: ipv6-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -137,6 +155,7 @@ jobs:
   ### AF_XDP SUITE
   kind-afxdp:
     runs-on: ubuntu-latest
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -158,7 +177,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: ${{ env.KIND_VERSION }}
-          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ needs.envsetup.outputs.default-node-version }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -168,7 +187,7 @@ jobs:
         run: |
           go test -count 1 -timeout 1h -race -v ./tests_afxdp -parallel 4
         env:
-          ARTIFACTS_DIR: afxdp-logs/${{ vars.NSM_KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: afxdp-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -180,6 +199,7 @@ jobs:
   ### SINGLE CALICO CLUSTER
   calico-kind:
     runs-on: ubuntu-latest
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -207,7 +227,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-calico.yaml
           version: ${{ env.KIND_VERSION }}
-          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ needs.envsetup.outputs.default-node-version }}
           wait: 0s
       - name: Setup external CNI plugin
         shell: bash {0}
@@ -243,7 +263,7 @@ jobs:
           ./tests_single/feature_test.go           \
           -calico -parallel 4
         env:
-          ARTIFACTS_DIR: calico-logs/${{ vars.NSM_KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: calico-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -255,6 +275,7 @@ jobs:
   ### HEAL EXTENDED SUITE
   kind-heal-extended:
     runs-on: ubuntu-latest
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -276,7 +297,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: ${{ env.KIND_VERSION }}
-          node_image: kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}
+          node_image: kindest/node:${{ needs.envsetup.outputs.default-node-version }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -286,7 +307,7 @@ jobs:
         run: |
           go test -count 1 -timeout 1h -race -v ./tests_heal_ext -parallel 4
         env:
-          ARTIFACTS_DIR: heal-ext-logs/${{ vars.NSM_KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: heal-ext-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -298,6 +319,7 @@ jobs:
   ### INTERDOMAIN CLUSTER
   interdomain-kind:
     runs-on: ubuntu-latest
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -326,7 +348,7 @@ jobs:
       - name: Create kind clusters
         run: |
           for (( i = 1; i <= 3; i++ )); do
-              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:${{ vars.NSM_KUBERNETES_VERSION }}"
+              kind create cluster --name "kind-${i}" --config cluster-config-interdomain.yaml --image="kindest/node:${{ needs.envsetup.outputs.default-node-version }}"
               configPath=${{ github.workspace }}/src/github.com/${{ github.repository }}/config${i}
               kind get kubeconfig --name "kind-${i}" > ${configPath}
               echo KUBECONFIG${i}=${configPath} >> $GITHUB_ENV
@@ -352,17 +374,16 @@ jobs:
   ### EXTENDED OVS SUITE
   kind-ovs-extra:
     runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.25.0"
+    needs: envsetup
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
         with:
           access_token: ${{ github.token }}
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.23.3
-          github-token: ${{ github.token }}
+          token: ${{ github.token }}
       - name: Set go env
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -375,7 +396,7 @@ jobs:
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
           version: v0.13.0
-          image: kindest/node:${{ env.KUBERNETES_VERSION }}
+          image: kindest/node:${{ needs.envsetup.outputs.default-node-version }}
       - name: Check kind cluster
         run: |
           kubectl version
@@ -385,7 +406,7 @@ jobs:
         run: |
           go test -count 1 -timeout 25m -race -v ./tests_ovs_extended -parallel 4
         env:
-          ARTIFACTS_DIR: ovs_extra-logs/${{ env.KUBERNETES_VERSION }}
+          ARTIFACTS_DIR: ovs_extra-logs
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
@@ -397,8 +418,6 @@ jobs:
   ### Tanzu mechanism permutation testing
   tanzu-unmanaged:
     runs-on: ubuntu-latest
-    env:
-      KUBERNETES_VERSION: "v1.27.2"
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
