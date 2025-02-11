@@ -100,7 +100,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Single logs
+          name: Single-logs-on-${{ matrix.image }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
 
   ### SINGLE IPv6 CLUSTER
@@ -149,7 +149,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Single IPv6 logs
+          name: Single-IPv6-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
 
   ### AF_XDP SUITE
@@ -193,7 +193,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: afxdp logs
+          name: afxdp-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
 
   ### SINGLE CALICO CLUSTER
@@ -269,7 +269,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Calico logs
+          name: Calico-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
 
   ### HEAL EXTENDED SUITE
@@ -313,7 +313,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: heal-ext logs
+          name: heal-ext-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
 
   ### INTERDOMAIN CLUSTER
@@ -368,7 +368,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Interdomain logs
+          name: Interdomain-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
 
   ### EXTENDED OVS SUITE
@@ -412,7 +412,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: ovs_extra logs
+          name: ovs_extra-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
 
   ### Tanzu mechanism permutation testing
@@ -461,7 +461,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: tanzu-unmanaged logs
+          name: tanzu-unmanaged-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged
       - name: Cleanup resources
         if: ${{ success() || failure() || cancelled() }}
