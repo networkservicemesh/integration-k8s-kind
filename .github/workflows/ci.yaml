@@ -97,14 +97,14 @@ jobs:
         run: |
           go test -count 1 -timeout 2h30m -race -v ./tests_single -parallel 4
         env:
-          ARTIFACTS_DIR: ${{ matrix.image }}-logs/${{ matrix.image }}
+          ARTIFACTS_DIR: ${{ env.SANITIZED_IMAGE_NAME }}-logs/${{ env.SANITIZED_IMAGE_NAME }}
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: Single-logs-on-${{ env.SANITIZED_IMAGE_NAME }}
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ env.SANITIZED_IMAGE_NAME }}-logs
 
   ### SINGLE IPv6 CLUSTER
   kind-ipv6:
