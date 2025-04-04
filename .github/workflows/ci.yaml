@@ -58,6 +58,12 @@ jobs:
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
+      - name: Sanitize image name for artifacts
+        run: |
+          IMAGE="${{ matrix.image }}"
+          IMAGE_SANITIZED="${IMAGE//:/_}"
+          echo "Sanitized image name: $IMAGE_SANITIZED"
+          echo "SANITIZED_IMAGE_NAME=$IMAGE_SANITIZED" >> $GITHUB_ENV
       - uses: actions/setup-go@v5
         with:
           go-version: 1.23.3
@@ -97,7 +103,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Single-logs-on-${{ split(matrix.image, '@')[0] }}
+          name: Single-logs-on-${{ env.SANITIZED_IMAGE_NAME }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
 
   ### SINGLE IPv6 CLUSTER
