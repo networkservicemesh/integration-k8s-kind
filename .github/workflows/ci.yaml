@@ -97,7 +97,7 @@ jobs:
         if: ${{ success() || failure() || cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: Single-logs-on-${{ matrix.image }}
+          name: Single-logs-on-${{ split(matrix.image, '@')[0] }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ matrix.image }}-logs
 
   ### SINGLE IPv6 CLUSTER
