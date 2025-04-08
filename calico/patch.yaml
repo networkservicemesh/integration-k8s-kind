@@ -1,30 +1,4 @@
 ---
-# For our purposes it is sufficient to use fewer resources. Using default values can lead to lack of resources.
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: calico-vpp-node
-  namespace: calico-vpp-dataplane
-spec:
-  template:
-    spec:
-      containers:
-        - name: agent
-          image: artgl/calicovpp-agent:ba374a0
-          resources:
-            requests:
-              cpu: 150m
-        - name: vpp
-          image: artgl/calicovpp-vpp:ba374a0
-          resources:
-            requests:
-              memory: 350Mi
-              cpu: 150m
-            limits:
-              memory: 500Mi
-              cpu: 525m
-
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
