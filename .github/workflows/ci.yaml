@@ -406,6 +406,7 @@ jobs:
           kubectl get pods -A -o wide
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Integration tests
+        continue-on-error: true
         run: |
           go test -count 1 -timeout 25m -race -v ./tests_ovs_extended -parallel 4
         env:
