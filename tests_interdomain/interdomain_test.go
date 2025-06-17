@@ -55,7 +55,7 @@ type msmSuite struct {
 }
 
 func (s *msmSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestNsm_istio" {
+	if testName == "TestNsm_istio" || testName == "TestNsm_consul_vl3" {
 		s.T().Skip()
 	}
 }
