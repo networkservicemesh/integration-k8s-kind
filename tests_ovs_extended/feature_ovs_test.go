@@ -20,6 +20,7 @@ package ovsextra_test
 
 import (
 	"flag"
+	"strings"
 	"testing"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
@@ -35,7 +36,7 @@ type kindFeatOvsSuite struct {
 }
 
 func (s *kindFeatOvsSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestWebhook_smartvf" {
+	if strings.ToLower(testName) == "testwebhook_smartvf" {
 		s.T().Skip()
 	}
 }

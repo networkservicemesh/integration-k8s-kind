@@ -20,6 +20,7 @@ package single
 
 import (
 	"flag"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -40,11 +41,11 @@ type calicoFeatureSuite struct {
 }
 
 func (s *calicoFeatureSuite) BeforeTest(suiteName, testName string) {
-	switch testName {
+	switch strings.ToLower(testName) {
 	case
-		"TestNse_composition",
-		"TestVl3_basic",
-		"TestVl3_scale_from_zero":
+		"testnse_composition",
+		"testvl3_basic",
+		"testvl3_scale_from_zero":
 		s.T().Skip()
 	}
 }

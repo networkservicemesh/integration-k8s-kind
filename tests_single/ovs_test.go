@@ -18,6 +18,7 @@ package single
 
 import (
 	"flag"
+	"strings"
 	"testing"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
@@ -35,10 +36,10 @@ type kindOvsSuite struct {
 }
 
 func (s *kindOvsSuite) BeforeTest(suiteName, testName string) {
-	switch testName {
+	switch strings.ToLower(testName) {
 	case
-		"TestSmartVF2SmartVF",
-		"TestKernel2KernelVLAN":
+		"testsmartvf2smartvf",
+		"testkernel2kernelvlan":
 		s.T().Skip()
 	}
 }

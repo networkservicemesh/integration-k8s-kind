@@ -21,6 +21,7 @@
 package interdomain
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -55,7 +56,7 @@ type msmSuite struct {
 }
 
 func (s *msmSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestNsm_istio" {
+	if strings.ToLower(testName) == "testnsm_istio" {
 		s.T().Skip()
 	}
 }
