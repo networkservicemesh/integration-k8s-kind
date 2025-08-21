@@ -73,7 +73,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: helm/kind-action@v1
@@ -124,7 +124,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: helm/kind-action@v1
@@ -173,7 +173,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: helm/kind-action@v1
@@ -223,7 +223,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: helm/kind-action@v1
@@ -293,7 +293,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: helm/kind-action@v1
@@ -343,7 +343,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Get kind
@@ -392,7 +392,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: engineerd/setup-kind@v0.6.2
@@ -442,7 +442,7 @@ jobs:
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Install and deploy ummanaged cluster

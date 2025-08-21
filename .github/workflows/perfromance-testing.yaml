@@ -22,7 +22,7 @@ jobs:
         echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
         echo GO111MODULE=on >> $GITHUB_ENV
         echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
     - name: Get kind
