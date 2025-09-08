@@ -13,7 +13,7 @@ jobs:
       uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
-    - uses: actions/setup-go@v5
+    - uses: actions/setup-go@v6
       with:
         go-version: 1.16
         github-token: ${{ github.token }}
