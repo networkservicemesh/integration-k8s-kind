@@ -101,7 +101,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Single-logs-on-${{ env.SANITIZED_IMAGE_NAME }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ env.SANITIZED_IMAGE_NAME }}-logs
@@ -150,7 +150,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Single-IPv6-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
@@ -194,7 +194,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: afxdp-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
@@ -270,7 +270,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Calico-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/calico-logs
@@ -314,7 +314,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: heal-ext-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
@@ -369,7 +369,7 @@ jobs:
         run: kind delete clusters $(kind get clusters)
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Interdomain-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_interdomain/interdomain-logs
@@ -414,7 +414,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ovs_extra-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_ovs_extended/ovs_extra-logs
@@ -463,7 +463,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: tanzu-unmanaged-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tanzu-unmanaged

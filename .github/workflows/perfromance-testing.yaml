@@ -59,7 +59,7 @@ jobs:
       run: kind delete clusters $(kind get clusters)
     - name: Upload artifacts
       if: ${{ success() || failure() || cancelled() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: Performance tests results and logs
         path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/perf-test-results
