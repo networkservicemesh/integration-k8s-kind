@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - 'release/**'
+      - "release/**"
 
 env:
   KIND_VERSION: v0.27.0
@@ -66,7 +66,7 @@ jobs:
           echo "SANITIZED_IMAGE_NAME=$IMAGE_SANITIZED" >> $GITHUB_ENV
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -117,7 +117,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -166,7 +166,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -216,7 +216,7 @@ jobs:
           df -h
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -286,7 +286,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -336,7 +336,7 @@ jobs:
           df -h
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -385,7 +385,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -435,7 +435,7 @@ jobs:
           df -h
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.24.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
