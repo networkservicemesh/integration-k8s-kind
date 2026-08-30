@@ -4,6 +4,8 @@
 //
 // Copyright (c) 2024 Pragmagic Inc. and/or its affiliates.
 //
+// Copyright (c) 2025 Nordix and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +23,7 @@
 package interdomain
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -55,7 +58,7 @@ type msmSuite struct {
 }
 
 func (s *msmSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestNsm_istio" {
+	if strings.EqualFold(testName, "testnsm_istio") {
 		s.T().Skip()
 	}
 }

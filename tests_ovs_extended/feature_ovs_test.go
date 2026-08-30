@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2024 Pragmagic Inc. and/or its affiliates.
 //
+// Copyright (c) 2025 Nordix and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +22,7 @@ package ovsextra_test
 
 import (
 	"flag"
+	"strings"
 	"testing"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
@@ -35,7 +38,7 @@ type kindFeatOvsSuite struct {
 }
 
 func (s *kindFeatOvsSuite) BeforeTest(suiteName, testName string) {
-	if testName == "TestWebhook_smartvf" {
+	if strings.EqualFold(testName, "testwebhook_smartvf") {
 		s.T().Skip()
 	}
 }
