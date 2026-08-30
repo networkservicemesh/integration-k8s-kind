@@ -55,7 +55,7 @@ jobs:
           - v1.29.14@sha256:8703bd94ee24e51b778d5556ae310c6c0fa67d761fae6379c8e0bb480e6fea29
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ github.token }}
       - name: Sanitize image name for artifacts
@@ -112,7 +112,7 @@ jobs:
     needs: envsetup
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
@@ -161,7 +161,7 @@ jobs:
     needs: envsetup
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
@@ -205,7 +205,7 @@ jobs:
     needs: envsetup
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
