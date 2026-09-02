@@ -5,27 +5,22 @@ on:
   push:
     branches:
       - "release/**"
-
 env:
   KIND_VERSION: v0.27.0
   KUBERNETES_VERSION: "v1.29.14@sha256:8703bd94ee24e51b778d5556ae310c6c0fa67d761fae6379c8e0bb480e6fea29"
-
 jobs:
   yamllint:
     uses: networkservicemesh/.github/.github/workflows/yamllint.yaml@main
-
   shellcheck:
     uses: networkservicemesh/.github/.github/workflows/shellcheck.yaml@main
-
   golangci-lint:
     uses: networkservicemesh/.github/.github/workflows/golangci-lint.yaml@main
-
+    with:
+      linter-version: v2.13.2
   exclude-fmt-errorf:
     uses: networkservicemesh/.github/.github/workflows/exclude-fmt-errorf.yaml@main
-
   checkgomod:
     uses: networkservicemesh/.github/.github/workflows/checkgomod.yaml@main
-
   envsetup:
     name: Setup kind node version
     runs-on: ubuntu-latest
@@ -105,7 +100,6 @@ jobs:
         with:
           name: Single-logs-on-${{ env.SANITIZED_IMAGE_NAME }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ env.SANITIZED_IMAGE_NAME }}-logs
-
   ### SINGLE IPv6 CLUSTER
   kind-ipv6:
     runs-on: ubuntu-latest
@@ -154,7 +148,6 @@ jobs:
         with:
           name: Single-IPv6-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
-
   ### AF_XDP SUITE
   kind-afxdp:
     runs-on: ubuntu-latest
@@ -198,7 +191,6 @@ jobs:
         with:
           name: afxdp-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
-
   ### HEAL EXTENDED SUITE
   kind-heal-extended:
     runs-on: ubuntu-latest
