@@ -96,7 +96,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Single-logs-on-${{ env.SANITIZED_IMAGE_NAME }}
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/${{ env.SANITIZED_IMAGE_NAME }}-logs
@@ -144,7 +144,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Single-IPv6-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_single/ipv6-logs
@@ -187,7 +187,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: afxdp-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_afxdp/afxdp-logs
@@ -230,7 +230,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Upload artifacts
         if: ${{ success() || failure() || cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: heal-ext-logs
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}/tests_heal_ext/heal-ext-logs
