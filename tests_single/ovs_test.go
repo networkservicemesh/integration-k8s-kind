@@ -1,4 +1,4 @@
-// Copyright (c) 2023-2024 Nordix Foundation.
+// Copyright (c) 2023-2025 Nordix Foundation.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -18,6 +18,7 @@ package single
 
 import (
 	"flag"
+	"strings"
 	"testing"
 
 	"github.com/networkservicemesh/integration-tests/extensions/parallel"
@@ -35,10 +36,10 @@ type kindOvsSuite struct {
 }
 
 func (s *kindOvsSuite) BeforeTest(suiteName, testName string) {
-	switch testName {
+	switch strings.ToLower(testName) {
 	case
-		"TestSmartVF2SmartVF",
-		"TestKernel2KernelVLAN":
+		"testsmartvf2smartvf",
+		"testkernel2kernelvlan":
 		s.T().Skip()
 	}
 }
