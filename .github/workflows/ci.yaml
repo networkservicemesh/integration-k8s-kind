@@ -71,6 +71,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Raise inotify limits for kind
+        run: |
+          sysctl fs.inotify.max_user_instances fs.inotify.max_user_watches
+          sudo sysctl -w fs.inotify.max_user_instances=1024
+          sudo sysctl -w fs.inotify.max_user_watches=524288
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
@@ -121,6 +126,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Raise inotify limits for kind
+        run: |
+          sysctl fs.inotify.max_user_instances fs.inotify.max_user_watches
+          sudo sysctl -w fs.inotify.max_user_instances=1024
+          sudo sysctl -w fs.inotify.max_user_watches=524288
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config-ipv6.yaml
@@ -169,6 +179,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Raise inotify limits for kind
+        run: |
+          sysctl fs.inotify.max_user_instances fs.inotify.max_user_watches
+          sudo sysctl -w fs.inotify.max_user_instances=1024
+          sudo sysctl -w fs.inotify.max_user_watches=524288
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
@@ -212,6 +227,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Raise inotify limits for kind
+        run: |
+          sysctl fs.inotify.max_user_instances fs.inotify.max_user_watches
+          sudo sysctl -w fs.inotify.max_user_instances=1024
+          sudo sysctl -w fs.inotify.max_user_watches=524288
       - uses: helm/kind-action@v1
         with:
           config: src/github.com/${{ github.repository }}/cluster-config.yaml
