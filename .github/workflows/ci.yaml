@@ -61,7 +61,7 @@ jobs:
           echo "SANITIZED_IMAGE_NAME=$IMAGE_SANITIZED" >> $GITHUB_ENV
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.26.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -116,7 +116,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.26.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -169,7 +169,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.26.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
@@ -217,7 +217,7 @@ jobs:
           access_token: ${{ github.token }}
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.23.3
+          go-version: 1.26.0
           token: ${{ github.token }}
       - name: Set go env
         run: |
